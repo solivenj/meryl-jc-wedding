@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { Envelope } from "@/components/envelope/Envelope";
 import { ACT_ONE, COUPLE } from "@/lib/content";
@@ -15,18 +15,34 @@ import { EASE_OUT, ENTRANCE, IDLE } from "@/lib/motion";
 
 const beat = (i: number) => i * ENTRANCE.stagger;
 
-export function ActOne({ onOpen }: { onOpen: () => void }) {
+/* CTA label needs the pointer type; media-query state via external store
+   (SSR snapshot: fine pointer → "CLICK TO OPEN"). */
+const coarseQuery = "(pointer: coarse)";
+const subscribeCoarse = (cb: () => void) => {
+  const mq = window.matchMedia(coarseQuery);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+};
+const getCoarse = () => window.matchMedia(coarseQuery).matches;
+
+export function ActOne({
+  stage,
+  onOpen,
+}: {
+  stage: "sealed" | "opening";
+  onOpen: () => void;
+}) {
   const reduced = useReducedMotion();
-  const [touch, setTouch] = useState(false);
+  const opening = stage === "opening";
+  const touch = useSyncExternalStore(subscribeCoarse, getCoarse, () => false);
 
-  useEffect(() => {
-    setTouch(window.matchMedia("(pointer: coarse)").matches);
-  }, []);
-
+  /* suppressHydrationWarning: the server can't know the client's
+     prefers-reduced-motion, so initial styles legitimately differ there. */
   const rise = (i: number) => ({
     initial: reduced ? { opacity: 0 } : { opacity: 0, y: ENTRANCE.travel },
     animate: { opacity: 1, y: 0 },
     transition: { delay: beat(i), duration: ENTRANCE.duration, ease: EASE_OUT },
+    suppressHydrationWarning: true,
   });
 
   return (
@@ -55,7 +71,7 @@ export function ActOne({ onOpen }: { onOpen: () => void }) {
 
       {/* Beat 3 — the envelope lands on its shadow */}
       <motion.div
-        initial={reduced ? { opacity: 0 } : { opacity: 0 }}
+        initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: beat(2), duration: 0.4 }}
         className="mt-6 w-[85vw] max-w-[560px]"
@@ -64,20 +80,28 @@ export function ActOne({ onOpen }: { onOpen: () => void }) {
           onOpen={onOpen}
           entrance={reduced ? false : { delay: beat(2) }}
           idle
+          open={opening}
         />
       </motion.div>
 
-      {/* Beat 4 — script tagline (user-specified copy) */}
+      {/* Beat 4 — script tagline (user-specified copy); bows out during the unravel */}
       <motion.p
         {...rise(3)}
+        animate={opening ? { opacity: 0, y: 0 } : rise(3).animate}
+        transition={opening ? { duration: 0.35 } : rise(3).transition}
         className="mt-2 text-center font-display text-ink-soft"
         style={{ fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
       >
         {ACT_ONE.tagline}
       </motion.p>
 
-      {/* Beat 5 — CTA with gentle infinite pulse */}
-      <motion.p {...rise(4)} className="mt-7">
+      {/* Beat 5 — CTA with gentle infinite pulse; bows out during the unravel */}
+      <motion.p
+        {...rise(4)}
+        animate={opening ? { opacity: 0, y: 0 } : rise(4).animate}
+        transition={opening ? { duration: 0.35 } : rise(4).transition}
+        className="mt-7"
+      >
         <motion.span
           animate={
             reduced
