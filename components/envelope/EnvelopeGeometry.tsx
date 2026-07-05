@@ -7,18 +7,6 @@
 export function EnvelopeGeometry({ p }: { p: string }) {
   return (
     <g>
-      {/* Ground shadow: warm-tinted, never pure black; animates with the envelope in P2. */}
-      <ellipse
-        data-ground-shadow
-        cx="280"
-        cy="376"
-        rx="230"
-        ry="18"
-        fill="#8a7a5f"
-        opacity="0.32"
-        filter={`url(#${p}-ground-blur)`}
-      />
-
       {/* Back panel + crisp silhouette edge */}
       <rect
         x="40"

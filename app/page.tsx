@@ -1,16 +1,13 @@
 "use client";
 
-/* P1 review page: static envelope centered on the ivory field.
-   Replaced by the sealed/opened state machine in P2/P3. */
+import { ActOne } from "@/components/act-one/ActOne";
 
-import { Envelope } from "@/components/envelope/Envelope";
+/* P2 stage: Act I only. The sealed/opening/opened machine arrives in P3. */
 
 export default function Page() {
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-ivory px-6">
-      <div className="w-[85vw] max-w-[560px]">
-        <Envelope />
-      </div>
+    <main className="bg-ivory">
+      <ActOne onOpen={() => {}} />
     </main>
   );
 }
