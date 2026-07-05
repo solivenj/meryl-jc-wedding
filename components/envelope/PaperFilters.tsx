@@ -121,6 +121,17 @@ export function PaperFilters({ p }: { p: string }) {
       <clipPath id={`${p}-body-clip`}>
         <rect x="40" y="80" width="480" height="280" rx="6" />
       </clipPath>
+
+      {/* Clip: everything above the fold line — the card emerges through this slot. */}
+      <clipPath id={`${p}-slot-clip`}>
+        <rect x="20" y="-240" width="520" height="324" />
+      </clipPath>
+
+      {/* Card face: barely-warm ivory with a whisper of top light. */}
+      <linearGradient id={`${p}-card`} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#faf6ee" />
+        <stop offset="1" stopColor="#f4eee1" />
+      </linearGradient>
     </defs>
   );
 }
