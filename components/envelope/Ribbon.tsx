@@ -1,3 +1,8 @@
+"use client";
+
+import { motion, useReducedMotion } from "motion/react";
+import { IDLE } from "@/lib/motion";
+
 /*
  * Satin ribbon: vertical band at the left third, horizontal band across the
  * lower body, bow on the crossing (168, 296) — deliberately offset from the
@@ -5,7 +10,10 @@
  * Every animatable part carries a data attribute for P3:
  * data-band-h, data-band-v, data-bow-loop-l/r, data-bow-knot, data-bow-tail-l/r.
  */
-export function Ribbon({ p }: { p: string }) {
+export function Ribbon({ p, idle = false }: { p: string; idle?: boolean }) {
+  const reduced = useReducedMotion();
+  const breathe = idle && !reduced;
+
   return (
     <g>
       {/* Cast shadows onto the paper (clipped to the envelope body) */}
@@ -44,8 +52,27 @@ export function Ribbon({ p }: { p: string }) {
         <rect x="512" y="278" width="8" height="36" fill="var(--color-ribbon-deep)" opacity="0.45" />
       </g>
 
-      {/* Bow at the crossing */}
-      <g data-bow style={{ transformOrigin: "168px 296px" }}>
+      {/* Bow at the crossing; after 4s idle it breathes once every ~6s (PRD §3.2). */}
+      <motion.g
+        data-bow
+        style={{ transformOrigin: "168px 296px" }}
+        animate={
+          breathe
+            ? { scale: [1, IDLE.breatheScale, 1] }
+            : { scale: 1 }
+        }
+        transition={
+          breathe
+            ? {
+                delay: IDLE.breatheDelay,
+                duration: 1.4,
+                repeat: Infinity,
+                repeatDelay: IDLE.breathePeriod - 1.4,
+                ease: "easeInOut",
+              }
+            : { duration: 0 }
+        }
+      >
         {/* Tails behind the loops: drooping S-curves with notched ends */}
         <path
           data-bow-tail-l
@@ -116,7 +143,7 @@ export function Ribbon({ p }: { p: string }) {
           transform="rotate(-5 168 296)"
           style={{ transformOrigin: "168px 296px" }}
         />
-      </g>
+      </motion.g>
     </g>
   );
 }
