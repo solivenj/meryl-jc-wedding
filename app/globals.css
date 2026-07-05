@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — single source of truth (PRD §6).
+ * ADR: PRD asks for tokens in tailwind.config; Tailwind v4 (current scaffold)
+ * moved token definition into CSS @theme. Same intent: no one-off hexes in JSX.
+ */
+@theme {
+  --color-ivory: #f6f1e8; /* page field, Act II panels */
+  --color-ivory-deep: #efe8db; /* placeholder gradient stop, section tint */
+  --color-paper: #eae0ce; /* envelope body base */
+  --color-paper-shade: #dccfb8; /* envelope crease/underside shading */
+  --color-ink: #2e2a25; /* warm charcoal text, never #000 */
+  --color-ink-soft: #625a51; /* secondary text (AA on ivory) */
+  --color-ribbon: #93a7c2; /* dusty blue satin base */
+  --color-ribbon-deep: #6e86a4; /* ribbon shadow edge */
+  --color-ribbon-light: #c4d0df; /* satin sheen highlight */
+  --color-scrim: rgb(30 26 22 / 0.5); /* photo overlay */
+
+  --font-display: var(--font-pinyon);
+  --font-body: var(--font-garamond);
+  --font-utility: var(--font-jost);
+}
+
+body {
+  background: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: var(--font-body), Georgia, serif;
+}
+
+::selection {
+  background: var(--color-ribbon-light);
+  color: var(--color-ink);
+}
+
+/* Visible keyboard focus (PRD §7) — ribbon-tinted ring, offset from the shape. */
+:focus-visible {
+  outline: 2px solid var(--color-ribbon-deep);
+  outline-offset: 6px;
+  border-radius: 2px;
+}
