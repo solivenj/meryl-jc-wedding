@@ -20,15 +20,7 @@ export function EnvelopeGeometry({ p, open = false }: { p: string; open?: boolea
   return (
     <g>
       {/* Back panel + crisp silhouette edge */}
-      <rect
-        x="40"
-        y="80"
-        width="480"
-        height="280"
-        rx="6"
-        fill="var(--color-paper)"
-        filter={`url(#${p}-paper)`}
-      />
+      <rect x="40" y="80" width="480" height="280" rx="6" fill="var(--color-paper)" />
       <rect
         x="40"
         y="80"
@@ -45,15 +37,19 @@ export function EnvelopeGeometry({ p, open = false }: { p: string; open?: boolea
       <rect x="46" y="84" width="468" height="150" fill="#c9bb9f" />
 
       {/* Side flaps folding toward center */}
-      <path d="M 40 86 L 40 354 L 254 236 Z" fill={`url(#${p}-panel-side-l)`} filter={`url(#${p}-paper)`} />
-      <path d="M 520 86 L 520 354 L 306 236 Z" fill={`url(#${p}-panel-side-r)`} filter={`url(#${p}-paper)`} />
+      <path d="M 40 86 L 40 354 L 254 236 Z" fill={`url(#${p}-panel-side-l)`} />
+      <path d="M 520 86 L 520 354 L 306 236 Z" fill={`url(#${p}-panel-side-r)`} />
 
       {/* Bottom flap over the side flaps */}
       <path
         d="M 40 356 L 520 356 C 470 322 330 234 292 214 C 284 210 276 210 268 214 C 230 234 90 322 40 356 Z"
         fill={`url(#${p}-panel-bottom)`}
-        filter={`url(#${p}-paper)`}
       />
+
+      {/* Single grain overlay for the whole body (see PaperFilters note) */}
+      <g clipPath={`url(#${p}-body-clip)`}>
+        <rect x="40" y="80" width="480" height="280" filter={`url(#${p}-grain)`} />
+      </g>
       {/* Bottom flap crease shadows */}
       <path
         d="M 40 356 C 90 322 230 234 268 214"
@@ -136,8 +132,11 @@ export function EnvelopeGeometry({ p, open = false }: { p: string; open?: boolea
             <path
               d="M 40 84 L 520 84 C 468 128 332 226 294 250 C 285 255.5 275 255.5 266 250 C 228 226 92 128 40 84 Z"
               fill={`url(#${p}-flap)`}
-              filter={`url(#${p}-paper)`}
             />
+          </g>
+          {/* Flap's own grain overlay, riding (and vanishing with) the face */}
+          <g clipPath={`url(#${p}-flap-clip)`}>
+            <rect x="40" y="84" width="480" height="176" filter={`url(#${p}-grain)`} />
           </g>
           <path d="M 40 84 L 520 84" stroke="#8a7a5f" strokeOpacity="0.25" strokeWidth="2" />
           <path

@@ -23,7 +23,8 @@ export const IDLE = {
   breatheDelay: 4, // s before the first bow breathe
   breatheScale: 1.02,
   breathePeriod: 6,
-  ctaPulse: { opacityMin: 0.55, opacityMax: 1, period: 2.5 },
+  /* Trough raised from the PRD's 0.55 so ink stays AA (4.5:1) mid-pulse. */
+  ctaPulse: { opacityMin: 0.7, opacityMax: 1, period: 2.5 },
 };
 
 /** The four-beat unravel (§3.3). Beats overlap; total 1.8–2.6s. */
@@ -47,8 +48,8 @@ export const SCROLL_REVEAL = {
   viewportAmount: 0.3,
 };
 
-/** S1 hero: photo settle + names blur-to-sharp + parallax cap. */
-export const HERO_SETTLE = { fromScale: 1.06, blur: 6, parallaxPct: 8 };
+/** S1 hero: photo settle + parallax cap. */
+export const HERO_SETTLE = { fromScale: 1.06, parallaxPct: 8 };
 
 /** S3 bird-and-ribbon line art self-draw. */
 export const LINE_ART_DRAW = { duration: 1.6 };

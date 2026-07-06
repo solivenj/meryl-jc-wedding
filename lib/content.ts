@@ -24,7 +24,8 @@ export const ACT_ONE = {
   tagline: "Wrapped tight, sent with love",
   ctaPointer: "CLICK TO OPEN",
   ctaTouch: "TAP TO OPEN",
-  openLabel: "Open the save the date",
+  /* Accessible name contains the card's visible text (axe: label-content-name-mismatch). */
+  openLabel: "Meryl & John, April 10, 2027: open the save the date",
 };
 
 export const HERO = {

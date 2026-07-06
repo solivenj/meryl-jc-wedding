@@ -45,10 +45,12 @@ export function Hero() {
       </motion.div>
       <div className="absolute inset-0 bg-scrim" aria-hidden />
 
+      {/* Chanel rule (PRD P5): the blur-to-sharp on this lockup was the one
+          effect too many — cut in favor of the plain rise. */}
       <motion.div
         className="relative px-6 text-center text-ivory"
-        initial={reduced ? { opacity: 0 } : { opacity: 0, y: 20, filter: `blur(${HERO_SETTLE.blur}px)` }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        initial={reduced ? { opacity: 0 } : { opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.45, duration: 1.1, ease: EASE_OUT }}
         suppressHydrationWarning
       >

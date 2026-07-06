@@ -47,7 +47,7 @@ export function PlaceholderImage({
       {/* Film grain: reuses the paper-noise idea at photo scale. */}
       <svg aria-hidden className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
         <filter id={id}>
-          <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="2" seed="5" />
+          <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="1" seed="5" />
           <feColorMatrix
             type="matrix"
             values={

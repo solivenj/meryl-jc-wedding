@@ -18,14 +18,16 @@ const pinyon = Pinyon_Script({
 const garamond = EB_Garamond({
   variable: "--font-garamond",
   weight: ["400", "500"],
-  style: ["normal", "italic"],
   subsets: ["latin"],
   display: "swap",
+  /* Body serif appears only after the envelope opens — keep it off the
+     critical font chain so Act I's LCP isn't waiting on it. */
+  preload: false,
 });
 
 const jost = Jost({
   variable: "--font-jost",
-  weight: ["400", "500"],
+  weight: "400",
   subsets: ["latin"],
   display: "swap",
 });
