@@ -16,7 +16,7 @@ if (mode === "keyboard") {
   await page.keyboard.press("Tab");
   await page.keyboard.press("Enter");
 } else {
-  await page.locator("button[aria-label='Open the save the date']").click();
+  await page.locator("button[aria-label*='open the save the date']").click();
 }
 await page.waitForTimeout(Number(ms));
 await page.screenshot({ path: out });

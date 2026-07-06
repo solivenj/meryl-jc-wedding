@@ -6,8 +6,10 @@
 export function PaperFilters({ p }: { p: string }) {
   return (
     <defs>
-      {/* Paper texture: coarse grain + fine fiber, clipped to the shape it filters. */}
-      <filter id={`${p}-paper`} x="-5%" y="-5%" width="110%" height="110%">
+      {/* Paper texture as a grain-ONLY output, applied to two overlay rects
+          (body + flap face) instead of per-shape — one turbulence pair per
+          overlay keeps raster cost flat (perf: main-thread budget). */}
+      <filter id={`${p}-grain`} x="0%" y="0%" width="100%" height="100%">
         <feTurbulence
           type="fractalNoise"
           baseFrequency="0.008"
@@ -37,11 +39,15 @@ export function PaperFilters({ p }: { p: string }) {
         <feComposite in="coarseDark" in2="SourceAlpha" operator="in" result="grainIn" />
         <feComposite in="fiberLight" in2="SourceAlpha" operator="in" result="fiberIn" />
         <feMerge>
-          <feMergeNode in="SourceGraphic" />
           <feMergeNode in="grainIn" />
           <feMergeNode in="fiberIn" />
         </feMerge>
       </filter>
+
+      {/* Clip matching the sealed flap outline, for its grain overlay. */}
+      <clipPath id={`${p}-flap-clip`}>
+        <path d="M 40 84 L 520 84 C 468 128 332 226 294 250 C 285 255.5 275 255.5 266 250 C 228 226 92 128 40 84 Z" />
+      </clipPath>
 
       {/* Deckled edge: barely-visible displacement so the flap edge is not a razor line. */}
       <filter id={`${p}-deckle`} x="-4%" y="-4%" width="108%" height="108%">

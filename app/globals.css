@@ -39,3 +39,40 @@ body {
   outline-offset: 6px;
   border-radius: 2px;
 }
+
+/*
+ * Act I text beats run as CSS animations so they start at parse time —
+ * before hydration — which is also what lets the names lockup paint early
+ * enough to hold LCP < 2s. Delay per beat via --rise-delay.
+ */
+@keyframes act-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes act-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.act-rise {
+  opacity: 0;
+  animation: act-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--rise-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .act-rise {
+    animation-name: act-fade; /* fade only, no translation (PRD §3.3) */
+  }
+}

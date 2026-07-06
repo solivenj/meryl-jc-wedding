@@ -17,7 +17,7 @@ if (mode === "keyboard") {
   await page.screenshot({ path: `${outdir}/unravel-focus.png` });
   await page.keyboard.press("Enter");
 } else {
-  await page.locator("button[aria-label='Open the save the date']").click();
+  await page.locator("button[aria-label*='open the save the date']").click();
 }
 
 const frames = mode === "reduced" ? [200, 600] : [300, 700, 1000, 1350, 1750, 2100, 2900];
