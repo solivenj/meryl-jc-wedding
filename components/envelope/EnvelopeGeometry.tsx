@@ -84,6 +84,7 @@ export function EnvelopeGeometry({ p, open = false }: { p: string; open?: boolea
       {/* Cast shadow of the flap edge — fades as the flap lifts. */}
       <g clipPath={`url(#${p}-body-clip)`}>
         <motion.path
+          initial={false}
           data-flap-shadow
           d="M 40 92 L 520 92 C 468 136 332 232 294 256 C 285 261.5 275 261.5 266 256 C 228 232 92 136 40 92 Z"
           fill="#6b5b41"
@@ -98,6 +99,7 @@ export function EnvelopeGeometry({ p, open = false }: { p: string; open?: boolea
           originX/originY (CSS transform-origin gets overridden), so the hinge
           MUST be set via style.originX/originY: originY 0 = the fold line. */}
       <motion.g
+        initial={false}
         data-flap
         style={{ originX: 0.5, originY: 0 }}
         animate={open ? { scaleY: -0.92 } : { scaleY: 1 }}
@@ -109,6 +111,7 @@ export function EnvelopeGeometry({ p, open = false }: { p: string; open?: boolea
       >
         {/* Underside: plain deeper paper, appears as the flip crosses the fold. */}
         <motion.path
+          initial={false}
           d="M 40 84 L 520 84 C 468 128 332 226 294 250 C 285 255.5 275 255.5 266 250 C 228 226 92 128 40 84 Z"
           fill="#d8cbb2"
           animate={open ? { opacity: 1 } : { opacity: 0 }}
@@ -121,6 +124,7 @@ export function EnvelopeGeometry({ p, open = false }: { p: string; open?: boolea
 
         {/* Sealed outer face (texture, creases, medallion) — hidden at the crossing. */}
         <motion.g
+          initial={false}
           animate={open ? { opacity: 0 } : { opacity: 1 }}
           transition={
             open

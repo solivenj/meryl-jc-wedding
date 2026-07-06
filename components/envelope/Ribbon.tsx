@@ -36,6 +36,7 @@ export function Ribbon({
           it slips past the paper's edge — pulled off, not flying away. */}
       <g clipPath={`url(#${p}-body-clip)`}>
         <motion.g
+          initial={false}
           data-band-h
           animate={
             open
@@ -67,6 +68,7 @@ export function Ribbon({
       {/* Vertical band follows, slipping down around the bottom fold */}
       <g clipPath={`url(#${p}-body-clip)`}>
         <motion.g
+          initial={false}
           data-band-v
           animate={
             open
@@ -97,6 +99,7 @@ export function Ribbon({
 
       {/* Bow at the crossing; after 4s idle it breathes once every ~6s (PRD §3.2). */}
       <motion.g
+        initial={false}
         data-bow
         style={{ transformOrigin: "168px 296px" }}
         animate={breathe ? { scale: [1, IDLE.breatheScale, 1] } : { scale: 1 }}
@@ -114,6 +117,7 @@ export function Ribbon({
       >
         {/* Tails stretch as the knot slips, then vanish with it */}
         <motion.path
+          initial={false}
           data-bow-tail-l
           d="M 162 302
              C 152 318 142 334 134 352
@@ -129,6 +133,7 @@ export function Ribbon({
           style={{ transformOrigin: "168px 300px" }}
         />
         <motion.path
+          initial={false}
           data-bow-tail-r
           d="M 174 302
              C 182 322 190 340 197 358
@@ -146,6 +151,7 @@ export function Ribbon({
 
         {/* Loops pull through the knot */}
         <motion.path
+          initial={false}
           data-bow-loop-l
           d="M 168 296 C 136 266 96 272 100 298 C 103 324 142 322 168 296 Z"
           fill={`url(#${p}-loop)`}
@@ -165,6 +171,7 @@ export function Ribbon({
           style={{ transformOrigin: "168px 296px" }}
         />
         <motion.path
+          initial={false}
           data-bow-loop-r
           d="M 168 296 C 200 266 240 272 236 298 C 233 324 194 322 168 296 Z"
           fill={`url(#${p}-loop)`}
@@ -185,6 +192,7 @@ export function Ribbon({
         />
         {/* Inner loop shading fades with the loops */}
         <motion.g
+          initial={false}
           animate={open ? { opacity: 0 } : { opacity: 1 }}
           transition={open ? { duration: UNRAVEL.bowRelease * 0.6 } : { duration: 0 }}
         >
@@ -206,6 +214,7 @@ export function Ribbon({
 
         {/* Knot: a wobble sells the pull, then it slips away */}
         <motion.rect
+          initial={false}
           data-bow-knot
           x="157"
           y="287"

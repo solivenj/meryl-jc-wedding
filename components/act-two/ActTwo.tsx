@@ -1,34 +1,30 @@
 "use client";
 
 import { motion } from "motion/react";
-import { COUPLE, HERO } from "@/lib/content";
+import { Hero } from "./Hero";
+import { Story } from "./Story";
+import { PhotoBand } from "./PhotoBand";
+import { Program } from "./Program";
+import { Closing } from "./Closing";
 
-/* P3 stub: hero-shaped landing surface so the hand-off can be verified.
-   Root stays ivory and the dark hero fades up INSIDE it, so the Act I
-   crossfade is ivory-to-ivory — no muddy blend, no flash (PRD §3.3 beat 4).
-   The five real sections land in P4. */
-
+/*
+ * Act II — the site (PRD §4). Five sections, standard scrolling, no
+ * scroll-jacking. Root stays ivory and fades content up inside it so the
+ * Act I hand-off is ivory-to-ivory (no flash, no muddy blend).
+ */
 export function ActTwo({ reduced }: { reduced: boolean }) {
   return (
-    <section className="relative min-h-dvh bg-ivory">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: reduced ? 0.4 : 1.1, ease: "easeOut" }}
-        className="grid min-h-dvh place-items-center bg-ink"
-      >
-        <motion.div
-          initial={reduced ? { opacity: 0 } : { opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center text-ivory"
-        >
-          <p className="font-utility text-[11px] tracking-[0.28em]">{HERO.eyebrow}</p>
-          <h1 className="mt-4 font-display" style={{ fontSize: "clamp(3rem, 8vw, 6rem)" }}>
-            {COUPLE.names}
-          </h1>
-        </motion.div>
-      </motion.div>
-    </section>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: reduced ? 0.4 : 0.9, ease: "easeOut" }}
+      className="bg-ivory"
+    >
+      <Hero />
+      <Story />
+      <PhotoBand />
+      <Program />
+      <Closing />
+    </motion.div>
   );
 }
