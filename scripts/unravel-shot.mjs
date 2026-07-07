@@ -20,7 +20,8 @@ if (mode === "keyboard") {
   await page.locator("button[aria-label*='open the save the date']").click();
 }
 
-const frames = mode === "reduced" ? [200, 600] : [300, 700, 1000, 1350, 1750, 2100, 2900];
+// The open is a straight crossfade now (0.7s out, Act II fades in under it).
+const frames = mode === "reduced" ? [200, 600] : [250, 500, 800, 1300];
 let elapsed = 0;
 for (const t of frames) {
   await page.waitForTimeout(t - elapsed);

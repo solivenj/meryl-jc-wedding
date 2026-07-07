@@ -1,43 +1,22 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ActOne } from "@/components/act-one/ActOne";
 import { ActTwo } from "@/components/act-two/ActTwo";
-import { REDUCED, UNRAVEL } from "@/lib/motion";
+import { REDUCED } from "@/lib/motion";
 
 /*
- * Two-act state machine (PRD §7): sealed → opening → opened.
- * Once opened, Act I never replays in-session; nothing is persisted, so a
- * returning visitor gets the full open again (PRD §3.3).
+ * Two-act state machine (PRD §7): sealed → opened. Clicking the envelope
+ * fades the whole Act I scene into Act II — the envelope is a static
+ * keepsake image now, so there is no unravel stage. Once opened, Act I
+ * never replays in-session; nothing is persisted (PRD §3.3).
  */
-type Stage = "sealed" | "opening" | "opened";
-
-/** Hand-off begins just before the card finishes rising — no hard cut. */
-const HANDOFF_MS =
-  (UNRAVEL.bandOverlap + UNRAVEL.bandSlide + UNRAVEL.flapOpen * 0.65 + UNRAVEL.reveal * 0.7) *
-  1000;
+type Stage = "sealed" | "opened";
 
 export default function Page() {
   const [stage, setStage] = useState<Stage>("sealed");
   const reduced = useReducedMotion();
-  const timer = useRef<number | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (timer.current !== null) window.clearTimeout(timer.current);
-    };
-  }, []);
-
-  const handleOpen = () => {
-    if (stage !== "sealed") return;
-    if (reduced) {
-      setStage("opened");
-      return;
-    }
-    setStage("opening");
-    timer.current = window.setTimeout(() => setStage("opened"), HANDOFF_MS);
-  };
 
   return (
     <main className="bg-ivory">
@@ -52,7 +31,7 @@ export default function Page() {
             }
             className="fixed inset-0 z-20 origin-center overflow-y-auto bg-ivory"
           >
-            <ActOne stage={stage === "opening" ? "opening" : "sealed"} onOpen={handleOpen} />
+            <ActOne onOpen={() => setStage("opened")} />
           </motion.div>
         )}
       </AnimatePresence>

@@ -8,7 +8,7 @@ const page = await (await browser.newContext({ viewport: { width: 1440, height: 
 await page.goto("http://localhost:3000", { waitUntil: "networkidle" });
 await page.waitForTimeout(3400);
 await page.locator("button[aria-label*='open the save the date']").click();
-await page.waitForTimeout(3200);
+await page.waitForTimeout(1400);
 const section = page.locator("section").nth(Number(idx));
 await section.scrollIntoViewIfNeeded();
 await page.waitForTimeout(2600);

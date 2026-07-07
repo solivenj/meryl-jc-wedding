@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { COUPLE, EVENT, HERO, PLACEHOLDER_ALT } from "@/lib/content";
 import { EASE_OUT, HERO_SETTLE } from "@/lib/motion";
 
@@ -27,7 +27,7 @@ export function Hero() {
 
   return (
     <section ref={ref} className="relative flex min-h-dvh items-center justify-center overflow-hidden">
-      {/* PLACEHOLDER — full-bleed hero photograph, ~3:2, B&W candid of the couple */}
+      {/* Full-bleed rings photograph, covering the whole hero */}
       <motion.div
         className="absolute inset-[-8%]"
         initial={reduced ? { opacity: 0 } : { opacity: 0, scale: HERO_SETTLE.fromScale }}
@@ -36,11 +36,13 @@ export function Hero() {
         style={reduced ? undefined : { y: parallax }}
         suppressHydrationWarning
       >
-        <PlaceholderImage
-          label="HERO PHOTO · 3:2"
+        <Image
+          src="/rings.JPG"
           alt={PLACEHOLDER_ALT.hero}
-          tone="deep"
           fill
+          sizes="100vw"
+          unoptimized /* static export has no optimizer; asset is local */
+          className="object-cover"
         />
       </motion.div>
       <div className="absolute inset-0 bg-scrim" aria-hidden />

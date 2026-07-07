@@ -10,7 +10,7 @@ const page = await ctx.newPage();
 await page.goto("http://localhost:3000", { waitUntil: "networkidle" });
 await page.waitForTimeout(3400);
 await page.locator("button[aria-label*='open the save the date']").click();
-await page.waitForTimeout(3200); // unravel + hand-off complete
+await page.waitForTimeout(1400); // fade-out + Act II fade-in complete
 
 // Scroll through so every whileInView (once: true) fires and settles.
 const total = await page.evaluate(() => document.body.scrollHeight);
