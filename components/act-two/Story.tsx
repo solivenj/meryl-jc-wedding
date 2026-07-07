@@ -1,10 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
-import { Envelope } from "@/components/envelope/Envelope";
 import { Reveal } from "@/components/ui/Reveal";
 import { STORY } from "@/lib/content";
-import { EASE_OUT, ENTRANCE, MASK_REVEAL } from "@/lib/motion";
+import { EASE_OUT, MASK_REVEAL } from "@/lib/motion";
 
 /*
  * S2 — Story / invitation (PRD §4.1). The section's signature: the Act I
@@ -46,16 +46,27 @@ export function Story() {
       <div className="mx-auto grid max-w-4xl items-center gap-10 md:grid-cols-[1fr_auto_1fr] md:gap-14">
         <Caption lines={STORY.captionLeft} from="left" />
 
-        {/* The re-tied miniature — Act I's metaphor, kept. */}
+        {/* The envelope miniature — Act I's keepsake, called back. */}
         <motion.div
           initial={reduced ? { opacity: 0 } : { opacity: 0, y: 26 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
-          transition={reduced ? { duration: 0.5 } : { ...ENTRANCE.envelopeSpring }}
+          transition={
+            reduced
+              ? { duration: 0.5 }
+              : { type: "spring", stiffness: 120, damping: 18 }
+          }
           suppressHydrationWarning
           className="mx-auto w-56 sm:w-64"
         >
-          <Envelope variant="miniature" />
+          <Image
+            src="/envelope.webp"
+            alt="A small envelope tied with its dusty blue ribbon"
+            width={1200}
+            height={857}
+            unoptimized /* static export has no optimizer; asset is local */
+            className="block h-auto w-full [filter:drop-shadow(0_14px_16px_rgb(138_122_95/0.3))]"
+          />
         </motion.div>
 
         <Caption lines={STORY.captionRight} from="right" />

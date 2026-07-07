@@ -29,7 +29,7 @@ export const ACT_ONE = {
 };
 
 export const HERO = {
-  eyebrow: "WELCOMING YOU TO THE WEDDING OF",
+  eyebrow: "WELCOMING YOU TO THE MATRIMONY OF",
 };
 
 export const STORY = {
@@ -88,9 +88,9 @@ export const CLOSING = {
   line: "We Look Forward to Seeing You.",
 };
 
-/* Alt text for placeholder images describes intended content (PRD §7). */
+/* Alt text: hero is the real rings photo; the rest are placeholders (PRD §7). */
 export const PLACEHOLDER_ALT = {
-  hero: "Meryl and John walking together in the church garden, black and white photograph",
+  hero: "John placing the engagement ring on Meryl's hand",
   band: "Candid photograph of Meryl and John dancing, soft motion blur",
   closing: "Bridal bouquet of white calla lilies held in gloved hands",
 };

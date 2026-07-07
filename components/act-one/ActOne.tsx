@@ -1,23 +1,19 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
-import { Envelope } from "@/components/envelope/Envelope";
 import { ACT_ONE, COUPLE } from "@/lib/content";
 import { ENTRANCE, IDLE } from "@/lib/motion";
 
 /*
- * Act I entrance choreography (PRD §3.2), five beats staggered one by one:
- * eyebrow → names → envelope (spring landing) → tagline → CTA.
+ * Act I entrance choreography (PRD §3.2), five beats staggered top to
+ * bottom: eyebrow → names → envelope → tagline → CTA. All beats are CSS
+ * animations (.act-rise) so they start at parse time, before hydration.
  *
- * The text beats are CSS animations (.act-rise) so they start at parse time,
- * before hydration — this is what lets the names lockup hold LCP. Elements
- * that must ALSO react to the open interaction (tagline, CTA) get an inner
- * motion element: CSS `forwards` fill would otherwise outrank Motion's
- * inline styles in the cascade.
- *
- * Layout space is reserved up front — beats animate opacity/transform only,
- * so there is no layout shift during the sequence.
+ * The envelope is John's supplied photographic asset (PRD §3.1 alternative
+ * path) — a static keepsake image inside a real button; clicking it fades
+ * the whole scene into Act II (handled by the page machine).
  */
 
 const beat = (i: number) => `${i * ENTRANCE.stagger}s`;
@@ -32,15 +28,8 @@ const subscribeCoarse = (cb: () => void) => {
 };
 const getCoarse = () => window.matchMedia(coarseQuery).matches;
 
-export function ActOne({
-  stage,
-  onOpen,
-}: {
-  stage: "sealed" | "opening";
-  onOpen: () => void;
-}) {
+export function ActOne({ onOpen }: { onOpen: () => void }) {
   const reduced = useReducedMotion();
-  const opening = stage === "opening";
   const touch = useSyncExternalStore(subscribeCoarse, getCoarse, () => false);
 
   const riseDelay = (i: number) =>
@@ -72,59 +61,59 @@ export function ActOne({
         {COUPLE.second}
       </h1>
 
-      {/* Beat 3 — the envelope lands on its shadow. No opacity fade on this
-          wrapper: the SVG paints in the server HTML; the spring + shadow
-          entrance still play. */}
-      <div className="mt-6 w-[85vw] max-w-[560px]">
-        <Envelope
-          onOpen={onOpen}
-          entrance={reduced ? false : { delay: ENTRANCE.stagger * 2 }}
-          idle
-          open={opening}
-        />
-      </div>
-
-      {/* Beat 4 — script tagline (user-specified copy); bows out during the unravel */}
-      <div className="act-rise mt-2" style={riseDelay(3)}>
-        <motion.p
-          initial={false}
-          animate={{ opacity: opening ? 0 : 1 }}
-          transition={{ duration: 0.35 }}
-          className="text-center font-display text-ink-soft"
-          style={{ fontSize: "clamp(1.5rem, 3vw, 2.1rem)" }}
+      {/* Beat 3 — the envelope keepsake; whole image is the open button */}
+      <div className="act-rise mt-8 w-[85vw] max-w-[560px]" style={riseDelay(2)}>
+        <button
+          type="button"
+          aria-label={ACT_ONE.openLabel}
+          onClick={onOpen}
+          className="block w-full cursor-pointer select-none"
         >
-          {ACT_ONE.tagline}
-        </motion.p>
+          <Image
+            src="/envelope.webp"
+            alt=""
+            aria-hidden
+            width={1200}
+            height={857}
+            priority
+            unoptimized /* asset pre-compressed; static export has no optimizer */
+            className="block h-auto w-full [filter:drop-shadow(0_26px_26px_rgb(138_122_95/0.35))]"
+          />
+        </button>
       </div>
 
-      {/* Beat 5 — CTA with gentle infinite pulse; bows out during the unravel */}
+      {/* Beat 4 — script tagline (user-specified copy) */}
+      <p
+        className="act-rise mt-6 text-center font-display text-ink-soft"
+        style={{ fontSize: "clamp(1.5rem, 3vw, 2.1rem)", ...riseDelay(3) }}
+      >
+        {ACT_ONE.tagline}
+      </p>
+
+      {/* Beat 5 — CTA with gentle infinite pulse */}
       <div className="act-rise mt-7" style={riseDelay(4)}>
         <motion.span
           initial={false}
           animate={
-            opening
-              ? { opacity: 0 }
-              : reduced
-                ? { opacity: 1 }
-                : {
-                    opacity: [
-                      IDLE.ctaPulse.opacityMin,
-                      IDLE.ctaPulse.opacityMax,
-                      IDLE.ctaPulse.opacityMin,
-                    ],
-                  }
+            reduced
+              ? { opacity: 1 }
+              : {
+                  opacity: [
+                    IDLE.ctaPulse.opacityMin,
+                    IDLE.ctaPulse.opacityMax,
+                    IDLE.ctaPulse.opacityMin,
+                  ],
+                }
           }
           transition={
-            opening
-              ? { duration: 0.35 }
-              : reduced
-                ? { duration: 0 }
-                : {
-                    delay: ENTRANCE.stagger * 4 + ENTRANCE.duration,
-                    duration: IDLE.ctaPulse.period,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }
+            reduced
+              ? { duration: 0 }
+              : {
+                  delay: ENTRANCE.stagger * 4 + ENTRANCE.duration,
+                  duration: IDLE.ctaPulse.period,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }
           }
           className="block font-utility text-[11px] tracking-[0.28em] text-ink sm:text-xs"
         >
