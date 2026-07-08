@@ -36,7 +36,7 @@ export function ActOne({ onOpen }: { onOpen: () => void }) {
     ({ "--rise-delay": beat(i) }) as React.CSSProperties;
 
   return (
-    <section className="flex min-h-dvh flex-col items-center justify-center px-6 py-12">
+    <section className="flex min-h-dvh flex-col items-center justify-center px-6 py-8">
       {/* Beat 1 — eyebrow */}
       <p
         className="act-rise font-utility text-[11px] tracking-[0.28em] text-ink-soft sm:text-xs"
@@ -61,13 +61,15 @@ export function ActOne({ onOpen }: { onOpen: () => void }) {
         {COUPLE.second}
       </h1>
 
-      {/* Beat 3 — the envelope keepsake; whole image is the open button */}
-      <div className="act-rise mt-8 w-[85vw] max-w-[560px]" style={riseDelay(2)}>
+      {/* Beat 3 — the envelope keepsake; whole image is the open button.
+          Capped by viewport height (max-h) as well as width so it shrinks on
+          short/wide windows instead of pushing the tagline + CTA off-screen. */}
+      <div className="act-rise mt-6 flex w-full justify-center" style={riseDelay(2)}>
         <button
           type="button"
           aria-label={ACT_ONE.openLabel}
           onClick={onOpen}
-          className="block w-full cursor-pointer select-none"
+          className="block cursor-pointer select-none"
         >
           <Image
             src="/envelope.webp"
@@ -77,21 +79,21 @@ export function ActOne({ onOpen }: { onOpen: () => void }) {
             height={857}
             priority
             unoptimized /* asset pre-compressed; static export has no optimizer */
-            className="block h-auto w-full [filter:drop-shadow(0_26px_26px_rgb(138_122_95/0.35))]"
+            className="mx-auto block h-auto w-auto max-h-[46dvh] max-w-[min(85vw,540px)] [filter:drop-shadow(0_26px_26px_rgb(138_122_95/0.35))]"
           />
         </button>
       </div>
 
       {/* Beat 4 — script tagline (user-specified copy) */}
       <p
-        className="act-rise mt-6 text-center font-display text-ink-soft"
+        className="act-rise mt-5 text-center font-display text-ink-soft"
         style={{ fontSize: "clamp(1.5rem, 3vw, 2.1rem)", ...riseDelay(3) }}
       >
         {ACT_ONE.tagline}
       </p>
 
       {/* Beat 5 — CTA with gentle infinite pulse */}
-      <div className="act-rise mt-7" style={riseDelay(4)}>
+      <div className="act-rise mt-6" style={riseDelay(4)}>
         <motion.span
           initial={false}
           animate={

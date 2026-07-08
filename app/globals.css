@@ -70,7 +70,7 @@ body {
      (opacity fades run on the compositor), so FCP/LCP never register.
      Visually indistinguishable from 0 during the beat delay. */
   opacity: 0.02;
-  animation: act-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: act-rise 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   animation-delay: var(--rise-delay, 0s);
 }
 

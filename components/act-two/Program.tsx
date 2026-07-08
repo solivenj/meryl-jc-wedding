@@ -110,9 +110,20 @@ function ReceptionColumn() {
 export function Program() {
   return (
     <section className="bg-ivory px-6 py-24 sm:py-32">
-      <div className="mx-auto grid max-w-5xl gap-16 md:grid-cols-2 md:gap-20">
-        <ProgramColumn />
-        <ReceptionColumn />
+      {/* Split the page into two halves; center a bounded block in each half
+          (Program in the left, Reception in the right). Content stays
+          internally left-aligned so times and hairline rules keep lining up. */}
+      <div className="mx-auto grid max-w-6xl gap-14 md:grid-cols-2 md:gap-10">
+        <div className="flex justify-center">
+          <div className="w-full max-w-sm">
+            <ProgramColumn />
+          </div>
+        </div>
+        <div className="flex justify-center">
+          <div className="w-full max-w-sm">
+            <ReceptionColumn />
+          </div>
+        </div>
       </div>
     </section>
   );
