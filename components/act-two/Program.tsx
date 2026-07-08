@@ -109,18 +109,20 @@ function ReceptionColumn() {
 
 export function Program() {
   return (
-    <section className="bg-ivory px-6 py-24 sm:py-32">
-      {/* Split the page into two halves; center a bounded block in each half
-          (Program in the left, Reception in the right). Content stays
-          internally left-aligned so times and hairline rules keep lining up. */}
-      <div className="mx-auto grid max-w-6xl gap-14 md:grid-cols-2 md:gap-10">
-        <div className="flex justify-center">
-          <div className="w-full max-w-sm">
+    <section className="bg-ivory py-24 sm:py-32">
+      {/* Two true page halves: Program centered in [0, 50%], Reception in
+          [50%, 100%], each with equal padding on both sides. No outer
+          max-width and no column gap, so the split sits exactly at 50%.
+          Content stays internally left-aligned so times and hairline rules
+          keep lining up. */}
+      <div className="grid md:grid-cols-2">
+        <div className="flex justify-center px-6">
+          <div className="w-fit max-w-full">
             <ProgramColumn />
           </div>
         </div>
-        <div className="flex justify-center">
-          <div className="w-full max-w-sm">
+        <div className="flex justify-center px-6">
+          <div className="w-fit max-w-full">
             <ReceptionColumn />
           </div>
         </div>
