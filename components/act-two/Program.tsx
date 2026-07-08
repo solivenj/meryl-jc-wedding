@@ -112,10 +112,13 @@ export function Program() {
     <section className="bg-ivory py-24 sm:py-32">
       {/* Two true page halves: Program centered in [0, 50%], Reception in
           [50%, 100%], each with equal padding on both sides. No outer
-          max-width and no column gap, so the split sits exactly at 50%.
+          max-width and no horizontal column gap, so the split sits exactly
+          at 50% on desktop. Below md the grid collapses to one column, so
+          gap-y-20 keeps Reception from butting up against Program's last
+          row; it's a no-op at md+ since both halves share a single row.
           Content stays internally left-aligned so times and hairline rules
           keep lining up. */}
-      <div className="grid md:grid-cols-2">
+      <div className="grid gap-y-20 md:grid-cols-2">
         <div className="flex justify-center px-6">
           <div className="w-fit max-w-full">
             <ProgramColumn />
