@@ -7,10 +7,9 @@ import { COUPLE, EVENT, HERO, PLACEHOLDER_ALT } from "@/lib/content";
 import { EASE_OUT, HERO_SETTLE } from "@/lib/motion";
 
 /*
- * S1 — Hero (PRD §4.1). Full-bleed photo + scrim; bow-motif flourish replaces
- * the reference's dove ornament. Photo settles 1.06 → 1 as the Act I card
- * hand-off completes; names sharpen from a soft blur; corner meta slides in
- * from its corners. Parallax capped at 8%, photo only.
+ * S1 — Hero (PRD §4.1). Full-bleed photo + scrim. Photo settles 1.06 → 1 as
+ * the Act I card hand-off completes; corner meta slides in from its corners.
+ * Parallax capped at 8%, photo only.
  */
 export function Hero() {
   const reduced = useReducedMotion();
@@ -56,22 +55,6 @@ export function Hero() {
         transition={{ delay: 0.45, duration: 1.1, ease: EASE_OUT }}
         suppressHydrationWarning
       >
-        {/* Bow-motif flourish: Act I's ribbon, re-drawn in a single line */}
-        <svg
-          aria-hidden
-          viewBox="0 0 120 44"
-          className="mx-auto mb-5 h-9 w-auto opacity-80"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.4"
-          strokeLinecap="round"
-        >
-          <path d="M 60 24 C 46 10, 22 12, 25 25 C 27 36, 48 33, 59 24" />
-          <path d="M 60 24 C 74 10, 98 12, 95 25 C 93 36, 72 33, 61 24" />
-          <path d="M 56 27 C 50 34, 45 39, 41 42" />
-          <path d="M 64 27 C 69 34, 74 38, 79 41" />
-        </svg>
-
         <p className="font-utility text-[11px] tracking-[0.3em] text-ivory/85">
           {HERO.eyebrow}
         </p>

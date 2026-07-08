@@ -7,9 +7,13 @@ import { ACT_ONE, COUPLE } from "@/lib/content";
 import { ENTRANCE, IDLE } from "@/lib/motion";
 
 /*
- * Act I entrance choreography (PRD §3.2), five beats staggered top to
- * bottom: eyebrow → names → envelope → tagline → CTA. All beats are CSS
- * animations (.act-rise) so they start at parse time, before hydration.
+ * Act I entrance choreography (PRD §3.2), four beats staggered top to
+ * bottom: names → tagline → envelope → CTA. All beats are CSS animations
+ * (.act-rise) so they start at parse time, before hydration.
+ *
+ * The tagline now stands in for the old "SAVE OUR DATE" eyebrow (styled
+ * identically — uppercase, tracked, utility face) and sits directly under
+ * the names; the CTA moved below the envelope.
  *
  * The envelope is John's supplied photographic asset (PRD §3.1 alternative
  * path) — a static keepsake image inside a real button; clicking it fades
@@ -37,18 +41,10 @@ export function ActOne({ onOpen }: { onOpen: () => void }) {
 
   return (
     <section className="flex min-h-dvh flex-col items-center justify-center px-6 py-8">
-      {/* Beat 1 — eyebrow */}
-      <p
-        className="act-rise font-utility text-[11px] tracking-[0.28em] text-ink-soft sm:text-xs"
-        style={riseDelay(0)}
-      >
-        {ACT_ONE.eyebrow}
-      </p>
-
-      {/* Beat 2 — names, the typographic hero; the ampersand is the featured glyph */}
+      {/* Beat 0 — names, the typographic hero; the ampersand is the featured glyph */}
       <h1
-        className="act-rise mt-4 text-center font-display leading-[1.15] text-ink"
-        style={{ fontSize: "clamp(3.25rem, 9vw, 6.5rem)", ...riseDelay(1) }}
+        className="act-rise text-center font-display leading-[1.15] text-ink"
+        style={{ fontSize: "clamp(3.25rem, 9vw, 6.5rem)", ...riseDelay(0) }}
       >
         {COUPLE.first}
         <span
@@ -61,10 +57,19 @@ export function ActOne({ onOpen }: { onOpen: () => void }) {
         {COUPLE.second}
       </h1>
 
-      {/* Beat 3 — the envelope keepsake; whole image is the open button.
+      {/* Beat 1 — tagline (user-specified copy), styled like the retired
+          "SAVE OUR DATE" eyebrow: uppercase, tracked, utility face. */}
+      <p
+        className="act-rise mt-4 text-center font-utility text-[11px] uppercase tracking-[0.28em] text-ink-soft sm:text-xs"
+        style={riseDelay(1)}
+      >
+        {ACT_ONE.tagline}
+      </p>
+
+      {/* Beat 2 — the envelope keepsake; whole image is the open button.
           Capped by viewport height (max-h) as well as width so it shrinks on
-          short/wide windows instead of pushing the tagline + CTA off-screen. */}
-      <div className="act-rise mt-6 flex w-full justify-center" style={riseDelay(2)}>
+          short/wide windows instead of pushing the CTA off-screen. */}
+      <div className="act-rise mt-8 flex w-full justify-center" style={riseDelay(2)}>
         <button
           type="button"
           aria-label={ACT_ONE.openLabel}
@@ -84,16 +89,8 @@ export function ActOne({ onOpen }: { onOpen: () => void }) {
         </button>
       </div>
 
-      {/* Beat 4 — script tagline (user-specified copy) */}
-      <p
-        className="act-rise mt-5 text-center font-display text-ink-soft"
-        style={{ fontSize: "clamp(1.5rem, 3vw, 2.1rem)", ...riseDelay(3) }}
-      >
-        {ACT_ONE.tagline}
-      </p>
-
-      {/* Beat 5 — CTA with gentle infinite pulse */}
-      <div className="act-rise mt-6" style={riseDelay(4)}>
+      {/* Beat 3 — CTA with gentle infinite pulse, now under the envelope */}
+      <div className="act-rise mt-6" style={riseDelay(3)}>
         <motion.span
           initial={false}
           animate={
@@ -111,7 +108,7 @@ export function ActOne({ onOpen }: { onOpen: () => void }) {
             reduced
               ? { duration: 0 }
               : {
-                  delay: ENTRANCE.stagger * 4 + ENTRANCE.duration,
+                  delay: ENTRANCE.stagger * 3 + ENTRANCE.duration,
                   duration: IDLE.ctaPulse.period,
                   repeat: Infinity,
                   ease: "easeInOut",
