@@ -8,12 +8,12 @@ import { ENTRANCE, IDLE } from "@/lib/motion";
 
 /*
  * Act I entrance choreography (PRD §3.2), four beats staggered top to
- * bottom: names → tagline → envelope → CTA. All beats are CSS animations
+ * bottom: names → envelope → tagline → CTA. All beats are CSS animations
  * (.act-rise) so they start at parse time, before hydration.
  *
- * The tagline now stands in for the old "SAVE OUR DATE" eyebrow (styled
- * identically — uppercase, tracked, utility face) and sits directly under
- * the names; the CTA moved below the envelope.
+ * The "SAVE OUR DATE" eyebrow stays retired; the tagline sits below the
+ * envelope in its original script treatment (font-display), with slightly
+ * wider tracking so the cursive letters don't read as cramped at this size.
  *
  * The envelope is John's supplied photographic asset (PRD §3.1 alternative
  * path) — a static keepsake image inside a real button; clicking it fades
@@ -57,19 +57,10 @@ export function ActOne({ onOpen }: { onOpen: () => void }) {
         {COUPLE.second}
       </h1>
 
-      {/* Beat 1 — tagline (user-specified copy), styled like the retired
-          "SAVE OUR DATE" eyebrow: uppercase, tracked, utility face. */}
-      <p
-        className="act-rise mt-4 text-center font-utility text-[11px] uppercase tracking-[0.28em] text-ink-soft sm:text-xs"
-        style={riseDelay(1)}
-      >
-        {ACT_ONE.tagline}
-      </p>
-
-      {/* Beat 2 — the envelope keepsake; whole image is the open button.
+      {/* Beat 1 — the envelope keepsake; whole image is the open button.
           Capped by viewport height (max-h) as well as width so it shrinks on
-          short/wide windows instead of pushing the CTA off-screen. */}
-      <div className="act-rise mt-8 flex w-full justify-center" style={riseDelay(2)}>
+          short/wide windows instead of pushing the tagline + CTA off-screen. */}
+      <div className="act-rise mt-8 flex w-full justify-center" style={riseDelay(1)}>
         <button
           type="button"
           aria-label={ACT_ONE.openLabel}
@@ -89,7 +80,17 @@ export function ActOne({ onOpen }: { onOpen: () => void }) {
         </button>
       </div>
 
-      {/* Beat 3 — CTA with gentle infinite pulse, now under the envelope */}
+      {/* Beat 2 — script tagline (user-specified copy), below the envelope.
+          tracking-[0.04em] opens the cursive letterforms up a touch —
+          Pinyon Script reads cramped at this size with zero tracking. */}
+      <p
+        className="act-rise mt-6 text-center font-display tracking-[0.04em] text-ink-soft"
+        style={{ fontSize: "clamp(1.5rem, 3vw, 2.1rem)", ...riseDelay(2) }}
+      >
+        {ACT_ONE.tagline}
+      </p>
+
+      {/* Beat 3 — CTA with gentle infinite pulse */}
       <div className="act-rise mt-6" style={riseDelay(3)}>
         <motion.span
           initial={false}
