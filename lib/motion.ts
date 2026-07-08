@@ -12,8 +12,8 @@ export const EASE_OUT = [0.16, 1, 0.3, 1] as const;
     (travel/duration/ease live in globals.css `.act-rise`; stagger drives
     the per-beat delays.) */
 export const ENTRANCE = {
-  duration: 0.7,
-  stagger: 0.3,
+  duration: 1.0,
+  stagger: 0.4,
 };
 
 /** Act I idle loops (§3.2). */
