@@ -88,9 +88,9 @@ export const CLOSING = {
   line: "We Look Forward to Seeing You.",
 };
 
-/* Alt text: hero is the real rings photo; the rest are placeholders (PRD §7). */
+/* Alt text for the real photos placed throughout the site (PRD §7). */
 export const PLACEHOLDER_ALT = {
   hero: "John placing the engagement ring on Meryl's hand",
-  band: "Candid photograph of Meryl and John dancing, soft motion blur",
-  closing: "Bridal bouquet of white calla lilies held in gloved hands",
+  band: "Meryl and John walking hand in hand through a museum gallery, motion blurred",
+  closing: "Meryl and John laughing together on a balcony",
 };
