@@ -46,28 +46,57 @@ export function Story() {
       <div className="mx-auto grid max-w-4xl items-center gap-10 md:grid-cols-[1fr_auto_1fr] md:gap-14">
         <Caption lines={STORY.captionLeft} from="left" />
 
-        {/* The envelope miniature — Act I's keepsake, called back. */}
-        <motion.div
-          initial={reduced ? { opacity: 0 } : { opacity: 0, y: 26 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={
-            reduced
-              ? { duration: 0.5 }
-              : { type: "spring", stiffness: 120, damping: 18 }
-          }
-          suppressHydrationWarning
-          className="mx-auto w-56 sm:w-64"
-        >
-          <Image
-            src="/envelope.webp"
-            alt="A small envelope tied with its dusty blue ribbon"
-            width={1200}
-            height={857}
-            unoptimized /* static export has no optimizer; asset is local */
-            className="block h-auto w-full [filter:drop-shadow(0_14px_16px_rgb(138_122_95/0.3))]"
-          />
-        </motion.div>
+        {/* A little gallery wall — the framed couple photo with an oval
+            portrait offset beside it, each hung at a slight tilt. */}
+        <div className="relative mx-auto h-96 w-80 sm:h-[28rem] sm:w-100">
+          {/* Rectangular frame — the anchor piece */}
+          <div className="absolute left-0 top-0 w-56 sm:w-64">
+            <motion.div
+              initial={reduced ? { opacity: 0 } : { opacity: 0, y: 26 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={
+                reduced
+                  ? { duration: 0.5 }
+                  : { type: "spring", stiffness: 120, damping: 18 }
+              }
+              suppressHydrationWarning
+            >
+              <Image
+                src="/framed_couple_final-remove-bg-io.png"
+                alt="A framed photo of the couple"
+                width={1087}
+                height={1447}
+                unoptimized /* static export has no optimizer; asset is local */
+                className="block h-auto w-full [filter:drop-shadow(0_14px_16px_rgb(138_122_95/0.3))]"
+              />
+            </motion.div>
+          </div>
+
+          {/* Oval portrait — hung lower and to the right, layered on top */}
+          <div className="absolute bottom-0 right-0 z-10 w-48 sm:w-60">
+            <motion.div
+              initial={reduced ? { opacity: 0 } : { opacity: 0, y: 26 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={
+                reduced
+                  ? { duration: 0.5, delay: 0.1 }
+                  : { type: "spring", stiffness: 120, damping: 18, delay: 0.12 }
+              }
+              suppressHydrationWarning
+            >
+              <Image
+                src="/oval_portrait.png"
+                alt="An oval portrait of the couple"
+                width={1536}
+                height={2304}
+                unoptimized /* static export has no optimizer; asset is local */
+                className="block h-auto w-full [filter:drop-shadow(0_14px_16px_rgb(138_122_95/0.3))]"
+              />
+            </motion.div>
+          </div>
+        </div>
 
         <Caption lines={STORY.captionRight} from="right" />
       </div>

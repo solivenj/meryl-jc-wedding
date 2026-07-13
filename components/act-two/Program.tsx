@@ -109,7 +109,7 @@ function ReceptionColumn() {
 
 export function Program() {
   return (
-    <section className="bg-ivory py-24 sm:py-32">
+    <section className="bg-ivory-deep py-24 sm:py-32">
       {/* Two true page halves: Program centered in [0, 50%], Reception in
           [50%, 100%], each with equal padding on both sides. No outer
           max-width and no horizontal column gap, so the split sits exactly

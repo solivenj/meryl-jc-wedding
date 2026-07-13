@@ -48,7 +48,7 @@ export function Closing() {
         </motion.div>
 
         {/* Hand-drawn heart flourish, drawn after the line lands */}
-        <svg
+        {/* <svg
           aria-hidden
           viewBox="0 0 48 44"
           fill="none"
@@ -76,7 +76,7 @@ export function Closing() {
             }
             suppressHydrationWarning
           />
-        </svg>
+        </svg> */}
       </div>
     </section>
   );

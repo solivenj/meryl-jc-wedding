@@ -7,11 +7,11 @@ import { PLACEHOLDER_ALT } from "@/lib/content";
 
 /*
  * S3 — Photo band (PRD §4.1): full-width photo (blurry.JPG), the scroll
- * centerpiece. Sized the same way as Hero and Closing — an explicit
- * min-height directly on the <section>, with nothing else in normal flow —
- * instead of a nested placeholder div, which resized oddly on window
- * resize. The photo drifts a subtle 4% (user-upgraded scroll layer; PRD
- * deviation noted).
+ * centerpiece. Unlike Hero and Closing (which are sized in vh and lean into
+ * an object-cover zoom), the band is sized by a fixed aspect ratio: height
+ * tracks width, so object-cover shows the *same* crop at every viewport —
+ * no zoom as the window widens, and consistent framing across devices. The
+ * photo drifts a subtle 4% (user-upgraded scroll layer; PRD deviation noted).
  */
 export function PhotoBand() {
   const reduced = useReducedMotion();
@@ -23,7 +23,7 @@ export function PhotoBand() {
   const drift = useTransform(scrollYProgress, [0, 1], ["-4%", "4%"]);
 
   return (
-    <section ref={ref} className="relative min-h-[50vh] overflow-hidden sm:min-h-[60vh]">
+    <section ref={ref} className="relative aspect-[21/9] overflow-hidden">
       <motion.div
         className="absolute inset-[-6%]"
         style={reduced ? undefined : { y: drift }}
@@ -35,7 +35,7 @@ export function PhotoBand() {
           fill
           sizes="100vw"
           unoptimized /* static export has no optimizer; asset is local */
-          className="object-cover"
+          className="object-cover object-[center_78%]"
         />
       </motion.div>
     </section>

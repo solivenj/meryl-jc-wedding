@@ -84,8 +84,100 @@ export const RECEPTION = {
   ],
 };
 
+export const RSVP = {
+  /* Small section above Program. PLACEHOLDER copy — John's to rewrite. */
+  headline: "Will you celebrate with us?",
+  subline:
+    "Kindly send your reply by March 1, 2027 so we can save you a seat at the table.",
+  buttonLabel: "RSVP",
+  /* Modal form copy */
+  modalTitle: "RSVP",
+  modalIntro: "We can't wait to celebrate with you. Just a few details:",
+  fields: {
+    name: { label: "Full name", placeholder: "First and last name" },
+    email: { label: "Email", placeholder: "you@example.com" },
+    attending: {
+      label: "Will you attend?",
+      yes: "Joyfully accepts",
+      no: "Regretfully declines",
+    },
+    /* Built but hidden behind RSVP_SHOW_GUEST_COUNT (lib/config.ts). */
+    guests: { label: "Number of guests", placeholder: "1" },
+    dietary: {
+      label: "Dietary needs",
+      placeholder: "Allergies or restrictions (optional)",
+    },
+    message: {
+      label: "A note for the couple",
+      placeholder: "Anything you'd like us to know (optional)",
+    },
+  },
+  submitLabel: "Send RSVP",
+  submittingLabel: "Sending…",
+  /* Post-submit states */
+  successTitle: "Thank you!",
+  successBody: "Your RSVP is in. We're so grateful you'll be part of our day.",
+  errorTitle: "Something went wrong",
+  errorBody: "We couldn't save your RSVP just now. Please try again, or email us:",
+  retryLabel: "Try again",
+  /* mailto fallback shown on error — PLACEHOLDER address */
+  mailtoFallback: "meryl.and.john@example.com",
+};
+
+export const TRAVEL = {
+  header: "Travel & Stay",
+  /* PLACEHOLDER — John's to replace with real hotels/directions. */
+  blocks: [
+    {
+      label: "Getting There",
+      body:
+        "Both the ceremony and reception are a short drive from Newark " +
+        "Liberty (EWR). Rideshare is plentiful; we'll share exact routes " +
+        "and timing with the formal invitation.",
+    },
+    {
+      label: "Where to Stay",
+      body:
+        "We've reserved a block of rooms at a hotel near the venue at a " +
+        "special rate. Booking details and the group code will follow by " +
+        "email in the coming months.",
+    },
+    {
+      label: "Parking",
+      body:
+        "Complimentary parking is available on site, with rideshare drop " +
+        "off close to the entrance for anyone who'd rather not drive.",
+    },
+  ],
+};
+
+export const FAQ = {
+  header: "FAQ",
+  /* PLACEHOLDER — common guest questions; John's to rewrite. */
+  items: [
+    {
+      question: "Can I bring a plus one?",
+      answer:
+        "Your invitation will name everyone we've reserved a seat for. If " +
+        "you have a question, just reach out and we'll do our best.",
+    },
+    {
+      question: "Are kids welcome?",
+      answer:
+        "We love your little ones, but this celebration is planned as an " +
+        "adults-only evening so everyone can relax and dance.",
+    },
+    {
+      question: "What should I wear?",
+      answer:
+        "Garden formal. Think breathable fabrics and shoes you can dance " +
+        "in. Please save ivory for the bride.",
+    },
+  ],
+};
+
 export const CLOSING = {
-  line: "We Look Forward to Seeing You.",
+  line: "See you at the altar",
 };
 
 /* Alt text for the real photos placed throughout the site (PRD §7). */
