@@ -1,25 +1,26 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
-import { PlaceholderImage } from "@/components/ui/PlaceholderImage";
 import { CLOSING, PLACEHOLDER_ALT } from "@/lib/content";
 import { EASE_OUT, LINE_ART_DRAW, MASK_REVEAL } from "@/lib/motion";
 
 /*
- * S5 — Closing (PRD §4.1). Full-bleed photo; the display line rises through
- * a clip mask, then a small hand-drawn heart draws itself in.
+ * S5 — Closing (PRD §4.1). Full-bleed photo (footer.jpg); the display line
+ * rises through a clip mask, then a small hand-drawn heart draws itself in.
  */
 export function Closing() {
   const reduced = useReducedMotion();
 
   return (
     <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden">
-      {/* PLACEHOLDER — full-bleed photograph, ~3:2, bouquet close-up */}
-      <PlaceholderImage
-        label="CLOSING PHOTO · 3:2"
+      <Image
+        src="/footer.jpg"
         alt={PLACEHOLDER_ALT.closing}
-        tone="deep"
         fill
+        sizes="100vw"
+        unoptimized /* static export has no optimizer; asset is local */
+        className="object-cover"
       />
       <div className="absolute inset-0 bg-scrim" aria-hidden />
 
