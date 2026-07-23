@@ -12,10 +12,45 @@ export const COUPLE = {
 
 export const EVENT = {
   date: "April 10, 2027",
-  /* PLACEHOLDER — ceremony time TBC (PRD §9.2) */
-  dateLine: "APRIL 10, 2027 · 12 PM",
-  venueLine: "ST. ALOYSIUS R.C. CHURCH, JERSEY CITY",
-  venueFull: "St. Aloysius R.C. Church, Jersey City, NJ",
+  dateLine: "APRIL 10, 2027 · 3 PM",
+  venueLine: "ST. ALOYSIUS CATHOLIC CHURCH, JERSEY CITY",
+  venueFull: "St. Aloysius Catholic Church, Jersey City, NJ",
+  /*
+   * Countdown target. The offset is written explicitly (-04:00 = US Eastern
+   * is on EDT in April) rather than built from a local-time string, so every
+   * guest counts down to the same instant no matter their timezone.
+   */
+  ceremonyISO: "2027-04-10T15:00:00-04:00",
+};
+
+/* The two real venues, pinned on the Venue section's maps. */
+export const VENUES = [
+  {
+    label: "Ceremony",
+    name: "St. Aloysius Catholic Church",
+    address: "691 West Side Ave, Jersey City, NJ 07304",
+    time: "3:00 PM",
+  },
+  {
+    label: "Reception",
+    name: "Adega Grill",
+    address: "130 Ferry St, Newark, NJ 07105",
+    time: "6:00 PM",
+  },
+];
+
+export const COUNTDOWN = {
+  eyebrow: "COUNTING DOWN",
+  line: "Until we say I do",
+  units: {
+    days: "Days",
+    hours: "Hours",
+    minutes: "Minutes",
+    seconds: "Seconds",
+  },
+  /* Shown once the ceremony is behind us — no dead zeros. */
+  passed: "We're married!",
+  passedNote: "Thank you for celebrating with us.",
 };
 
 export const ACT_ONE = {
@@ -64,8 +99,8 @@ export const RECEPTION = {
     {
       label: "Reception Venue",
       body:
-        "Our reception will follow the ceremony at a venue nearby. The " +
-        "celebration continues into the evening with dinner, dancing, and " +
+        "Our reception follows the ceremony at Adega Grill in Newark, where " +
+        "the celebration continues into the evening with dinner, dancing, and " +
         "a few surprises we are keeping wrapped for now.",
     },
     {
@@ -90,37 +125,56 @@ export const RSVP = {
   subline:
     "Kindly send your reply by March 1, 2027 so we can save you a seat at the table.",
   buttonLabel: "RSVP",
-  /* Modal form copy */
+
+  /* Modal — step 1: find yourself */
   modalTitle: "RSVP",
-  modalIntro: "We can't wait to celebrate with you. Just a few details:",
-  fields: {
-    name: { label: "Full name", placeholder: "First and last name" },
-    email: { label: "Email", placeholder: "you@example.com" },
-    attending: {
-      label: "Will you attend?",
-      yes: "Joyfully accepts",
-      no: "Regretfully declines",
-    },
-    /* Built but hidden behind RSVP_SHOW_GUEST_COUNT (lib/config.ts). */
-    guests: { label: "Number of guests", placeholder: "1" },
-    dietary: {
-      label: "Dietary needs",
-      placeholder: "Allergies or restrictions (optional)",
-    },
-    message: {
-      label: "A note for the couple",
-      placeholder: "Anything you'd like us to know (optional)",
-    },
+  search: {
+    intro: "Find your invitation by typing your name.",
+    label: "Your name",
+    placeholder: "Start typing your first or last name…",
+    help: "Look yourself up and your whole party will appear.",
+    searching: "Searching…",
+    notFound:
+      "We couldn't find that name. Check the spelling, try a last name, or reach us at",
+    backLabel: "Search a different name",
   },
+
+  /* Modal — step 2: your party */
+  party: {
+    intro: "Let us know who's coming. You can respond for your whole party.",
+    attendingLabel: "Attending?",
+    yes: "Joyfully accepts",
+    no: "Regretfully declines",
+    dietaryLabel: "Dietary needs",
+    dietaryPlaceholder: "Allergies or restrictions (optional)",
+    kidTag: "Child",
+    addPlusOne: "Add a guest",
+    plusOneNote: "You may bring one guest.",
+    plusOneNamePlaceholder: "Your guest's name",
+    removePlusOne: "Remove",
+    emailLabel: "Email",
+    emailPlaceholder: "you@example.com",
+    messageLabel: "A note for the couple",
+    messagePlaceholder: "Anything you'd like us to know (optional)",
+  },
+
   submitLabel: "Send RSVP",
   submittingLabel: "Sending…",
-  /* Post-submit states */
+
+  /* Post-submit + edit + closed states */
   successTitle: "Thank you!",
   successBody: "Your RSVP is in. We're so grateful you'll be part of our day.",
+  editingNote: "You've responded before — your answers are filled in below. Update anything and resend.",
+  editConfirmTitle: "Update your RSVP?",
+  editConfirmBody: "You already have an RSVP on file for this party. Do you want to review and update it?",
+  editConfirmYes: "Yes, update it",
+  editConfirmNo: "Cancel",
+  closedTitle: "RSVPs are closed",
+  closedBody: "The deadline to respond has passed. If you need to reach us, email",
   errorTitle: "Something went wrong",
   errorBody: "We couldn't save your RSVP just now. Please try again, or email us:",
   retryLabel: "Try again",
-  /* mailto fallback shown on error — PLACEHOLDER address */
+  /* mailto fallback shown on error / closed — PLACEHOLDER address */
   mailtoFallback: "meryl.and.john@example.com",
 };
 

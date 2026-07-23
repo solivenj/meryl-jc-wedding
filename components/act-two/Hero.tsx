@@ -55,7 +55,7 @@ export function Hero() {
         transition={{ delay: 0.45, duration: 1.1, ease: EASE_OUT }}
         suppressHydrationWarning
       >
-        <p className="font-utility text-[11px] tracking-[0.3em] text-ivory/85">
+        <p className="font-utility text-[12.5px] tracking-[0.3em] text-ivory/85">
           {HERO.eyebrow}
         </p>
         <h1

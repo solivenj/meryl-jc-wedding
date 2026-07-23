@@ -28,7 +28,7 @@ function Caption({ lines, from }: { lines: string[]; from: "left" | "right" }) {
     <Reveal x={from === "left" ? -24 : 24} className={from === "left" ? "md:text-right" : ""}>
       <p className="font-utility text-[11px] leading-[2] tracking-[0.26em] text-ink-soft">
         {lines.map((line) => (
-          <span key={line} className="block">
+          <span key={line} className="block whitespace-nowrap">
             {line}
           </span>
         ))}
@@ -43,14 +43,24 @@ export function Story() {
 
   return (
     <section className="bg-ivory px-6 py-24 sm:py-32">
-      <div className="mx-auto grid max-w-4xl items-center gap-10 md:grid-cols-[1fr_auto_1fr] md:gap-14">
+      {/* max-w-7xl, not 4xl: the gallery-wall frames are wide enough now that a
+          narrower grid squeezed the side captions into mid-phrase wraps.
+          The middle track is minmax(0,45rem) rather than auto: every child of
+          the frame stack is absolutely positioned, so an auto track has no
+          intrinsic width to size from — it either collapsed to 0 or blew past
+          the viewport. minmax gives it a definite cap that can still shrink. */}
+      <div className="mx-auto grid max-w-7xl items-center gap-10 md:grid-cols-[1fr_minmax(0,45rem)_1fr] md:gap-14">
         <Caption lines={STORY.captionLeft} from="left" />
 
         {/* A little gallery wall — the framed couple photo with an oval
             portrait offset beside it, each hung at a slight tilt. */}
-        <div className="relative mx-auto h-96 w-80 sm:h-[28rem] sm:w-100">
+        {/* Sized fluidly rather than in fixed rem: the frames are large enough now
+            that fixed widths blew past a phone viewport. The container caps at
+            45rem and the frames are percentages of it, so the composition holds
+            its proportions at every width and never overflows. */}
+        <div className="relative mx-auto aspect-[25/28] w-full max-w-[45rem]">
           {/* Rectangular frame — the anchor piece */}
-          <div className="absolute left-0 top-0 w-56 sm:w-64">
+          <div className="absolute left-0 top-0 w-[64%]">
             <motion.div
               initial={reduced ? { opacity: 0 } : { opacity: 0, y: 26 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -74,7 +84,7 @@ export function Story() {
           </div>
 
           {/* Oval portrait — hung lower and to the right, layered on top */}
-          <div className="absolute bottom-0 right-0 z-10 w-48 sm:w-60">
+          <div className="absolute bottom-0 right-0 z-10 w-[60%]">
             <motion.div
               initial={reduced ? { opacity: 0 } : { opacity: 0, y: 26 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -108,7 +118,7 @@ export function Story() {
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.4 }}
-        className="mx-auto mt-14 max-w-2xl text-center sm:mt-20"
+        className="mx-auto mt-4 max-w-2xl text-center sm:mt-6"
       >
         {groups.map((group, i) => (
           <div key={group} className="overflow-hidden">

@@ -28,7 +28,7 @@ export function Rsvp() {
         </p>
       </Reveal>
       <Reveal delay={0.08}>
-        <p className="mx-auto mt-4 max-w-[44ch] font-body text-[15.5px] leading-[1.75] text-ink-soft">
+        <p className="mx-auto mt-4 max-w-[44ch] font-body text-[17px] leading-[1.75] text-ink-soft">
           {RSVP.subline}
         </p>
       </Reveal>
