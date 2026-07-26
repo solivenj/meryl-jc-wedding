@@ -70,25 +70,28 @@ export const HERO = {
 export const STORY = {
   /* PLACEHOLDER — side captions (PRD §4.1 S2) */
   captionLeft: ["OUR LOVE", "A FAIRYTALE"],
-  captionRight: ["A MEMORY", "A STORY"],
+  captionRight: ["A PAINTING", "A CENTERPIECE"],
   /* PLACEHOLDER — invitation copy (~60 words); John will rewrite. */
   invitation:
-    "Love found us in the quiet ways: in shared laughter, in long walks home, " +
-    "in a bond that grew stronger with every passing season. With grateful " +
-    "hearts and endless joy, we have chosen forever. We would be honored to " +
-    "have you beside us on our wedding day, to witness the beginning of our " +
-    "next chapter and every moment until then, wrapped with love.",
+    "Our love started at college in Boston, falling more in love with each study session, " +
+    "meals shared, and time spent together. After a first date with dinner and a scary movie, " +
+    "we knew that our connection was real and special. Through multiple periods of long distance" +
+    "on opposite coasts of the country, there was nothing that could affect our love for each other. " +
+    "We share a love for traveling, trying new restaurants, and TV series, we became each other's go-to person " +
+    "and #1 partner, navigating life hand in hand. We feel blessed to be surrounded by the most amazing friends & family " +
+    "and we would be honored to have you beside us on our wedding day, to witness the beginning of our " +
+    "next chapter and every moment until then",
 };
 
 export const PROGRAM = {
   header: "Program",
   /* PLACEHOLDER — all times and items (PRD §4.1 S4) */
   rows: [
-    { time: "5:00 PM", item: "Welcome Photos & Cocktails" },
-    { time: "6:00 PM", item: "Dinner Program" },
-    { time: "7:00 PM", item: "Toasts & Speeches" },
-    { time: "8:00 PM", item: "Official Picture Taking" },
-    { time: "9:00 PM", item: "Open Bar & Dancing" },
+    { time: "3:00 PM", item: "Marriage Ceremony Begins" },
+    { time: "6:00 PM", item: "Welcome Photos & Cocktails" },
+    { time: "7:00 PM", item: "Dinner Program" },
+    { time: "8:00 PM", item: "Toasts & Speeches" },
+    { time: "9:00 PM", item: "Dancing!" },
   ],
 };
 
@@ -165,10 +168,18 @@ export const RSVP = {
   successTitle: "Thank you!",
   successBody: "Your RSVP is in. We're so grateful you'll be part of our day.",
   editingNote: "You've responded before — your answers are filled in below. Update anything and resend.",
-  editConfirmTitle: "Update your RSVP?",
-  editConfirmBody: "You already have an RSVP on file for this party. Do you want to review and update it?",
-  editConfirmYes: "Yes, update it",
-  editConfirmNo: "Cancel",
+
+  /* Recap shown when a returning guest picks their party — read-only view of
+     the latest RSVP on file, with an Edit button that opens the form. */
+  recap: {
+    submittedPrefix: "Submitted",
+    editButton: "Edit RSVP",
+    back: "Search a different name",
+    noResponse: "No response recorded",
+    guestPrefix: "Guest",
+    emailLabel: "Email",
+    noteLabel: "Note",
+  },
   closedTitle: "RSVPs are closed",
   closedBody: "The deadline to respond has passed. If you need to reach us, email",
   errorTitle: "Something went wrong",

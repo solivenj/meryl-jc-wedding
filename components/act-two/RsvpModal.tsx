@@ -17,6 +17,7 @@ type Prefill = {
   plusOnes: Record<string, { name: string; attending: string; dietary: string }>;
   email: string;
   message: string;
+  submittedAt: string;
 };
 type Match = {
   partyId: string;
@@ -44,6 +45,18 @@ const fieldClass =
 const labelClass =
   "block font-utility text-[11px] uppercase tracking-[0.18em] text-ink-soft";
 
+/* The Timestamp cell is written as an ISO string, but Sheets can hand it back
+   in its own display format — parse when we can, fall back to the raw text. */
+function formatSubmitted(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso;
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
 const mailtoLink = (
   <a
     href={`mailto:${RSVP.mailtoFallback}`}
@@ -69,8 +82,8 @@ export function RsvpModal({
   const [lookup, setLookup] = useState<LookupStatus>("idle");
   const [matches, setMatches] = useState<Match[]>([]);
 
-  // step 1.5 — confirm before opening an existing RSVP for editing
-  const [pendingEdit, setPendingEdit] = useState<Match | null>(null);
+  // step 1.5 — read-only recap of the RSVP on file, before editing
+  const [reviewing, setReviewing] = useState<Match | null>(null);
 
   // step 2 — party
   const [party, setParty] = useState<Match | null>(null);
@@ -109,7 +122,7 @@ export function RsvpModal({
       setQuery("");
       setLookup("idle");
       setMatches([]);
-      setPendingEdit(null);
+      setReviewing(null);
       setParty(null);
       setPeople({});
       setPlusOnes({});
@@ -343,32 +356,87 @@ export function RsvpModal({
                   {RSVP.closedBody} {mailtoLink}.
                 </p>
               </div>
-            ) : pendingEdit ? (
-              /* ---- Step 1.5: confirm before opening an existing RSVP ---- */
-              <div className="py-6 text-center">
+            ) : reviewing && reviewing.existing ? (
+              /* ---- Step 1.5: read-only recap of the RSVP on file ---- */
+              <div>
                 <h2 id={titleId} className="font-display text-4xl text-ink sm:text-5xl">
-                  {RSVP.editConfirmTitle}
+                  {reviewing.partyLabel}
                 </h2>
-                <p className="mx-auto mt-4 max-w-[36ch] font-body text-[15px] leading-[1.7] text-ink-soft">
-                  {RSVP.editConfirmBody}
+                <p className="mt-2 font-utility text-[11px] uppercase tracking-[0.18em] text-ink-soft">
+                  {RSVP.recap.submittedPrefix} {formatSubmitted(reviewing.existing.submittedAt)}
                 </p>
-                <div className="mt-7 flex items-center justify-center gap-6">
+
+                <div className="mt-6 space-y-5">
+                  {reviewing.members.map((m) => {
+                    const answer = reviewing.existing!.people[m.name];
+                    const plus = reviewing.existing!.plusOnes[m.name];
+                    return (
+                      <div key={m.guestId} className="border-t border-ink/10 pt-4 first:border-t-0 first:pt-0">
+                        <div className="flex items-baseline justify-between gap-4">
+                          <span className="font-body text-[16px] text-ink">{m.name}</span>
+                          <span className="shrink-0 font-body text-[14px] text-ink-soft">
+                            {answer
+                              ? answer.attending === "yes"
+                                ? RSVP.party.yes
+                                : RSVP.party.no
+                              : RSVP.recap.noResponse}
+                          </span>
+                        </div>
+                        {answer?.dietary && (
+                          <p className="mt-1 font-body text-[13.5px] leading-[1.6] text-ink-soft">
+                            {answer.dietary}
+                          </p>
+                        )}
+                        {plus && (
+                          <div className="mt-2 flex items-baseline justify-between gap-4 text-ink-soft">
+                            <span className="font-body text-[14.5px]">
+                              + {RSVP.recap.guestPrefix}: {plus.name}
+                            </span>
+                            <span className="shrink-0 font-body text-[14px]">
+                              {plus.attending === "yes" ? RSVP.party.yes : RSVP.party.no}
+                            </span>
+                          </div>
+                        )}
+                        {plus?.dietary && (
+                          <p className="mt-1 font-body text-[13.5px] leading-[1.6] text-ink-soft">
+                            {plus.dietary}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
+
+                  <div className="border-t border-ink/10 pt-4">
+                    <p className="font-body text-[14px] text-ink-soft">
+                      <span className={labelClass}>{RSVP.recap.emailLabel}</span>
+                      {reviewing.existing.email}
+                    </p>
+                    {reviewing.existing.message && (
+                      <p className="mt-3 font-body text-[14px] leading-[1.6] text-ink-soft">
+                        <span className={labelClass}>{RSVP.recap.noteLabel}</span>
+                        {reviewing.existing.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mt-7 flex items-center justify-between gap-4">
                   <button
                     type="button"
-                    onClick={() => setPendingEdit(null)}
+                    onClick={() => setReviewing(null)}
                     className="font-utility text-[11px] uppercase tracking-[0.2em] text-ink-soft hover:text-ink"
                   >
-                    {RSVP.editConfirmNo}
+                    ← {RSVP.recap.back}
                   </button>
                   <button
                     type="button"
                     onClick={() => {
-                      selectParty(pendingEdit);
-                      setPendingEdit(null);
+                      selectParty(reviewing);
+                      setReviewing(null);
                     }}
                     className="rounded-full bg-ink px-6 py-3 font-utility text-[12px] uppercase tracking-[0.24em] text-ivory transition-colors hover:bg-ribbon-deep"
                   >
-                    {RSVP.editConfirmYes}
+                    {RSVP.recap.editButton}
                   </button>
                 </div>
               </div>
@@ -407,7 +475,7 @@ export function RsvpModal({
                       <li key={m.partyId}>
                         <button
                           type="button"
-                          onClick={() => (m.existing ? setPendingEdit(m) : selectParty(m))}
+                          onClick={() => (m.existing ? setReviewing(m) : selectParty(m))}
                           className="w-full rounded-md border border-ink/15 px-4 py-3 text-left transition-colors hover:border-ribbon-deep hover:bg-ribbon-light/30"
                         >
                           <span className="block font-body text-[15px] text-ink">

@@ -4,7 +4,6 @@ import { motion, useReducedMotion } from "motion/react";
 import { Reveal } from "@/components/ui/Reveal";
 import { PROGRAM, RECEPTION } from "@/lib/content";
 import { EASE_OUT, RULE_EXTEND, SCROLL_REVEAL } from "@/lib/motion";
-import { useCappedWidth } from "@/components/dev/WidthToggleContext";
 
 /*
  * S4 — Program & Reception (PRD §4.1). Two columns; timeline rows cascade
@@ -109,23 +108,21 @@ function ReceptionColumn() {
 }
 
 export function Program() {
-  // TEMP — capped is the dev A/B toggle; once John's picked a width, drop
-  // this and always render the max-w-5xl wrapper below (see the plan).
-  const [capped] = useCappedWidth();
   return (
     <section className="bg-ivory-deep py-24 sm:py-32">
       {/* Capped at max-w-5xl so the halves shrink together on wide screens —
           otherwise short content sits centered in a much-too-wide half,
           leaving a large empty gap at the shared midline. Two true halves
           within that: Program centered in [0, 50%], Reception in [50%,
-          100%], each with equal padding on both sides — no column gap, so
-          the split sits exactly at 50%. Below md the grid collapses to one
+          100%], each with equal padding on both sides — plus a bit of
+          md:gap-x-10 so the columns don't feel like they're touching now
+          that the halves are narrower. Below md the grid collapses to one
           column, so gap-y-20 keeps Reception from butting up against
           Program's last row; it's a no-op at md+ since both halves share a
           single row. Content stays internally left-aligned so times and
           hairline rules keep lining up. */}
-      <div className={capped ? "mx-auto max-w-5xl" : undefined}>
-        <div className="grid gap-y-20 md:grid-cols-2">
+      <div className="mx-auto max-w-5xl">
+        <div className="grid gap-y-20 md:grid-cols-2 md:gap-x-10">
           <div className="flex justify-center px-6">
             <div className="w-fit max-w-full">
               <ProgramColumn />

@@ -37,6 +37,7 @@ type Prefill = {
   plusOnes: Record<string, { name: string; attending: string; dietary: string }>; // by host name
   email: string;
   message: string;
+  submittedAt: string; // raw Timestamp cell of the latest submission
 };
 
 /** Rebuild the modal's prefill shape from a party's stored rows. Rows carry
@@ -71,7 +72,8 @@ function buildPrefill(rows: ResponseRecord[], party: Party): Prefill | null {
       people[host.name] = { attending: r.attending, dietary: r.dietary };
     }
   }
-  return { people, plusOnes, email, message };
+  // All rows of the latest submission share one Timestamp (appended together).
+  return { people, plusOnes, email, message, submittedAt: rows[0].timestamp };
 }
 
 export async function POST(request: Request) {

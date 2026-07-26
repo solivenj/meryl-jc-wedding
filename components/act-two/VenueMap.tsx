@@ -31,7 +31,7 @@ export function VenueMap({
       <p className="mt-2 font-body text-[15.5px] leading-[1.75] text-ink-soft">
         {address}
         <span className="mx-2 text-ink/30">·</span>
-        {time}
+        <span className="font-semibold">{time}</span>
       </p>
 
       <div className="mt-4 aspect-[4/3] overflow-hidden rounded-lg border border-ink/15">

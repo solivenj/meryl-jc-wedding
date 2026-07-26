@@ -62,9 +62,10 @@ export function Countdown() {
             <p className="mt-3 font-display text-5xl leading-[1.15] text-ink sm:text-6xl">
               {COUNTDOWN.line}
             </p>
-            {/* 50% larger than its old 11px — this date line sits right above
-                the countdown grid and wanted more weight than the eyebrow. */}
-            <p className="mt-4 font-utility text-[16.5px] uppercase tracking-[0.26em] text-ink-soft">
+            {/* 50% larger than its old 11px, and bold — this date line sits
+                right above the countdown grid and wanted more weight than
+                the eyebrow. */}
+            <p className="mt-4 font-utility text-[16.5px] font-semibold uppercase tracking-[0.26em] text-ink-soft">
               {EVENT.dateLine}
             </p>
           </Reveal>

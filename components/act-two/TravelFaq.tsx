@@ -4,7 +4,6 @@ import { motion, useReducedMotion } from "motion/react";
 import { Reveal } from "@/components/ui/Reveal";
 import { TRAVEL, FAQ } from "@/lib/content";
 import { EASE_OUT, SCROLL_REVEAL } from "@/lib/motion";
-import { useCappedWidth } from "@/components/dev/WidthToggleContext";
 
 /*
  * Travel & Stay + FAQ (added post-launch). Sits after Program on plain ivory —
@@ -107,18 +106,16 @@ function FaqColumn() {
 }
 
 export function TravelFaq() {
-  // TEMP — capped is the dev A/B toggle; once John's picked a width, drop
-  // this and always render the max-w-5xl wrapper below (see the plan).
-  const [capped] = useCappedWidth();
   return (
     <section className="bg-ivory py-24 sm:py-32">
       {/* Capped at max-w-5xl so the halves shrink together on wide screens —
           otherwise short content sits centered in a much-too-wide half,
           leaving a large empty gap at the shared midline. Same two-halves
-          split as Program within that: no column gap so the divide sits at
-          50%; gap-y-20 gives breathing room when stacked below md. */}
-      <div className={capped ? "mx-auto max-w-5xl" : undefined}>
-        <div className="grid gap-y-20 md:grid-cols-2">
+          split as Program within that: md:gap-x-10 keeps the columns from
+          feeling like they're touching; gap-y-20 gives breathing room when
+          stacked below md. */}
+      <div className="mx-auto max-w-5xl">
+        <div className="grid gap-y-20 md:grid-cols-2 md:gap-x-10">
           <div className="flex justify-center px-6">
             <div className="w-fit max-w-full">
               <TravelColumn />
