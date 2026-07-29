@@ -55,7 +55,7 @@ export function Hero() {
         transition={{ delay: 0.45, duration: 1.1, ease: EASE_OUT }}
         suppressHydrationWarning
       >
-        <p className="font-utility text-[12.5px] tracking-[0.3em] text-ivory/85">
+        <p className="font-utility text-[13px] tracking-[0.3em] text-ivory/85">
           {HERO.eyebrow}
         </p>
         <h1
@@ -75,7 +75,7 @@ export function Hero() {
           narrow screens so the two lines never collide. */}
       <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1.5 p-6 sm:flex-row sm:items-end sm:justify-between sm:p-8 lg:px-10">
         <motion.p
-          className="font-utility text-[9px] tracking-[0.2em] text-ivory/80 sm:text-[11px] sm:tracking-[0.24em]"
+          className="font-utility text-[13px] tracking-[0.2em] text-ivory/80 sm:tracking-[0.24em]"
           initial={reduced ? { opacity: 0 } : { opacity: 0, x: -18 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 1.1, duration: 0.7, ease: EASE_OUT }}
@@ -84,7 +84,7 @@ export function Hero() {
           {EVENT.dateLine}
         </motion.p>
         <motion.p
-          className="font-utility text-[9px] tracking-[0.2em] text-ivory/80 sm:text-right sm:text-[11px] sm:tracking-[0.24em]"
+          className="font-utility text-[13px] tracking-[0.2em] text-ivory/80 sm:text-right sm:tracking-[0.24em]"
           initial={reduced ? { opacity: 0 } : { opacity: 0, x: 18 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 1.2, duration: 0.7, ease: EASE_OUT }}

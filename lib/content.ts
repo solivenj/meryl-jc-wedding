@@ -71,16 +71,19 @@ export const STORY = {
   /* PLACEHOLDER — side captions (PRD §4.1 S2) */
   captionLeft: ["OUR LOVE", "A FAIRYTALE"],
   captionRight: ["A PAINTING", "A CENTERPIECE"],
-  /* PLACEHOLDER — invitation copy (~60 words); John will rewrite. */
-  invitation:
-    "Our love started at college in Boston, falling more in love with each study session, " +
-    "meals shared, and time spent together. After a first date with dinner and a scary movie, " +
-    "we knew that our connection was real and special. Through multiple periods of long distance" +
-    "on opposite coasts of the country, there was nothing that could affect our love for each other. " +
-    "We share a love for traveling, trying new restaurants, and TV series, we became each other's go-to person " +
-    "and #1 partner, navigating life hand in hand. We feel blessed to be surrounded by the most amazing friends & family " +
-    "and we would be honored to have you beside us on our wedding day, to witness the beginning of our " +
-    "next chapter and every moment until then",
+  /* Invitation copy — one string per paragraph. Story.tsx mask-reveals each
+     paragraph as its own group, so paragraph breaks live here. */
+  invitation: [
+    "Our love started in college, falling more in love with each study session, " +
+      "meals shared, and time spent together. After a first date with dinner and a scary movie, " +
+      "we knew that our connection was real and special.",
+    "Through periods of long distance on opposite coasts of the country, " +
+      "there was nothing that could affect our love for each other. " +
+      "We became each other's #1 person, navigating life hand in hand.",
+    "We feel blessed to be surrounded by the most amazing friends & family " +
+      "and we would be honored to have you beside us on our wedding day, to witness the beginning of our " +
+      "next chapter and every moment until then",
+  ],
 };
 
 export const PROGRAM = {

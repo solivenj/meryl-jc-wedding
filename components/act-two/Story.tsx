@@ -12,17 +12,6 @@ import { EASE_OUT, MASK_REVEAL } from "@/lib/motion";
  * from their sides; the invitation copy rises in line-group masks.
  */
 
-/* PLACEHOLDER copy is chunked so each group can mask-reveal separately. */
-const chunk = (text: string, parts: number) => {
-  const sentences = text.match(/[^.]+\.?/g) ?? [text];
-  const out: string[] = [];
-  const per = Math.ceil(sentences.length / parts);
-  for (let i = 0; i < sentences.length; i += per) {
-    out.push(sentences.slice(i, i + per).join(" ").trim());
-  }
-  return out;
-};
-
 function Caption({ lines, from }: { lines: string[]; from: "left" | "right" }) {
   return (
     <Reveal x={from === "left" ? -24 : 24} className={from === "left" ? "md:text-right" : ""}>
@@ -39,7 +28,7 @@ function Caption({ lines, from }: { lines: string[]; from: "left" | "right" }) {
 
 export function Story() {
   const reduced = useReducedMotion();
-  const groups = chunk(STORY.invitation, 3);
+  const groups = STORY.invitation;
 
   return (
     <section className="bg-ivory px-6 py-24 sm:py-32">
@@ -118,7 +107,7 @@ export function Story() {
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.4 }}
-        className="mx-auto mt-4 max-w-2xl text-center sm:mt-6"
+        className="mx-auto mt-4 max-w-2xl space-y-6 text-center sm:mt-6"
       >
         {groups.map((group, i) => (
           <div key={group} className="overflow-hidden">
