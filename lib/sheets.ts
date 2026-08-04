@@ -3,6 +3,7 @@ import {
   parseGuests,
   parseResponses,
   encodePlusOneName,
+  auditGuestList,
   type Guest,
   type ResponseRecord,
   type ResolvedRow,
@@ -54,15 +55,26 @@ let guestCache: { at: number; guests: Guest[] } | null = null;
 
 /** The guest list — cached briefly so keystroke lookups don't hammer Sheets. */
 export async function loadGuests(): Promise<Guest[]> {
-  if (isFixtureMode()) return FIXTURE_GUESTS;
   if (guestCache && Date.now() - guestCache.at < GUESTS_TTL_MS) {
     return guestCache.guests;
   }
-  const res = await getClient().spreadsheets.values.get({
-    spreadsheetId: process.env.GOOGLE_SHEET_ID,
-    range: `${GUESTS_TAB}!A:Z`,
-  });
-  const guests = parseGuests(res.data.values as string[][] | undefined ?? []);
+  let guests: Guest[];
+  if (isFixtureMode()) {
+    guests = FIXTURE_GUESTS;
+  } else {
+    const res = await getClient().spreadsheets.values.get({
+      spreadsheetId: process.env.GOOGLE_SHEET_ID,
+      range: `${GUESTS_TAB}!A:Z`,
+    });
+    guests = parseGuests(res.data.values as string[][] | undefined ?? []);
+  }
+  /* Report data-entry problems the guest-facing flow can't fix itself. Runs on
+   * the cache-miss path only, so the TTL throttles it to once a minute per
+   * instance rather than once per keystroke. Fixtures go through the same path
+   * so the checks are exercised locally. Never fatal. */
+  for (const w of auditGuestList(guests)) {
+    console.error(`Guest list [${w.kind}] ${w.detail}`);
+  }
   guestCache = { at: Date.now(), guests };
   return guests;
 }

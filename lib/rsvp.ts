@@ -78,6 +78,11 @@ export type ResolvedRow = {
 
 export const MIN_QUERY_LENGTH = 2;
 
+/** A lookup needs a first AND last name. Requiring the whole name — not a
+ *  prefix or substring — is what stops this endpoint being walked for the
+ *  guest list; see findParty. */
+export const MIN_NAME_PARTS = 2;
+
 /** Lowercase, strip accents/punctuation, collapse whitespace. */
 export function normalize(s: string): string {
   return (s ?? "")
@@ -99,17 +104,27 @@ function effectiveName(g: Guest): string {
 }
 
 /**
- * Stable, position-independent ids. Precedence: an explicit id column wins;
- * otherwise derive from the party label (or the person's own name when the
- * label is blank — a party of one).
+ * Stable, position-independent ids, derived from the party label (or the
+ * person's own name when the label is blank — a party of one).
+ *
+ * A filled party_id column exists to separate two households that share a
+ * label, so it QUALIFIES the label rather than replacing it: a bare "1" in the
+ * sheet can't then collide with a "1" written under an unrelated label. With no
+ * label there's nothing to scope under and grouping-by-id is the only sensible
+ * reading, so an explicit id stays global there. A filled guest_id always wins
+ * outright — it names one person, not a grouping.
  */
 export function deriveIds(g: Guest): { partyId: string; guestId: string } {
   const label = g.partyLabel.trim();
-  const partyId = g.partyIdExplicit.trim()
-    ? normalize(g.partyIdExplicit)
-    : label
-      ? normalize(label)
-      : normalize(`${g.firstName} ${g.lastName}`);
+  const explicit = g.partyIdExplicit.trim();
+  const base = label
+    ? normalize(label)
+    : normalize(`${g.firstName} ${g.lastName}`);
+  const partyId = explicit
+    ? label
+      ? normalize(`${base}|${explicit}`)
+      : normalize(explicit)
+    : base;
   const guestId = g.guestIdExplicit.trim()
     ? normalize(g.guestIdExplicit)
     : normalize(`${partyId}|${g.firstName}|${g.lastName}`);
@@ -237,35 +252,180 @@ export function buildParties(guests: Guest[]): Map<string, Party> {
 }
 
 /**
- * Parties with any member whose name matches the query. Returns only matches
- * (never the whole list), capped, so the endpoint can't be used to dump the
- * guest list. Empty when the query is too short.
+ * Normalized member names that appear in more than one party. A stored response
+ * row's only identity is the person's Name cell (the Responses tab has no
+ * party column — see appendResponses), so a name owned by two households can't
+ * be attributed to either one. A duplicate name *inside* a single party isn't
+ * ambiguous in this sense; `auditGuestList` reports that separately.
  */
-export function matchParties(
-  guests: Guest[],
-  query: string,
-  limit = 8,
-): Party[] {
-  const q = normalize(query);
-  if (q.length < MIN_QUERY_LENGTH) return [];
-  const parties = buildParties(guests);
-  const hits: Party[] = [];
-  for (const party of parties.values()) {
-    const matched = party.members.some((m) => normalize(m.name).includes(q));
-    if (matched) hits.push(party);
-    if (hits.length >= limit) break;
+export function namesInMultipleParties(guests: Guest[]): Set<string> {
+  const owner = new Map<string, string>(); // normalized name → first partyId seen
+  const ambiguous = new Set<string>();
+  for (const party of buildParties(guests).values()) {
+    for (const m of party.members) {
+      const key = normalize(m.name);
+      const seen = owner.get(key);
+      if (seen === undefined) owner.set(key, party.partyId);
+      else if (seen !== party.partyId) ambiguous.add(key);
+    }
   }
-  return hits;
+  return ambiguous;
+}
+
+export type GuestListWarning = {
+  kind: "duplicate-name" | "shared-name" | "partial-party-id" | "oversized-party";
+  partyId: string;
+  detail: string;
+};
+
+/**
+ * Data-entry problems in the Guests tab that the guest-facing flow can't
+ * recover from on its own. Pure and side-effect free — the caller decides how
+ * loudly to report (see `loadGuests`).
+ *
+ * Deliberately NO "duplicate party_label" check: one large family and two
+ * merged families are indistinguishable from the label alone, so it would be
+ * pure noise. The checks here are the ones that are actually decidable.
+ */
+export function auditGuestList(
+  guests: Guest[],
+  maxPartySize = 8,
+): GuestListWarning[] {
+  const out: GuestListWarning[] = [];
+
+  for (const party of buildParties(guests).values()) {
+    const seen = new Set<string>();
+    for (const m of party.members) {
+      const key = normalize(m.name);
+      if (seen.has(key)) {
+        out.push({
+          kind: "duplicate-name",
+          partyId: party.partyId,
+          detail: `"${m.name}" appears twice in "${party.partyLabel}" — two households probably share a party_label without distinct party_ids.`,
+        });
+      }
+      seen.add(key);
+    }
+    if (party.members.length > maxPartySize) {
+      out.push({
+        kind: "oversized-party",
+        partyId: party.partyId,
+        detail: `"${party.partyLabel}" has ${party.members.length} members (over ${maxPartySize}) — worth confirming it's one household.`,
+      });
+    }
+  }
+
+  for (const name of namesInMultipleParties(guests)) {
+    out.push({
+      kind: "shared-name",
+      partyId: "",
+      detail: `"${name}" belongs to more than one party — any prior RSVP under that name is unattributable and will be ignored for prefill.`,
+    });
+  }
+
+  /* A label where some rows carry a party_id and others don't: the blank rows
+   * fall back to the bare label and split into a party of their own, which the
+   * name checks above can't see. */
+  const tally = new Map<string, { withId: number; without: number }>();
+  for (const g of guests) {
+    const label = normalize(g.partyLabel);
+    if (!label) continue; // blank label is a party of one by design
+    const t = tally.get(label) ?? { withId: 0, without: 0 };
+    if (g.partyIdExplicit.trim()) t.withId++;
+    else t.without++;
+    tally.set(label, t);
+  }
+  for (const [label, t] of tally) {
+    if (t.withId && t.without) {
+      out.push({
+        kind: "partial-party-id",
+        partyId: label,
+        detail: `party_label "${label}" has ${t.withId} row(s) with a party_id and ${t.without} without — fill it on every row of every household sharing the label.`,
+      });
+    }
+  }
+
+  return out;
+}
+
+/** A name reduced to its normalized tokens, sorted — so "Bianca Diaz" and
+ *  "Diaz Bianca" produce the same key. Order-insensitivity costs nothing here:
+ *  the whole name is still required. */
+function nameKey(s: string): string {
+  return normalize(s).split(" ").filter(Boolean).sort().join(" ");
+}
+
+/**
+ * partyId → the name keys that identify one of its members. Both the effective
+ * name (display_name when the couple set one) and the plain first+last are
+ * accepted, so a nickname in the sheet doesn't lock out a guest typing their
+ * legal name.
+ */
+function nameKeysByParty(guests: Guest[]): Map<string, Set<string>> {
+  const out = new Map<string, Set<string>>();
+  for (const g of guests) {
+    const { partyId } = deriveIds(g);
+    const keys = out.get(partyId) ?? new Set<string>();
+    keys.add(nameKey(effectiveName(g)));
+    keys.add(nameKey(`${g.firstName} ${g.lastName}`));
+    out.set(partyId, keys);
+  }
+  return out;
+}
+
+export type LookupMatch =
+  | { status: "none" }
+  | { status: "ambiguous" } // one full name, two households — never disclose either
+  | { status: "match"; party: Party };
+
+/**
+ * The single party a guest belongs to, found by their WHOLE name.
+ *
+ * This is the endpoint's main privacy control, so it is deliberately strict.
+ * The query must carry at least MIN_NAME_PARTS tokens and match a member's full
+ * name exactly — no substrings, no prefixes, no "did you mean". A substring
+ * search over a guest list is a list-enumeration endpoint: two-letter probes
+ * walk the whole list, which is the documented complaint against The Knot and
+ * why Zola and RSVPify both match on a full name instead.
+ *
+ * When one full name legitimately belongs to two households we return
+ * `ambiguous` WITHOUT assembling either member list, rather than showing a
+ * searcher both families (same fail-safe stance as namesInMultipleParties).
+ */
+export function findParty(guests: Guest[], query: string): LookupMatch {
+  const key = nameKey(query);
+  if (key.split(" ").filter(Boolean).length < MIN_NAME_PARTS) {
+    return { status: "none" };
+  }
+  const keysByParty = nameKeysByParty(guests);
+  let found: Party | null = null;
+  for (const party of buildParties(guests).values()) {
+    if (!keysByParty.get(party.partyId)?.has(key)) continue;
+    if (found) return { status: "ambiguous" }; // bail before exposing a second party
+    found = party;
+  }
+  return found ? { status: "match", party: found } : { status: "none" };
 }
 
 /** True if a stored response row (its Name, possibly plus-one-encoded)
  *  belongs to this party — its name matches a current member, or it's a
- *  plus-one tagged as belonging to one. */
-function responseBelongsToParty(r: ResponseRecord, party: Party): boolean {
+ *  plus-one tagged as belonging to one.
+ *
+ *  Names in `ambiguousNames` (see `namesInMultipleParties`) are treated as
+ *  belonging to NO party: showing one household another's answers is worse
+ *  than showing an empty form, so we fail safe rather than guess. */
+function responseBelongsToParty(
+  r: ResponseRecord,
+  party: Party,
+  ambiguousNames?: Set<string>,
+): boolean {
   const memberNames = new Set(party.members.map((m) => normalize(m.name)));
-  if (memberNames.has(normalize(r.name))) return true;
+  const rowName = normalize(r.name);
+  if (memberNames.has(rowName)) return !ambiguousNames?.has(rowName);
   const plus = decodePlusOneName(r.name);
-  return !!plus && memberNames.has(normalize(plus.hostName));
+  if (!plus) return false;
+  const hostName = normalize(plus.hostName);
+  return memberNames.has(hostName) && !ambiguousNames?.has(hostName);
 }
 
 /**
@@ -278,8 +438,11 @@ function responseBelongsToParty(r: ResponseRecord, party: Party): boolean {
 export function latestResponsesForParty(
   responses: ResponseRecord[],
   party: Party,
+  ambiguousNames?: Set<string>,
 ): ResponseRecord[] {
-  const mine = responses.filter((r) => responseBelongsToParty(r, party));
+  const mine = responses.filter((r) =>
+    responseBelongsToParty(r, party, ambiguousNames),
+  );
   if (!mine.length) return [];
   const latestTimestamp = mine.reduce(
     (max, r) => (r.timestamp > max ? r.timestamp : max),

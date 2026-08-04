@@ -80,8 +80,7 @@ export const STORY = {
     "Through periods of long distance on opposite coasts of the country, " +
       "there was nothing that could affect our love for each other. " +
       "We became each other's #1 person, navigating life hand in hand.",
-    "We feel blessed to be surrounded by the most amazing friends & family " +
-      "and we would be honored to have you beside us on our wedding day, to witness the beginning of our " +
+    "We would be honored to have you beside us on our wedding day to witness the beginning of our " +
       "next chapter and every moment until then",
   ],
 };
@@ -107,13 +106,17 @@ export const RECEPTION = {
       body:
         "Our reception follows the ceremony at Adega Grill in Newark, where " +
         "the celebration continues into the evening with dinner, dancing, and " +
-        "a few surprises we are keeping wrapped for now.",
+        "lots of fun.",
     },
+    /* Dress code lives in the FAQ ("What should I wear?") — it was duplicated
+       here almost word for word. TODO(John): confirm "family style" and the
+       open bar against what's actually booked at Adega before this ships. */
     {
-      label: "Dress Code",
+      label: "Dinner & Drinks",
       body:
-        "Garden formal: breathable fabrics and comfortable shoes. Heels " +
-        "are optional, dancing is not. Please save ivory for the bride.",
+        "Dinner is served family style, with plenty of it, and the bar stays " +
+        "open through the night. If you let us know about allergies or " +
+        "restrictions in your RSVP, the kitchen will take care of the rest.",
     },
     {
       label: "Parking & Directions",
@@ -135,13 +138,14 @@ export const RSVP = {
   /* Modal — step 1: find yourself */
   modalTitle: "RSVP",
   search: {
-    intro: "Find your invitation by typing your name.",
+    intro: "Find your invitation by typing your full name.",
     label: "Your name",
-    placeholder: "Start typing your first or last name…",
-    help: "Look yourself up and your whole party will appear.",
+    placeholder: "First and last name…",
     searching: "Searching…",
     notFound:
-      "We couldn't find that name. Check the spelling, try a last name, or reach us at",
+      "We couldn't find that name. Check the spelling, make sure you've entered both your first and last name, or reach us at",
+    ambiguous:
+      "We have more than one guest by that name, so we'd rather not guess. Send us a note at",
     backLabel: "Search a different name",
   },
 
@@ -173,7 +177,8 @@ export const RSVP = {
   editingNote: "You've responded before — your answers are filled in below. Update anything and resend.",
 
   /* Recap shown when a returning guest picks their party — read-only view of
-     the latest RSVP on file, with an Edit button that opens the form. */
+     the latest RSVP on file, with an Edit button that opens the form. Only ever
+     shown to the browser that submitted it (see lib/rsvp-cookie.ts). */
   recap: {
     submittedPrefix: "Submitted",
     editButton: "Edit RSVP",
@@ -182,6 +187,17 @@ export const RSVP = {
     guestPrefix: "Guest",
     emailLabel: "Email",
     noteLabel: "Note",
+  },
+
+  /* Shown instead of the recap when we can't tell that this device sent the
+     original reply — e.g. a guest on a new phone. Confirms a reply exists and
+     when, and nothing else about it. */
+  responded: {
+    title: "You've already replied",
+    body: "We have a response on file for your party from",
+    replaceNote:
+      "If this was you and you'd like to change it, fill the form in again — your new answers replace the old ones.",
+    continueButton: "Respond again",
   },
   closedTitle: "RSVPs are closed",
   closedBody: "The deadline to respond has passed. If you need to reach us, email",
@@ -193,22 +209,25 @@ export const RSVP = {
 };
 
 export const TRAVEL = {
-  header: "Travel & Stay",
+  header: "Travel",
   /* PLACEHOLDER — John's to replace with real hotels/directions. */
   blocks: [
     {
       label: "Getting There",
       body:
         "Both the ceremony and reception are a short drive from Newark " +
-        "Liberty (EWR). Rideshare is plentiful; we'll share exact routes " +
-        "and timing with the formal invitation.",
+        "Liberty (EWR) and rideshare is plentiful.",
     },
+    /* No hotel block — guests are local, so nobody needs lodging. Replaced with
+       the one piece of travel this wedding actually creates: the ceremony and
+       reception are in two different cities.
+       TODO(John): confirm the drive time between the two venues. */
     {
-      label: "Where to Stay",
+      label: "Between the Venues",
       body:
-        "We've reserved a block of rooms at a hotel near the venue at a " +
-        "special rate. Booking details and the group code will follow by " +
-        "email in the coming months.",
+        "The ceremony and the reception are about twenty minutes apart — St. " +
+        "Aloysius in Jersey City, then Adega Grill in Newark. Rideshare runs " +
+        "easily between the two if you'd rather leave the car where it is.",
     },
     {
       label: "Parking",
@@ -238,8 +257,16 @@ export const FAQ = {
     {
       question: "What should I wear?",
       answer:
-        "Garden formal. Think breathable fabrics and shoes you can dance " +
-        "in. Please save ivory for the bride.",
+        "Cocktail attire and Filipino traditional barongs! Please save ivory for the bride.",
+    },
+    /* The ceremony is at three and dinner isn't until six — the likeliest
+       question any guest will have, and the only place the site answers it. */
+    {
+      question: "What happens between the ceremony and the reception?",
+      answer:
+        "There's a bit of a gap while we steal away for photos — the reception " +
+        "starts at six. Cocktails begin the moment you arrive, and there's " +
+        "plenty nearby in the Ironbound if you'd like a coffee or a drink first.",
     },
   ],
 };

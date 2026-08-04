@@ -4,6 +4,9 @@ import { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { RSVP } from "@/lib/content";
 import { EASE_OUT } from "@/lib/motion";
+// lib/rsvp is deliberately pure (no node/framework imports), so it's safe to
+// pull the shared matching constant into the client bundle.
+import { MIN_NAME_PARTS } from "@/lib/rsvp";
 
 /* Shape returned by /api/guests/lookup */
 type Member = {
@@ -23,7 +26,12 @@ type Match = {
   partyId: string;
   partyLabel: string;
   members: Member[];
+  /* Prior answers, but ONLY for the browser that submitted them — the server
+     withholds this from everyone else (see lib/rsvp-cookie.ts). */
   existing: Prefill | null;
+  /* Set whenever a response exists at all. A bare date is safe to show a
+     stranger who guessed the name; `existing` is not. */
+  responded: { submittedAt: string } | null;
 };
 
 type PersonAnswer = { attending: string; dietary: string };
@@ -34,16 +42,17 @@ type LookupStatus =
   | "searching"
   | "results"
   | "notfound"
+  | "ambiguous" // one full name, two households — we won't guess which
   | "closed"
   | "error";
 
 const fieldClass =
-  "mt-1.5 w-full rounded-md border border-ink/20 bg-ivory px-3 py-2.5 " +
-  "font-body text-[15px] text-ink placeholder:text-ink-soft/60 " +
+  "mt-2 w-full rounded-md border border-ink/20 bg-ivory px-3.5 py-3 " +
+  "font-body text-[18px] text-ink placeholder:text-ink-soft/60 " +
   "focus:border-ribbon-deep focus:outline-none";
 
 const labelClass =
-  "block font-utility text-[11px] uppercase tracking-[0.18em] text-ink-soft";
+  "block font-utility text-[13px] uppercase tracking-[0.18em] text-ink-soft";
 
 /* The Timestamp cell is written as an ISO string, but Sheets can hand it back
    in its own display format — parse when we can, fall back to the raw text. */
@@ -139,7 +148,11 @@ export function RsvpModal({
   useEffect(() => {
     if (!open || party) return;
     const q = query.trim();
-    if (q.length < 2) {
+    /* Wait for a first AND last name before asking. The server matches whole
+       names only, so firing per keystroke would just answer "not found" until
+       the surname lands — which reads as broken — and would burn a bot check
+       on every letter. */
+    if (q.split(/\s+/).filter(Boolean).length < MIN_NAME_PARTS) {
       setMatches([]);
       setLookup("idle");
       return;
@@ -161,7 +174,10 @@ export function RsvpModal({
         }
         const found: Match[] = data.matches ?? [];
         setMatches(found);
-        setLookup(found.length ? "results" : "notfound");
+        /* `ambiguous` means one full name belongs to two households. The server
+           sends no member lists in that case on purpose, so route the guest to
+           us rather than making them pick a family. */
+        setLookup(found.length ? "results" : data.ambiguous ? "ambiguous" : "notfound");
       } catch (err) {
         if (!ctrl.signal.aborted) setLookup("error");
       }
@@ -301,23 +317,29 @@ export function RsvpModal({
       {open && (
         <motion.div
           key="rsvp-overlay"
-          className="fixed inset-0 z-30 flex items-center justify-center overflow-y-auto p-4 sm:p-6"
+          className="fixed inset-0 z-30 flex items-center justify-center overflow-y-auto p-5 sm:p-7"
           {...overlayMotion}
           transition={{ duration: 0.25, ease: EASE_OUT }}
           suppressHydrationWarning
         >
+          {/* fixed, not absolute: this sits inside the overflow-y-auto overlay,
+              so an absolute inset-0 resolved to exactly one viewport height AND
+              scrolled with the content — a big family's tall form scrolled clean
+              past its bottom edge and exposed the page behind. Fixed pins it to
+              the viewport at any scroll offset. The overlay animates opacity
+              only, so nothing creates a containing block that would trap it. */}
           <button
             type="button"
             aria-label="Close RSVP"
             onClick={onClose}
-            className="absolute inset-0 bg-scrim"
+            className="fixed inset-0 bg-scrim"
           />
 
           <motion.div
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
-            className="relative z-10 my-auto w-full max-w-md rounded-xl bg-ivory p-6 shadow-2xl sm:p-8"
+            className="relative z-10 my-auto w-full max-w-[43rem] rounded-2xl bg-ivory p-7 shadow-2xl sm:p-10"
             {...panelMotion}
             transition={{ duration: reduced ? 0.2 : 0.35, ease: EASE_OUT }}
             suppressHydrationWarning
@@ -326,55 +348,55 @@ export function RsvpModal({
               type="button"
               aria-label="Close"
               onClick={onClose}
-              className="absolute right-4 top-4 font-utility text-[20px] leading-none text-ink-soft hover:text-ink"
+              className="absolute right-5 top-5 font-utility text-[24px] leading-none text-ink-soft hover:text-ink"
             >
               ×
             </button>
 
             {status === "submitted" ? (
-              <div className="py-6 text-center">
-                <h2 id={titleId} className="font-display text-5xl text-ink sm:text-6xl">
+              <div className="py-7 text-center">
+                <h2 id={titleId} className="font-display text-[3.6rem] text-ink sm:text-7xl">
                   {RSVP.successTitle}
                 </h2>
-                <p className="mx-auto mt-4 max-w-[36ch] font-body text-[15.5px] leading-[1.75] text-ink-soft">
+                <p className="mx-auto mt-5 max-w-[36ch] font-body text-[18.5px] leading-[1.75] text-ink-soft">
                   {RSVP.successBody}
                 </p>
                 <button
                   type="button"
                   onClick={onClose}
-                  className="mt-7 font-utility text-[11px] uppercase tracking-[0.24em] text-ink hover:text-ribbon-deep"
+                  className="mt-8 font-utility text-[13px] uppercase tracking-[0.24em] text-ink hover:text-ribbon-deep"
                 >
                   Close
                 </button>
               </div>
             ) : lookup === "closed" ? (
-              <div className="py-6 text-center">
-                <h2 id={titleId} className="font-display text-5xl text-ink sm:text-6xl">
+              <div className="py-7 text-center">
+                <h2 id={titleId} className="font-display text-[3.6rem] text-ink sm:text-7xl">
                   {RSVP.closedTitle}
                 </h2>
-                <p className="mx-auto mt-4 max-w-[36ch] font-body text-[15.5px] leading-[1.75] text-ink-soft">
+                <p className="mx-auto mt-5 max-w-[36ch] font-body text-[18.5px] leading-[1.75] text-ink-soft">
                   {RSVP.closedBody} {mailtoLink}.
                 </p>
               </div>
             ) : reviewing && reviewing.existing ? (
               /* ---- Step 1.5: read-only recap of the RSVP on file ---- */
               <div>
-                <h2 id={titleId} className="font-display text-4xl text-ink sm:text-5xl">
+                <h2 id={titleId} className="font-display text-[2.7rem] text-ink sm:text-[3.6rem]">
                   {reviewing.partyLabel}
                 </h2>
-                <p className="mt-2 font-utility text-[11px] uppercase tracking-[0.18em] text-ink-soft">
+                <p className="mt-2.5 font-utility text-[13px] uppercase tracking-[0.18em] text-ink-soft">
                   {RSVP.recap.submittedPrefix} {formatSubmitted(reviewing.existing.submittedAt)}
                 </p>
 
-                <div className="mt-6 space-y-5">
+                <div className="mt-7 space-y-6">
                   {reviewing.members.map((m) => {
                     const answer = reviewing.existing!.people[m.name];
                     const plus = reviewing.existing!.plusOnes[m.name];
                     return (
-                      <div key={m.guestId} className="border-t border-ink/10 pt-4 first:border-t-0 first:pt-0">
-                        <div className="flex items-baseline justify-between gap-4">
-                          <span className="font-body text-[16px] text-ink">{m.name}</span>
-                          <span className="shrink-0 font-body text-[14px] text-ink-soft">
+                      <div key={m.guestId} className="border-t border-ink/10 pt-5 first:border-t-0 first:pt-0">
+                        <div className="flex items-baseline justify-between gap-5">
+                          <span className="font-body text-[19px] text-ink">{m.name}</span>
+                          <span className="shrink-0 font-body text-[17px] text-ink-soft">
                             {answer
                               ? answer.attending === "yes"
                                 ? RSVP.party.yes
@@ -383,22 +405,22 @@ export function RsvpModal({
                           </span>
                         </div>
                         {answer?.dietary && (
-                          <p className="mt-1 font-body text-[13.5px] leading-[1.6] text-ink-soft">
+                          <p className="mt-1 font-body text-[16px] leading-[1.6] text-ink-soft">
                             {answer.dietary}
                           </p>
                         )}
                         {plus && (
-                          <div className="mt-2 flex items-baseline justify-between gap-4 text-ink-soft">
-                            <span className="font-body text-[14.5px]">
+                          <div className="mt-2.5 flex items-baseline justify-between gap-5 text-ink-soft">
+                            <span className="font-body text-[17.5px]">
                               + {RSVP.recap.guestPrefix}: {plus.name}
                             </span>
-                            <span className="shrink-0 font-body text-[14px]">
+                            <span className="shrink-0 font-body text-[17px]">
                               {plus.attending === "yes" ? RSVP.party.yes : RSVP.party.no}
                             </span>
                           </div>
                         )}
                         {plus?.dietary && (
-                          <p className="mt-1 font-body text-[13.5px] leading-[1.6] text-ink-soft">
+                          <p className="mt-1 font-body text-[16px] leading-[1.6] text-ink-soft">
                             {plus.dietary}
                           </p>
                         )}
@@ -406,13 +428,13 @@ export function RsvpModal({
                     );
                   })}
 
-                  <div className="border-t border-ink/10 pt-4">
-                    <p className="font-body text-[14px] text-ink-soft">
+                  <div className="border-t border-ink/10 pt-5">
+                    <p className="font-body text-[17px] text-ink-soft">
                       <span className={labelClass}>{RSVP.recap.emailLabel}</span>
                       {reviewing.existing.email}
                     </p>
                     {reviewing.existing.message && (
-                      <p className="mt-3 font-body text-[14px] leading-[1.6] text-ink-soft">
+                      <p className="mt-3.5 font-body text-[17px] leading-[1.6] text-ink-soft">
                         <span className={labelClass}>{RSVP.recap.noteLabel}</span>
                         {reviewing.existing.message}
                       </p>
@@ -420,11 +442,11 @@ export function RsvpModal({
                   </div>
                 </div>
 
-                <div className="mt-7 flex items-center justify-between gap-4">
+                <div className="mt-8 flex items-center justify-between gap-5">
                   <button
                     type="button"
                     onClick={() => setReviewing(null)}
-                    className="font-utility text-[11px] uppercase tracking-[0.2em] text-ink-soft hover:text-ink"
+                    className="font-utility text-[13px] uppercase tracking-[0.2em] text-ink-soft hover:text-ink"
                   >
                     ← {RSVP.recap.back}
                   </button>
@@ -434,55 +456,115 @@ export function RsvpModal({
                       selectParty(reviewing);
                       setReviewing(null);
                     }}
-                    className="rounded-full bg-ink px-6 py-3 font-utility text-[12px] uppercase tracking-[0.24em] text-ivory transition-colors hover:bg-ribbon-deep"
+                    className="rounded-full bg-ink px-7 py-3.5 font-utility text-[14px] uppercase tracking-[0.24em] text-ivory transition-colors hover:bg-ribbon-deep"
                   >
                     {RSVP.recap.editButton}
+                  </button>
+                </div>
+              </div>
+            ) : reviewing && reviewing.responded ? (
+              /* ---- Step 1.5b: a reply exists, but this browser can't prove it
+                     sent it. Confirm that and when — never who said what. ---- */
+              <div>
+                <h2 id={titleId} className="font-display text-[2.7rem] text-ink sm:text-[3.6rem]">
+                  {RSVP.responded.title}
+                </h2>
+                <p className="mt-5 font-body text-[18px] leading-[1.7] text-ink-soft">
+                  {RSVP.responded.body}{" "}
+                  <span className="text-ink">
+                    {formatSubmitted(reviewing.responded.submittedAt)}
+                  </span>
+                  .
+                </p>
+                <p className="mt-3.5 font-body text-[17px] leading-[1.6] text-ink-soft">
+                  {RSVP.responded.replaceNote}
+                </p>
+
+                <div className="mt-8 flex items-center justify-between gap-5">
+                  <button
+                    type="button"
+                    onClick={() => setReviewing(null)}
+                    className="font-utility text-[13px] uppercase tracking-[0.2em] text-ink-soft hover:text-ink"
+                  >
+                    ← {RSVP.recap.back}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      selectParty(reviewing);
+                      setReviewing(null);
+                    }}
+                    className="rounded-full bg-ink px-7 py-3.5 font-utility text-[14px] uppercase tracking-[0.24em] text-ivory transition-colors hover:bg-ribbon-deep"
+                  >
+                    {RSVP.responded.continueButton}
                   </button>
                 </div>
               </div>
             ) : !party ? (
               /* ---- Step 1: find yourself ---- */
               <div>
-                <h2 id={titleId} className="font-display text-5xl text-ink sm:text-6xl">
+                <h2 id={titleId} className="font-display text-[3.6rem] text-ink sm:text-7xl">
                   {RSVP.modalTitle}
                 </h2>
-                <p className="mt-2 font-body text-[14.5px] leading-[1.6] text-ink-soft">
+                <p className="mt-2.5 font-body text-[17.5px] leading-[1.6] text-ink-soft">
                   {RSVP.search.intro}
                 </p>
 
-                <div className="mt-6">
-                  <label htmlFor="rsvp-search" className={labelClass}>
-                    {RSVP.search.label}
-                  </label>
+                <div className="mt-7">
+                  {/* No visible label — the intro above and the placeholder both
+                      already say to type your full name. Kept as an aria-label so
+                      the field still has an accessible name. */}
                   <input
                     id="rsvp-search"
                     ref={searchRef}
                     type="text"
                     autoComplete="off"
+                    aria-label={RSVP.search.label}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder={RSVP.search.placeholder}
                     className={fieldClass}
                   />
-                  <p className="mt-2 font-body text-[13px] leading-[1.5] text-ink-soft/80">
-                    {lookup === "searching" ? RSVP.search.searching : RSVP.search.help}
-                  </p>
+                  {/* Only the searching indicator lives here now — the standing
+                      help line is gone. aria-live so it's announced rather than
+                      being a silent change for screen-reader users. */}
+                  {lookup === "searching" && (
+                    <p
+                      aria-live="polite"
+                      className="mt-2.5 font-body text-[15.5px] leading-[1.5] text-ink-soft/80"
+                    >
+                      {RSVP.search.searching}
+                    </p>
+                  )}
                 </div>
 
                 {lookup === "results" && (
-                  <ul className="mt-4 space-y-2">
+                  <ul className="mt-5 space-y-2.5">
                     {matches.map((m) => (
                       <li key={m.partyId}>
                         <button
                           type="button"
-                          onClick={() => (m.existing ? setReviewing(m) : selectParty(m))}
-                          className="w-full rounded-md border border-ink/15 px-4 py-3 text-left transition-colors hover:border-ribbon-deep hover:bg-ribbon-light/30"
+                          /* existing → full recap; responded-only → the bare
+                             "already replied" notice; neither → straight in. */
+                          onClick={() =>
+                            m.existing || m.responded
+                              ? setReviewing(m)
+                              : selectParty(m)
+                          }
+                          className="w-full rounded-md border border-ink/15 px-5 py-3.5 text-left transition-colors hover:border-ribbon-deep hover:bg-ribbon-light/30"
                         >
-                          <span className="block font-body text-[15px] text-ink">
-                            {m.members.map((x) => x.name).join(", ")}
-                          </span>
-                          <span className="mt-0.5 block font-utility text-[10px] uppercase tracking-[0.18em] text-ink-soft">
+                          <span className="block font-body text-[18px] text-ink">
                             {m.partyLabel}
+                          </span>
+                          <span className="mt-1 block space-y-0.5">
+                            {m.members.map((x) => (
+                              <span
+                                key={x.guestId}
+                                className="block font-utility text-[12px] uppercase tracking-[0.18em] text-ink-soft"
+                              >
+                                {x.name}
+                              </span>
+                            ))}
                           </span>
                         </button>
                       </li>
@@ -491,12 +573,17 @@ export function RsvpModal({
                 )}
 
                 {lookup === "notfound" && (
-                  <p className="mt-4 font-body text-[14px] leading-[1.6] text-ink">
+                  <p className="mt-5 font-body text-[17px] leading-[1.6] text-ink">
                     {RSVP.search.notFound} {mailtoLink}.
                   </p>
                 )}
+                {lookup === "ambiguous" && (
+                  <p className="mt-5 font-body text-[17px] leading-[1.6] text-ink">
+                    {RSVP.search.ambiguous} {mailtoLink}.
+                  </p>
+                )}
                 {lookup === "error" && (
-                  <p className="mt-4 font-body text-[14px] leading-[1.6] text-ink">
+                  <p className="mt-5 font-body text-[17px] leading-[1.6] text-ink">
                     {RSVP.errorBody} {mailtoLink}.
                   </p>
                 )}
@@ -504,49 +591,55 @@ export function RsvpModal({
             ) : (
               /* ---- Step 2: your party ---- */
               <form onSubmit={handleSubmit} noValidate>
-                <h2 id={titleId} className="font-display text-4xl text-ink sm:text-5xl">
+                <h2 id={titleId} className="font-display text-[2.7rem] text-ink sm:text-[3.6rem]">
                   {party.partyLabel}
                 </h2>
-                <p className="mt-2 font-body text-[14.5px] leading-[1.6] text-ink-soft">
+                <p className="mt-2.5 font-body text-[17.5px] leading-[1.6] text-ink-soft">
                   {isEditing ? RSVP.editingNote : RSVP.party.intro}
                 </p>
 
-                <div className="mt-6 space-y-6">
+                <div className="mt-7 space-y-7">
                   {party.members.map((m) => (
-                    <div key={m.guestId} className="border-t border-ink/10 pt-5 first:border-t-0 first:pt-0">
-                      {/* Only worth naming the person when there's more than one
-                          in the party — for a party of one it just repeats the
-                          heading above. */}
-                      {party.members.length > 1 && (
-                        <div className="flex items-baseline justify-between">
-                          <span className="font-body text-[16px] text-ink">{m.name}</span>
-                          {m.isKid && (
-                            <span className="font-utility text-[10px] uppercase tracking-[0.18em] text-ink-soft">
-                              {RSVP.party.kidTag}
-                            </span>
+                    <div key={m.guestId} className="border-t border-ink/10 pt-6 first:border-t-0 first:pt-0">
+                      {/* Name on the left, the two choices across from it, always
+                          on the same line. The choices are shrink-0 and the name
+                          is min-w-0, so a long name wraps within its own column
+                          instead of shoving the radios onto a line of their own.
+                          Matches the recap rows above. */}
+                      <div className="flex items-baseline justify-between gap-5">
+                        {/* Only worth naming the person when there's more than one
+                            in the party — for a party of one it just repeats the
+                            heading above. */}
+                        {party.members.length > 1 && (
+                          <span className="min-w-0 font-body text-[19px] text-ink">
+                            {m.name}
+                            {m.isKid && (
+                              <span className="ml-2.5 font-utility text-[12px] uppercase tracking-[0.18em] text-ink-soft">
+                                {RSVP.party.kidTag}
+                              </span>
+                            )}
+                          </span>
+                        )}
+                        <div className="ml-auto flex shrink-0 items-center gap-5">
+                          {([["yes", RSVP.party.yes], ["no", RSVP.party.no]] as const).map(
+                            ([value, text]) => (
+                              <label
+                                key={value}
+                                className="flex cursor-pointer items-center gap-2.5 font-body text-[18px] text-ink"
+                              >
+                                <input
+                                  type="radio"
+                                  name={`att-${m.guestId}`}
+                                  value={value}
+                                  checked={people[m.guestId]?.attending === value}
+                                  onChange={() => setPerson(m.guestId, { attending: value })}
+                                  className="accent-ribbon-deep"
+                                />
+                                {text}
+                              </label>
+                            ),
                           )}
                         </div>
-                      )}
-
-                      <div className="mt-3 flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-6">
-                        {([["yes", RSVP.party.yes], ["no", RSVP.party.no]] as const).map(
-                          ([value, text]) => (
-                            <label
-                              key={value}
-                              className="flex cursor-pointer items-center gap-2 font-body text-[15px] text-ink"
-                            >
-                              <input
-                                type="radio"
-                                name={`att-${m.guestId}`}
-                                value={value}
-                                checked={people[m.guestId]?.attending === value}
-                                onChange={() => setPerson(m.guestId, { attending: value })}
-                                className="accent-ribbon-deep"
-                              />
-                              {text}
-                            </label>
-                          ),
-                        )}
                       </div>
 
                       <input
@@ -560,13 +653,13 @@ export function RsvpModal({
 
                       {m.plusOneAllowed &&
                         (plusOnes[m.guestId] ? (
-                          <div className="mt-3 rounded-md border border-ribbon/40 bg-ribbon-light/20 p-3">
+                          <div className="mt-3.5 rounded-md border border-ribbon/40 bg-ribbon-light/20 p-3.5">
                             <div className="flex items-center justify-between">
                               <span className={labelClass}>{RSVP.party.addPlusOne}</span>
                               <button
                                 type="button"
                                 onClick={() => togglePlusOne(m.guestId, false)}
-                                className="font-utility text-[10px] uppercase tracking-[0.18em] text-ink-soft hover:text-ink"
+                                className="font-utility text-[12px] uppercase tracking-[0.18em] text-ink-soft hover:text-ink"
                               >
                                 {RSVP.party.removePlusOne}
                               </button>
@@ -579,12 +672,12 @@ export function RsvpModal({
                               placeholder={RSVP.party.plusOneNamePlaceholder}
                               className={fieldClass}
                             />
-                            <div className="mt-3 flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-6">
+                            <div className="mt-3.5 flex items-center justify-end gap-5">
                               {([["yes", RSVP.party.yes], ["no", RSVP.party.no]] as const).map(
                                 ([value, text]) => (
                                   <label
                                     key={value}
-                                    className="flex cursor-pointer items-center gap-2 font-body text-[15px] text-ink"
+                                    className="flex cursor-pointer items-center gap-2.5 font-body text-[18px] text-ink"
                                   >
                                     <input
                                       type="radio"
@@ -604,10 +697,10 @@ export function RsvpModal({
                           <button
                             type="button"
                             onClick={() => togglePlusOne(m.guestId, true)}
-                            className="mt-3 font-utility text-[11px] uppercase tracking-[0.2em] text-ribbon-deep hover:text-ink"
+                            className="mt-3.5 font-utility text-[13px] uppercase tracking-[0.2em] text-ribbon-deep hover:text-ink"
                           >
                             + {RSVP.party.addPlusOne}
-                            <span className="ml-2 font-body text-[12px] normal-case tracking-normal text-ink-soft">
+                            <span className="ml-2.5 font-body text-[14px] normal-case tracking-normal text-ink-soft">
                               {RSVP.party.plusOneNote}
                             </span>
                           </button>
@@ -615,7 +708,7 @@ export function RsvpModal({
                     </div>
                   ))}
 
-                  <div className="border-t border-ink/10 pt-5">
+                  <div className="border-t border-ink/10 pt-6">
                     <label htmlFor="rsvp-email" className={labelClass}>
                       {RSVP.party.emailLabel}
                     </label>
@@ -660,23 +753,23 @@ export function RsvpModal({
                 </div>
 
                 {errorMsg && (
-                  <p className="mt-4 font-body text-[14px] leading-[1.6] text-ink">
+                  <p className="mt-5 font-body text-[17px] leading-[1.6] text-ink">
                     {errorMsg} {status === "error" && <>— {mailtoLink}</>}
                   </p>
                 )}
 
-                <div className="mt-6 flex items-center justify-between gap-4">
+                <div className="mt-7 flex items-center justify-between gap-5">
                   <button
                     type="button"
                     onClick={backToSearch}
-                    className="font-utility text-[11px] uppercase tracking-[0.2em] text-ink-soft hover:text-ink"
+                    className="font-utility text-[13px] uppercase tracking-[0.2em] text-ink-soft hover:text-ink"
                   >
                     ← {RSVP.search.backLabel}
                   </button>
                   <button
                     type="submit"
                     disabled={status === "submitting"}
-                    className="rounded-full bg-ink px-6 py-3 font-utility text-[12px] uppercase tracking-[0.24em] text-ivory transition-colors hover:bg-ribbon-deep disabled:opacity-60"
+                    className="rounded-full bg-ink px-7 py-3.5 font-utility text-[14px] uppercase tracking-[0.24em] text-ivory transition-colors hover:bg-ribbon-deep disabled:opacity-60"
                   >
                     {status === "submitting"
                       ? RSVP.submittingLabel

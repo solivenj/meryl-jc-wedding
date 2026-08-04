@@ -33,7 +33,7 @@ function TravelColumn() {
                 ease: EASE_OUT,
               }}
               suppressHydrationWarning
-              className="font-body text-[15px] font-medium tracking-[0.02em] text-ink"
+              className="font-body text-[15.5px] font-medium tracking-[0.02em] text-ink"
             >
               {block.label}
             </motion.h3>
@@ -47,7 +47,7 @@ function TravelColumn() {
                 ease: EASE_OUT,
               }}
               suppressHydrationWarning
-              className="mt-2 max-w-[42ch] font-body text-[17px] leading-[1.75] text-ink-soft"
+              className="mt-2 max-w-[42ch] font-body text-[17.5px] leading-[1.75] text-ink-soft"
             >
               {block.body}
             </motion.p>
@@ -80,7 +80,7 @@ function FaqColumn() {
                 ease: EASE_OUT,
               }}
               suppressHydrationWarning
-              className="font-body text-[15px] font-medium tracking-[0.02em] text-ink"
+              className="font-body text-[15.5px] font-medium tracking-[0.02em] text-ink"
             >
               {item.question}
             </motion.h3>
@@ -94,7 +94,7 @@ function FaqColumn() {
                 ease: EASE_OUT,
               }}
               suppressHydrationWarning
-              className="mt-2 max-w-[42ch] font-body text-[17px] leading-[1.75] text-ink-soft"
+              className="mt-2 max-w-[42ch] font-body text-[17.5px] leading-[1.75] text-ink-soft"
             >
               {item.answer}
             </motion.p>

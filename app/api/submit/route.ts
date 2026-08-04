@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { checkBotId } from "botid/server";
 import { loadGuests, loadResponses, appendResponses, isClosed } from "@/lib/sheets";
+import { RSVP_COOKIE, buildPartyCookie } from "@/lib/rsvp-cookie";
 import {
   validateSubmission,
   buildParties,
   latestResponsesForParty,
+  namesInMultipleParties,
   buildEditNote,
   type SubmissionPayload,
 } from "@/lib/rsvp";
@@ -21,6 +25,10 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function POST(request: Request) {
   if (isClosed()) {
     return NextResponse.json({ error: "RSVPs are closed." }, { status: 403 });
+  }
+
+  if ((await checkBotId()).isBot) {
+    return NextResponse.json({ error: "Access denied." }, { status: 403 });
   }
 
   let body: SubmissionPayload;
@@ -52,8 +60,15 @@ export async function POST(request: Request) {
 
     const party = buildParties(guests).get(body.partyId);
     const priorResponses = await loadResponses();
+    // Same fail-safe as the lookup route: a name shared by two households can't
+    // mark either one as a resubmission.
     const hadPriorResponse =
-      !!party && latestResponsesForParty(priorResponses, party).length > 0;
+      !!party &&
+      latestResponsesForParty(
+        priorResponses,
+        party,
+        namesInMultipleParties(guests),
+      ).length > 0;
     const now = new Date();
 
     await appendResponses(result.rows, {
@@ -62,6 +77,27 @@ export async function POST(request: Request) {
       message: (body.message ?? "").trim(),
       notes: buildEditNote(hadPriorResponse, now),
     });
+
+    /* Remember that THIS browser answered for this party — the lookup route
+     * hands prior answers back only to a browser holding this proof, so a guest
+     * can edit from their own phone while a stranger who knows the same name
+     * sees nothing but a date. Appends, so one phone can answer for two
+     * households. Null when RSVP_COOKIE_SECRET is unset (then nobody ever gets
+     * prefill, which is the safe direction to fail). */
+    const store = await cookies();
+    const cookieValue = buildPartyCookie(
+      body.partyId,
+      store.get(RSVP_COOKIE)?.value,
+    );
+    if (cookieValue) {
+      store.set(RSVP_COOKIE, cookieValue, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 180, // through the wedding and a little past it
+      });
+    }
 
     return NextResponse.json({ ok: true });
   } catch (err) {

@@ -65,7 +65,10 @@ export function ActOne({ onOpen }: { onOpen: () => void }) {
           type="button"
           aria-label={ACT_ONE.openLabel}
           onClick={onOpen}
-          className="block cursor-pointer select-none"
+          /* appearance-none + overflow-visible: iOS WebKit paints a native-
+             appearance button clipped to its border box, which chopped the
+             envelope's drop-shadow off at the bottom edge (desktop is fine). */
+          className="block cursor-pointer select-none appearance-none overflow-visible bg-transparent p-0"
         >
           <Image
             src="/envelope.webp"

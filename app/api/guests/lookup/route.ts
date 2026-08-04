@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { checkBotId } from "botid/server";
 import { loadGuests, loadResponses, isClosed } from "@/lib/sheets";
+import { RSVP_COOKIE, hasProvenParty } from "@/lib/rsvp-cookie";
 import {
-  matchParties,
+  findParty,
   latestResponsesForParty,
+  namesInMultipleParties,
   decodePlusOneName,
   normalize,
   MIN_QUERY_LENGTH,
@@ -87,6 +91,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Too many attempts." }, { status: 429 });
   }
 
+  /* Invisible bot challenge, before any Sheets read. The per-instance limiter
+   * above only slows a scripted client down; this is what stops it. */
+  if ((await checkBotId()).isBot) {
+    return NextResponse.json({ error: "Access denied." }, { status: 403 });
+  }
+
   let query = "";
   try {
     const body = (await request.json()) as { query?: string };
@@ -100,17 +110,45 @@ export async function POST(request: Request) {
 
   try {
     const guests = await loadGuests();
-    const parties = matchParties(guests, query);
-    if (!parties.length) return NextResponse.json({ matches: [] });
+    const found = findParty(guests, query);
+    if (found.status === "none") return NextResponse.json({ matches: [] });
+    // One full name, two households: disclose neither.
+    if (found.status === "ambiguous") {
+      return NextResponse.json({ matches: [], ambiguous: true });
+    }
+    const party = found.party;
 
     const responses = await loadResponses();
-    const matches = parties.map((p: Party) => ({
-      partyId: p.partyId,
-      partyLabel: p.partyLabel,
-      members: p.members,
-      existing: buildPrefill(latestResponsesForParty(responses, p), p),
-    }));
-    return NextResponse.json({ matches });
+    /* A name owned by two households can't be attributed to either, so its
+     * stored rows are ignored for prefill rather than shown to the wrong
+     * family. loadGuests logs these; see namesInMultipleParties. */
+    const rows = latestResponsesForParty(
+      responses,
+      party,
+      namesInMultipleParties(guests),
+    );
+
+    /* Prior answers go ONLY to the browser that submitted them. Anyone else who
+     * knows this name learns that a response exists and when — not who's
+     * coming, dietary notes, the email, or the message. */
+    const proven = hasProvenParty(
+      (await cookies()).get(RSVP_COOKIE)?.value,
+      party.partyId,
+    );
+    const existing = proven ? buildPrefill(rows, party) : null;
+    const responded = rows.length ? { submittedAt: rows[0].timestamp } : null;
+
+    return NextResponse.json({
+      matches: [
+        {
+          partyId: party.partyId,
+          partyLabel: party.partyLabel,
+          members: party.members,
+          existing,
+          responded,
+        },
+      ],
+    });
   } catch (err) {
     console.error("RSVP lookup failed", err);
     return NextResponse.json({ error: "Lookup failed." }, { status: 500 });
