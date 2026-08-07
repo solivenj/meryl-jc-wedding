@@ -93,35 +93,48 @@ export function ActOne({ onOpen }: { onOpen: () => void }) {
         {ACT_ONE.tagline}
       </p>
 
-      {/* Beat 3 — CTA with gentle infinite pulse */}
+      {/* Beat 3 — CTA with gentle infinite pulse. It says "click to open", so it
+          opens: a real <button> rather than a click handler on the span, so it
+          stays keyboard-reachable. No aria-label here — the visible text is the
+          accessible name, which is also what keeps axe's
+          label-content-name-mismatch quiet (the envelope above carries the
+          longer descriptive label). */}
       <div className="act-rise mt-6" style={riseDelay(3)}>
-        <motion.span
-          initial={false}
-          animate={
-            reduced
-              ? { opacity: 1 }
-              : {
-                  opacity: [
-                    IDLE.ctaPulse.opacityMin,
-                    IDLE.ctaPulse.opacityMax,
-                    IDLE.ctaPulse.opacityMin,
-                  ],
-                }
-          }
-          transition={
-            reduced
-              ? { duration: 0 }
-              : {
-                  delay: ENTRANCE.stagger * 3 + ENTRANCE.duration,
-                  duration: IDLE.ctaPulse.period,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }
-          }
-          className="block font-utility text-[11px] tracking-[0.28em] text-ink sm:text-xs"
+        <button
+          type="button"
+          onClick={onOpen}
+          className="block cursor-pointer select-none appearance-none bg-transparent p-0"
         >
-          {touch ? ACT_ONE.ctaTouch : ACT_ONE.ctaPointer}
-        </motion.span>
+          <motion.span
+            initial={false}
+            animate={
+              reduced
+                ? { opacity: 1 }
+                : {
+                    opacity: [
+                      IDLE.ctaPulse.opacityMin,
+                      IDLE.ctaPulse.opacityMax,
+                      IDLE.ctaPulse.opacityMin,
+                    ],
+                  }
+            }
+            transition={
+              reduced
+                ? { duration: 0 }
+                : {
+                    delay: ENTRANCE.stagger * 3 + ENTRANCE.duration,
+                    duration: IDLE.ctaPulse.period,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }
+            }
+            /* hover colour lives here, not on the button: the span sets
+               text-ink, which would win over an inherited hover colour. */
+            className="block font-utility text-[11px] tracking-[0.28em] text-ink transition-colors hover:text-ribbon-deep sm:text-xs"
+          >
+            {touch ? ACT_ONE.ctaTouch : ACT_ONE.ctaPointer}
+          </motion.span>
+        </button>
       </div>
     </section>
   );

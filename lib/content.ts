@@ -74,14 +74,14 @@ export const STORY = {
   /* Invitation copy — one string per paragraph. Story.tsx mask-reveals each
      paragraph as its own group, so paragraph breaks live here. */
   invitation: [
-    "Our love started in college, falling more in love with each study session, " +
-      "meals shared, and time spent together. After a first date with dinner and a scary movie, " +
+    "Our story started in college, falling more in love with each study session, " +
+      "meals shared, and time spent together. After a first date with dinner and a movie, " +
       "we knew that our connection was real and special.",
     "Through periods of long distance on opposite coasts of the country, " +
       "there was nothing that could affect our love for each other. " +
       "We became each other's #1 person, navigating life hand in hand.",
     "We would be honored to have you beside us on our wedding day to witness the beginning of our " +
-      "next chapter and every moment until then",
+      "next chapter and every moment until then.",
   ],
 };
 
@@ -89,10 +89,10 @@ export const PROGRAM = {
   header: "Program",
   /* PLACEHOLDER — all times and items (PRD §4.1 S4) */
   rows: [
+    { time: "2:15 PM", item: "Arrive at Church"},
     { time: "3:00 PM", item: "Marriage Ceremony Begins" },
-    { time: "6:00 PM", item: "Welcome Photos & Cocktails" },
-    { time: "7:00 PM", item: "Dinner Program" },
-    { time: "8:00 PM", item: "Toasts & Speeches" },
+    { time: "6:00 PM", item: "Cocktail Hour" },
+    { time: "7:00 PM", item: "Reception" },
     { time: "9:00 PM", item: "Dancing!" },
   ],
 };
@@ -122,8 +122,7 @@ export const RECEPTION = {
       label: "Parking & Directions",
       body:
         "Free parking is available on site, with designated areas for " +
-        "rideshare pick up and drop off close to the entrance. Details " +
-        "will follow with the formal invitation.",
+        "rideshare pick up and drop off close to the entrance.",
     },
   ],
 };
@@ -205,7 +204,7 @@ export const RSVP = {
   errorBody: "We couldn't save your RSVP just now. Please try again, or email us:",
   retryLabel: "Try again",
   /* mailto fallback shown on error / closed — PLACEHOLDER address */
-  mailtoFallback: "meryl.and.john@example.com",
+  mailtoFallback: "merylandjc@gmail.com",
 };
 
 export const TRAVEL = {
@@ -218,23 +217,23 @@ export const TRAVEL = {
         "Both the ceremony and reception are a short drive from Newark " +
         "Liberty (EWR) and rideshare is plentiful.",
     },
-    /* No hotel block — guests are local, so nobody needs lodging. Replaced with
-       the one piece of travel this wedding actually creates: the ceremony and
-       reception are in two different cities.
-       TODO(John): confirm the drive time between the two venues. */
+    /* No room block — suggestions only, one per area (near dinner / between the
+       two / near the church) so guests can pick by where they'd rather wake up.
+       Deliberately no nightly rates or star ratings: they drift, and stale
+       numbers on a wedding site are worse than none. */
+    {
+      label: "Where to Stay",
+      body:
+        "There are a few great options nearby the ceremony and the reception: " +
+        "DoubleTree by Hilton, Newark Penn Station · Element by Marriott, " +
+        "Harrison · Holiday Inn Express & Suites, Jersey City.",
+    },
     {
       label: "Between the Venues",
       body:
         "The ceremony and the reception are about twenty minutes apart — St. " +
-        "Aloysius in Jersey City, then Adega Grill in Newark. Rideshare runs " +
-        "easily between the two if you'd rather leave the car where it is.",
-    },
-    {
-      label: "Parking",
-      body:
-        "Complimentary parking is available on site, with rideshare drop " +
-        "off close to the entrance for anyone who'd rather not drive.",
-    },
+        "Aloysius in Jersey City, then Adega Grill in Newark.",
+    }
   ],
 };
 
@@ -249,15 +248,9 @@ export const FAQ = {
         "you have a question, just reach out and we'll do our best.",
     },
     {
-      question: "Are kids welcome?",
-      answer:
-        "We love your little ones, but this celebration is planned as an " +
-        "adults-only evening so everyone can relax and dance.",
-    },
-    {
       question: "What should I wear?",
       answer:
-        "Cocktail attire and Filipino traditional barongs! Please save ivory for the bride.",
+        "Cocktail attire and traditional Filipino wear! Please save ivory for the bride.",
     },
     /* The ceremony is at three and dinner isn't until six — the likeliest
        question any guest will have, and the only place the site answers it. */
