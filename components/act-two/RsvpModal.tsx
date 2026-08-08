@@ -602,16 +602,19 @@ export function RsvpModal({
                   {party.members.map((m) => (
                     <div key={m.guestId} className="border-t border-ink/10 pt-6 first:border-t-0 first:pt-0">
                       {/* Name on the left, the two choices across from it, always
-                          on the same line. The choices are shrink-0 and the name
-                          is min-w-0, so a long name wraps within its own column
-                          instead of shoving the radios onto a line of their own.
-                          Matches the recap rows above. */}
-                      <div className="flex items-baseline justify-between gap-5">
+                          on the same line — but only from sm up. The two labels
+                          need ~365px together, and a phone panel offers ~294px,
+                          so below sm everything stacks: name, then each choice on
+                          its own line. Without that the name shrinks to 0px and
+                          vanishes while the radios still overflow. w-fit keeps
+                          each stacked label's hit area on its text rather than
+                          the full row. */}
+                      <div className="flex flex-col gap-2.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-5">
                         {/* Only worth naming the person when there's more than one
                             in the party — for a party of one it just repeats the
                             heading above. */}
                         {party.members.length > 1 && (
-                          <span className="min-w-0 font-body text-[19px] text-ink">
+                          <span className="font-body text-[19px] text-ink sm:min-w-0">
                             {m.name}
                             {m.isKid && (
                               <span className="ml-2.5 font-utility text-[12px] uppercase tracking-[0.18em] text-ink-soft">
@@ -620,12 +623,12 @@ export function RsvpModal({
                             )}
                           </span>
                         )}
-                        <div className="ml-auto flex shrink-0 items-center gap-5">
+                        <div className="flex flex-col gap-2.5 sm:ml-auto sm:flex-row sm:shrink-0 sm:items-center sm:gap-5">
                           {([["yes", RSVP.party.yes], ["no", RSVP.party.no]] as const).map(
                             ([value, text]) => (
                               <label
                                 key={value}
-                                className="flex cursor-pointer items-center gap-2.5 font-body text-[18px] text-ink"
+                                className="flex w-fit cursor-pointer items-center gap-2.5 font-body text-[18px] text-ink"
                               >
                                 <input
                                   type="radio"
@@ -672,12 +675,14 @@ export function RsvpModal({
                               placeholder={RSVP.party.plusOneNamePlaceholder}
                               className={fieldClass}
                             />
-                            <div className="mt-3.5 flex items-center justify-end gap-5">
+                            {/* Same stack-below-sm rule as the member rows — this
+                                sits inside an even narrower padded card. */}
+                            <div className="mt-3.5 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-end sm:gap-5">
                               {([["yes", RSVP.party.yes], ["no", RSVP.party.no]] as const).map(
                                 ([value, text]) => (
                                   <label
                                     key={value}
-                                    className="flex cursor-pointer items-center gap-2.5 font-body text-[18px] text-ink"
+                                    className="flex w-fit cursor-pointer items-center gap-2.5 font-body text-[18px] text-ink"
                                   >
                                     <input
                                       type="radio"

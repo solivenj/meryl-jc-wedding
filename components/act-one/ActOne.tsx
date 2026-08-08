@@ -78,7 +78,14 @@ export function ActOne({ onOpen }: { onOpen: () => void }) {
             height={857}
             priority
             unoptimized /* asset pre-compressed; static export has no optimizer */
-            className="mx-auto block h-auto w-auto max-h-[46dvh] max-w-[min(85vw,540px)] [filter:drop-shadow(0_26px_26px_rgb(138_122_95/0.35))]"
+            /* translateZ(0) pins this image to its own compositing layer.
+               .act-rise ends on `transform: none`, so when the entrance
+               finishes iOS WebKit tears the parent's GPU layer down and
+               repaints — and the drop-shadow came back as a hard rectangle
+               over the soft one. Its own layer means the parent's animation
+               lifecycle can't take the filter's raster with it. Desktop was
+               never affected; Chrome demotes layers without the artifact. */
+            className="mx-auto block h-auto w-auto max-h-[46dvh] max-w-[min(85vw,540px)] [transform:translateZ(0)] [filter:drop-shadow(0_26px_26px_rgb(138_122_95/0.35))]"
           />
         </button>
       </div>
