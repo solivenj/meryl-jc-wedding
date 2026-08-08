@@ -12,9 +12,20 @@ import { EASE_OUT, MASK_REVEAL } from "@/lib/motion";
  * from their sides; the invitation copy rises in line-group masks.
  */
 
+/*
+ * At md+ the two captions flank the frames and each hugs the middle column:
+ * the left one is right-aligned, the right one left-aligned. Below md the grid
+ * collapses to a single column and they'd both fall to the left edge, so the
+ * pair reads as one stack. Aligning the trailing caption to the right keeps the
+ * left/right conversation intact on a phone, and it sits under the oval
+ * portrait, which is itself offset right.
+ */
 function Caption({ lines, from }: { lines: string[]; from: "left" | "right" }) {
   return (
-    <Reveal x={from === "left" ? -24 : 24} className={from === "left" ? "md:text-right" : ""}>
+    <Reveal
+      x={from === "left" ? -24 : 24}
+      className={from === "left" ? "md:text-right" : "text-right md:text-left"}
+    >
       <p className="font-utility text-[11px] leading-[2] tracking-[0.26em] text-ink-soft">
         {lines.map((line) => (
           <span key={line} className="block whitespace-nowrap">
