@@ -131,7 +131,7 @@ export const RSVP = {
   /* Small section above Program. PLACEHOLDER copy — John's to rewrite. */
   headline: "Will you celebrate with us?",
   subline:
-    "Kindly send your reply by March 1, 2027 so we can save you a seat at the table.",
+    "Kindly send your reply by February 1, 2027 so we can save you a seat at the table.",
   buttonLabel: "RSVP",
 
   /* Modal — step 1: find yourself */
