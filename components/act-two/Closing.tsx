@@ -24,7 +24,7 @@ export function Closing() {
       />
       <div className="absolute inset-0 bg-scrim" aria-hidden />
 
-      <div className="relative px-6 py-24 text-center text-ivory">
+      <div className="relative -translate-y-[22vh] px-6 py-24 text-center text-ivory sm:-translate-y-[20vh]">
         {/* Observer on the unclipped wrapper (see Story.tsx note). */}
         <motion.div
           initial="hidden"

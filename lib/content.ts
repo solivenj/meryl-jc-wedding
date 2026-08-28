@@ -130,8 +130,11 @@ export const RECEPTION = {
 export const RSVP = {
   /* Small section above Program. PLACEHOLDER copy — John's to rewrite. */
   headline: "Will you celebrate with us?",
-  subline:
-    "Kindly send your reply by February 1, 2027 so we can save you a seat at the table.",
+  subline: {
+    before: "Kindly send your reply by ",
+    date: "February 1, 2027",
+    after: " so we can save you a seat at the table.",
+  },
   buttonLabel: "RSVP",
 
   /* Modal — step 1: find yourself */
@@ -224,7 +227,7 @@ export const TRAVEL = {
     {
       label: "Where to Stay",
       body:
-        "There are a few great options nearby the ceremony and the reception: " +
+        "We do not have a room block at a hotel, however here are some recommended nearby options: " +
         "DoubleTree by Hilton, Newark Penn Station · Element by Marriott, " +
         "Harrison · Holiday Inn Express & Suites, Jersey City.",
     },
