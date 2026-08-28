@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import { Reveal } from "@/components/ui/Reveal";
-import { TRAVEL, FAQ } from "@/lib/content";
+import { TRAVEL, FAQ, RSVP } from "@/lib/content";
 import { EASE_OUT, SCROLL_REVEAL } from "@/lib/motion";
 
 /*
@@ -107,7 +107,7 @@ function FaqColumn() {
 
 export function TravelFaq() {
   return (
-    <section className="bg-ivory py-24 sm:py-32">
+    <section className="bg-ivory pt-24 pb-16 sm:pt-32 sm:pb-20">
       {/* Capped at max-w-5xl so the halves shrink together on wide screens —
           otherwise short content sits centered in a much-too-wide half,
           leaving a large empty gap at the shared midline. Same two-halves
@@ -128,6 +128,11 @@ export function TravelFaq() {
           </div>
         </div>
       </div>
+      <Reveal>
+        <p className="mt-10 px-6 text-center font-body text-[17.5px] leading-[1.75] text-ink-soft sm:mt-12">
+          Questions? Please email us at {RSVP.mailtoFallback}
+        </p>
+      </Reveal>
     </section>
   );
 }
