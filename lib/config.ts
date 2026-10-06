@@ -14,6 +14,9 @@
  */
 export const RSVP_DEADLINE: string | null = null;
 
+/** Same as RSVP_DEADLINE, for the Italy wedding RSVP (/italy-wedding/rsvp). */
+export const ITALY_RSVP_DEADLINE: string | null = null;
+
 /**
  * @deprecated Superseded by the guest-list party model (each guest's
  * `plus_one_allowed` flag in the Guests sheet). Left only to avoid breaking

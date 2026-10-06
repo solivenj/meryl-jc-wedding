@@ -32,10 +32,10 @@ const jost = Jost({
   display: "swap",
 });
 
+/* Each route (save-the-date, italy-wedding) sets its own title + description. */
 export const metadata: Metadata = {
-  title: "Meryl & John · Save the Date",
-  description:
-    "Save the date: Meryl & John are getting married on April 10, 2027 at St. Aloysius R.C. Church, Jersey City, NJ.",
+  title: "Meryl & John",
+  description: "Meryl & John are getting married.",
 };
 
 export default function RootLayout({

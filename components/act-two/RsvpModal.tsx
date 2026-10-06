@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { RSVP } from "@/lib/content";
+import { RSVP as SAVE_THE_DATE_RSVP } from "@/lib/content";
 import { EASE_OUT } from "@/lib/motion";
 // lib/rsvp is deliberately pure (no node/framework imports), so it's safe to
 // pull the shared matching constant into the client bundle.
@@ -66,22 +66,35 @@ function formatSubmitted(iso: string): string {
   });
 }
 
-const mailtoLink = (
-  <a
-    href={`mailto:${RSVP.mailtoFallback}`}
-    className="underline decoration-ribbon-deep underline-offset-2"
-  >
-    {RSVP.mailtoFallback}
-  </a>
-);
+/* The modal serves more than one event (save-the-date, Italy wedding): copy
+   and API routes come in as props, defaulting to the save-the-date's. */
+export type RsvpCopy = typeof SAVE_THE_DATE_RSVP;
+export type RsvpEndpoints = { lookup: string; submit: string };
+
+const SAVE_THE_DATE_ENDPOINTS: RsvpEndpoints = {
+  lookup: "/api/guests/lookup",
+  submit: "/api/submit",
+};
 
 export function RsvpModal({
   open,
   onClose,
+  content: RSVP = SAVE_THE_DATE_RSVP,
+  endpoints = SAVE_THE_DATE_ENDPOINTS,
 }: {
   open: boolean;
   onClose: () => void;
+  content?: RsvpCopy;
+  endpoints?: RsvpEndpoints;
 }) {
+  const mailtoLink = (
+    <a
+      href={`mailto:${RSVP.mailtoFallback}`}
+      className="underline decoration-ribbon-deep underline-offset-2"
+    >
+      {RSVP.mailtoFallback}
+    </a>
+  );
   const reduced = useReducedMotion();
   const titleId = useId();
   const searchRef = useRef<HTMLInputElement>(null);
@@ -161,7 +174,7 @@ export function RsvpModal({
     const ctrl = new AbortController();
     const t = window.setTimeout(async () => {
       try {
-        const res = await fetch("/api/guests/lookup", {
+        const res = await fetch(endpoints.lookup, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ query: q }),
@@ -186,7 +199,7 @@ export function RsvpModal({
       ctrl.abort();
       window.clearTimeout(t);
     };
-  }, [query, open, party]);
+  }, [query, open, party, endpoints.lookup]);
 
   function selectParty(m: Match) {
     const nextPeople: Record<string, PersonAnswer> = {};
@@ -279,7 +292,7 @@ export function RsvpModal({
       _hp: hp,
     };
     try {
-      const res = await fetch("/api/submit", {
+      const res = await fetch(endpoints.submit, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

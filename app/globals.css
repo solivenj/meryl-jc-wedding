@@ -20,6 +20,18 @@
   --font-display: var(--font-pinyon);
   --font-body: var(--font-garamond);
   --font-utility: var(--font-jost);
+
+  /* /italy-wedding only — unused names elsewhere, so the save-the-date is unaffected. */
+  --color-forest: #1e312c; /* nav, links, caps labels */
+  --color-rule: rgb(30 35 30 / 0.2); /* hairlines */
+}
+
+/* Inline: the Italy font vars only exist inside the italy-wedding layout (set
+   there by next/font), so these must compile to var(--font-monsieur) etc. at
+   the use site rather than resolve once at :root. */
+@theme inline {
+  --font-flourish: var(--font-monsieur); /* names, hero script, monogram */
+  --font-caps: var(--font-baskerville); /* tracked uppercase labels */
 }
 
 body {
@@ -77,5 +89,95 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .act-rise {
     animation-name: act-fade; /* fade only, no translation (PRD §3.3) */
+  }
+}
+
+/*
+ * /italy-wedding theme. Scoped re-point of the shared tokens, so every utility
+ * (and the shared RSVP modal, which renders inline) picks up the Italy palette
+ * and type without code changes. Nothing outside .theme-italy is touched.
+ */
+.theme-italy {
+  --color-ivory: #fffcf4;
+  --color-ivory-deep: #f4efe2;
+  --color-ink: #1e231e;
+  --color-ink-soft: #55564c;
+  --color-ribbon: #3a4e47;
+  --color-ribbon-deep: #1e312c;
+  --color-ribbon-light: rgb(30 35 30 / 0.12);
+  --color-scrim: rgb(20 24 20 / 0.45);
+
+  --font-display: var(--font-pinyon); /* section script */
+  --font-body: var(--font-cormorant);
+  --font-utility: var(--font-baskerville);
+}
+
+body:has(.theme-italy) {
+  background: #fffcf4;
+}
+
+/* Page rise on every tab change (app/italy-wedding/template.tsx remounts). */
+@keyframes italy-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.italy-rise {
+  animation: italy-rise 550ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .italy-rise {
+    animation: none;
+  }
+}
+
+/* Fixed paper grain over the whole Italy page (decorative, click-through). */
+.italy-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/*
+ * Home photo band (components/italy/PhotoCarousel.tsx). The track holds the
+ * slides twice, so sliding it left by half its width loops seamlessly. The
+ * 1px gap is part of each half, hence the extra 0.5px in the shift.
+ */
+@keyframes italy-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 0.5px));
+  }
+}
+
+.italy-marquee-track {
+  animation: italy-marquee var(--marquee-duration, 54s) linear infinite;
+}
+
+.italy-marquee:hover .italy-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Reduced motion: no drift — a still row the visitor can swipe instead. */
+@media (prefers-reduced-motion: reduce) {
+  .italy-marquee {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .italy-marquee-track {
+    animation: none;
   }
 }

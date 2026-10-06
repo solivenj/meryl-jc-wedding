@@ -6,7 +6,7 @@ import { initBotId } from "botid/client/core";
  * and attendance, so it's the endpoint worth scripting against.
  *
  * A path missing from this list makes the matching checkBotId() call fail on the
- * server, so both routes have to be declared here. Next is >= 15.3, so this
+ * server, so every RSVP route (save-the-date and Italy) has to be declared here. Next is >= 15.3, so this
  * instrumentation hook is the recommended entry point over <BotIdClient/>.
  *
  * Basic checks are free on every plan; Deep Analysis is a paid per-call add-on
@@ -16,5 +16,7 @@ initBotId({
   protect: [
     { path: "/api/guests/lookup", method: "POST" },
     { path: "/api/submit", method: "POST" },
+    { path: "/api/italy/guests/lookup", method: "POST" },
+    { path: "/api/italy/submit", method: "POST" },
   ],
 });
