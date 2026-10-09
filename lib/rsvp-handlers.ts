@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { checkBotId } from "botid/server";
-import { loadGuests, loadResponses, appendResponses, isClosed } from "@/lib/sheets";
+import {
+  loadGuests,
+  loadResponses,
+  appendResponses,
+  isClosed,
+  isFixtureMode,
+} from "@/lib/sheets";
 import { hasProvenParty, buildPartyCookie } from "@/lib/rsvp-cookie";
 import type { RsvpEvent } from "@/lib/rsvp-events";
 import {
@@ -185,6 +191,27 @@ export function makeSubmitHandler(event: RsvpEvent) {
 async function submit(event: RsvpEvent, request: Request) {
   if (isClosed(event)) {
     return NextResponse.json({ error: "RSVPs are closed." }, { status: 403 });
+  }
+
+  /*
+   * Fixture mode in production means a missing sheet id or missing creds, and
+   * appendResponses would log "would append" and drop the reply on the floor
+   * while the guest is shown the success screen. Silent data loss is the worst
+   * outcome this route has, so fail loudly instead and tell them to email.
+   * RSVP_FIXTURE=1 is the deliberate opt-in and is still honoured.
+   */
+  if (
+    isFixtureMode(event) &&
+    process.env.NODE_ENV === "production" &&
+    process.env.RSVP_FIXTURE !== "1"
+  ) {
+    console.error(
+      `RSVP (${event.key}) refused: fixture mode in production — ${event.sheetIdEnv} or the service-account creds are unset.`,
+    );
+    return NextResponse.json(
+      { error: "We couldn't save your reply just now. Please email us instead." },
+      { status: 503 },
+    );
   }
 
   if ((await checkBotId()).isBot) {
