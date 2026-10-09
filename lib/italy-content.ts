@@ -65,14 +65,15 @@ export const ITALY_SCHEDULE = {
       place: "Monastero Santa Margherita · Todi",
       dress: "Black Tie",
     },
+    /* No farewell lunch — Friday is an open day, with people leaving at their
+       own pace. Nothing is scheduled, so there is no `place` or fixed time. */
     {
       day: "Friday, April 23rd",
       art: "loggia",
-      title: "Farewell",
-      quote: "Long tables, slow afternoon",
-      time: "Midday until late afternoon",
-      place: "Details to follow",
-      dress: "Linen & Sun Hats",
+      title: "A farewell day",
+      quote: "No schedule, no hurry",
+      time: "Leave when you like",
+      dress: "Whatever you travel in",
     },
   ],
 } as const;
@@ -99,55 +100,110 @@ export const ITALY_DRESS = {
   ],
 } as const;
 
-/* VERIFIED places (Sept 2026 research); availability for 2027 not checked. */
-export const ITALY_STAY = {
-  eyebrow: "Fly to Rome or Perugia · Book early",
-  groups: [
+/*
+ * Travel (was Stay). No hotel is named on this page — not even Hotel Bramante.
+ * The room block is covered for guests who reply yes, and advertising that
+ * publicly invites RSVPs for the lodging and an overbooked block, so the
+ * accommodation section is a teaser that points at the RSVP and the real
+ * detail lives on /italy-wedding/accommodations behind that reply.
+ *
+ * Travel times marked VERIFIED came from Sept 2026 research; everything TBD
+ * still needs confirming closer to the date.
+ */
+export const ITALY_TRAVEL = {
+  eyebrow: "Getting to Todi",
+  sections: [
     {
-      title: "The Venue",
-      lines: ["Hotel Bramante — the Monastero’s own rooms, Todi"],
-    },
-    {
-      title: "Luxury Hotels",
-      lines: [
-        "Roccafiore Wine Resort & Spa, Chioano",
-        "Relais Todini, Collevalenza",
-        "Borgo Petroro, Petroro",
-        "Tenuta di Canonica, Canonica",
+      id: "arriving",
+      title: "Arriving",
+      body: "Todi sits on a hill above the Tiber valley, an hour or two from three airports and — despite having a railway station — nowhere near a reliable train. Here is what actually works.",
+      blocks: [
+        {
+          label: "By air",
+          /* VERIFIED Sept 2026 — drive times, not flight times. */
+          lines: [
+            "Rome Fiumicino (FCO) — about two hours by car, and far the most international flights",
+            "Perugia San Francesco (PEG) — about forty minutes, small, a handful of European routes",
+            "Florence (FLR) — about two and a quarter hours north",
+          ],
+        },
+        {
+          label: "By train from Rome",
+          lines: [
+            /* TBD — re-confirm FCU service status before this goes to guests. */
+            "Todi has its own station on the Ferrovia Centrale Umbra, but service has been unreliable and partly suspended — we would not plan around it",
+            /* VERIFIED Sept 2026 */
+            "The route that works: Roma Termini to Orvieto, an hour to an hour and a quarter, then about forty minutes by taxi or hire car",
+            "Or Roma Termini to Perugia, then about forty-five minutes by road",
+          ],
+        },
+        {
+          label: "By car",
+          lines: [
+            "Hiring a car is the easiest way to see Umbria — collect it at the airport and keep it for the three days",
+            /* TBD — confirm the road numbers. */
+            "From Rome: the A1 north, then the E45 up the Tiber valley, about two hours",
+            "There is free parking at the Monastero",
+          ],
+        },
+        {
+          label: "Once you arrive",
+          /* VERIFIED — the ZTL and the Porta Orvietana lift are both real. */
+          lines: [
+            "The historic centre is a ZTL, a limited-traffic zone watched by cameras. Do not drive into it",
+            "Leave the car at Porta Orvietana and take the glass lift up into the old town",
+            "The Monastero sits just outside the walls, fifteen minutes on foot below Piazza del Popolo",
+          ],
+        },
       ],
     },
     {
-      title: "Inside the Walls",
-      lines: [
-        "Residenza d’Epoca San Lorenzo Tre",
-        "Hotel Fonte Cesia",
-        "Monastero SS. Annunziata",
-      ],
+      id: "accommodation",
+      title: "Where to stay",
+      /* Deliberately names nothing. See app/italy-wedding/accommodations. */
+      body: "We are arranging rooms for our guests, and what we can offer depends on who is coming — so please send your reply first. Once your RSVP is in, this is where you will find the details.",
+      cta: { label: "Go to the RSVP", href: "/italy-wedding/rsvp" },
     },
     {
-      title: "Small & Simple",
-      lines: [
-        "Il Ghiottone Umbro",
-        "Villa Luisa",
-        "Hotel Tuder",
-        "Agriturismo Casale Ulivi, Loreto",
-      ],
-    },
-    {
-      title: "Houses for Families",
-      lines: [
-        "Farmhouses and villas across the Tiber valley",
-        "Many sleep ten to twelve, most with pools",
-        "Book early — April fills quickly",
-      ],
-    },
-    {
-      title: "Getting Around",
-      lines: [
-        "Perugia airport is forty minutes by car",
-        "Rome Fiumicino is about two hours",
-        "The old town is a limited-traffic zone",
-        "Park at Porta Orvietana and take the lift up",
+      /* =====================================================================
+       * TBD — GENERATED PLACEHOLDER. Meryl & John to rewrite entirely.
+       * Nothing below has been checked for 2027 opening hours or existence.
+       * ===================================================================== */
+      id: "nearby",
+      title: "Things we love nearby",
+      body: "If you are making a week of it — and you should — these are the places we keep going back to.",
+      blocks: [
+        {
+          label: "In Todi",
+          lines: [
+            "Piazza del Popolo at the top of the town — three palazzi, one cathedral, and the best coffee of the morning on the south side",
+            "Santa Maria della Consolazione, the domed church below the walls, ten minutes on foot from the Monastero",
+            "The Roman cisterns, if you like your history underneath you",
+          ],
+        },
+        {
+          label: "Half an hour away",
+          lines: [
+            "Orvieto, for the striped facade of the duomo and a glass of Classico in the shade of it",
+            "Deruta, for hand-painted majolica you will regret not buying",
+            "Montefalco and the Sagrantino hills, for the big red wine of Umbria",
+          ],
+        },
+        {
+          label: "A longer day",
+          lines: [
+            "Assisi, Spoleto and Perugia — each an hour or less",
+            "Lake Trasimeno, for a slow lunch by the water",
+          ],
+        },
+        {
+          label: "Eat & drink",
+          lines: [
+            "Black truffle is in season into spring — ask for tagliatelle al tartufo and do not share",
+            "Torta al testo, the flatbread that comes with everything",
+            "Olive oil from the Tiber valley, the thing to carry home",
+          ],
+        },
       ],
     },
   ],
