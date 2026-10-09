@@ -41,7 +41,9 @@ export default function DressCodePage() {
                   sizes={wide ? "(min-width: 1080px) 1080px, 100vw" : "(min-width: 700px) 50vw, 100vw"}
                   className={`flex items-center justify-center ${heroHeight}`}
                 >
-                  <h2 className="relative font-flourish text-[clamp(44px,5vw,74px)] text-ivory [text-shadow:0_2px_20px_rgba(40,25,10,.32)]">
+                  {/* Pinyon's strokes are lighter than the Monsieur this was
+                      set for, so the shadow carries more of the contrast. */}
+                  <h2 className="relative font-flourish text-[clamp(40px,4.5vw,66px)] text-ivory [text-shadow:0_2px_20px_rgba(40,25,10,.45)]">
                     {p.word}
                   </h2>
                 </PhotoPanel>

@@ -18,6 +18,7 @@
   --color-scrim: rgb(30 26 22 / 0.5); /* photo overlay */
 
   --font-display: var(--font-pinyon);
+  --font-flourish: var(--font-pinyon); /* names, hero script, monogram */
   --font-body: var(--font-garamond);
   --font-utility: var(--font-jost);
 
@@ -26,11 +27,12 @@
   --color-rule: rgb(30 35 30 / 0.2); /* hairlines */
 }
 
-/* Inline: the Italy font vars only exist inside the italy-wedding layout (set
-   there by next/font), so these must compile to var(--font-monsieur) etc. at
-   the use site rather than resolve once at :root. */
+/* Inline: --font-baskerville only exists inside the italy-wedding layout (set
+   there by next/font), so this must compile to var(--font-baskerville) at the
+   use site rather than resolve once at :root. --font-flourish used to live
+   here too, pointing at Monsieur La Doulaise; it is Pinyon now, which the root
+   layout sets on <html>, so it resolves at :root with the rest. */
 @theme inline {
-  --font-flourish: var(--font-monsieur); /* names, hero script, monogram */
   --font-caps: var(--font-baskerville); /* tracked uppercase labels */
 }
 
@@ -98,8 +100,9 @@ body {
  * and type without code changes. Nothing outside .theme-italy is touched.
  */
 .theme-italy {
-  --color-ivory: #fffcf4;
-  --color-ivory-deep: #f4efe2;
+  /* ivory / ivory-deep are deliberately NOT overridden: both sites share one
+     ground (#f6f1e8) so they read as one wedding. Italy used to sit on a
+     lighter #fffcf4. */
   --color-ink: #1e231e;
   --color-ink-soft: #55564c;
   --color-ribbon: #3a4e47;
@@ -110,10 +113,6 @@ body {
   --font-display: var(--font-pinyon); /* section script */
   --font-body: var(--font-cormorant);
   --font-utility: var(--font-baskerville);
-}
-
-body:has(.theme-italy) {
-  background: #fffcf4;
 }
 
 /* Page rise on every tab change (app/italy-wedding/template.tsx remounts). */

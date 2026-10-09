@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# screenshots from scripts/*-shot.mjs — regenerate, don't commit
+/shots/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

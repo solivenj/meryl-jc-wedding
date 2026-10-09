@@ -1,23 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Monsieur_La_Doulaise, Libre_Baskerville, Cormorant_Garamond } from "next/font/google";
+import { Libre_Baskerville, Cormorant_Garamond } from "next/font/google";
 import { ItalyNav } from "@/components/italy/ItalyNav";
 import { ITALY } from "@/lib/italy-content";
 
 /*
  * /italy-wedding typography (Pinyon Script comes from the root layout):
- *  flourish — Monsieur La Doulaise: the names, hero script, monogram
+ *  flourish — Pinyon Script: the names, hero script, monogram
  *  display  — Pinyon Script: section titles
  *  caps     — Libre Baskerville: tracked uppercase nav/labels
  *  body     — Cormorant Garamond 300: running text
+ *
+ * flourish and display are the same face now — they were Monsieur La Doulaise
+ * and Pinyon respectively, until the Italy side was brought onto the same
+ * script as the church save-the-date. Kept as two tokens because they mark
+ * different intents (the couple's mark vs. a section head) and may diverge
+ * again; nothing is loaded twice for it.
  */
-const monsieur = Monsieur_La_Doulaise({
-  variable: "--font-monsieur",
-  weight: "400",
-  subsets: ["latin"],
-  display: "swap",
-});
-
 const baskerville = Libre_Baskerville({
   variable: "--font-baskerville",
   weight: ["400", "700"],
@@ -45,14 +44,14 @@ export const metadata: Metadata = {
 export default function ItalyLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className={`${monsieur.variable} ${baskerville.variable} ${cormorant.variable} theme-italy flex min-h-screen flex-1 flex-col overflow-x-clip bg-ivory font-body text-ink`}
+      className={`${baskerville.variable} ${cormorant.variable} theme-italy flex min-h-screen flex-1 flex-col overflow-x-clip bg-ivory font-body text-ink`}
     >
       <div aria-hidden="true" className="italy-grain" />
 
       <header className="flex flex-col items-center gap-[18px] px-4 pt-[46px] pb-[34px]">
         <Link
           href="/italy-wedding"
-          className="text-center font-flourish text-[clamp(46px,7.4vw,78px)] leading-[1.24] text-ink"
+          className="text-center font-flourish text-[clamp(40px,6.4vw,66px)] leading-[1.12] text-ink"
         >
           {ITALY.names}
         </Link>
@@ -62,7 +61,9 @@ export default function ItalyLayout({ children }: { children: React.ReactNode })
       <main className="flex-1">{children}</main>
 
       <footer className="flex flex-col items-center gap-2.5 px-4 pt-[70px] pb-[84px]">
-        <p className="pb-[0.3em] font-flourish text-[clamp(64px,9vw,120px)] leading-none text-ink">
+        {/* pb clears the script's descender — Pinyon's is shallower than the
+            Monsieur this was tuned for, so it needs about half the old 0.3em. */}
+        <p className="pb-[0.14em] font-flourish text-[clamp(54px,7.4vw,96px)] leading-none text-ink">
           {ITALY.monogram}
         </p>
         <p className="font-caps text-[10px] uppercase tracking-[0.24em] text-ink-soft">
