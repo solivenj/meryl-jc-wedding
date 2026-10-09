@@ -86,19 +86,13 @@ export const ITALY_DRESS = {
       label: "Wednesday · Welcome",
       body: "Printed silk, a light suit, no tie. Colour is welcome — the piazza is pale travertine and everything reads well against it.",
       tone: "terracotta",
+      pinterestUrl: "https://www.pinterest.com/merylfranco/wedding-attire/",
     },
     {
       word: "Black Tie",
       label: "Thursday · Ceremony",
       body: "Long dress, dinner jacket. A block heel will thank you on the old stone floors; bring a wrap for the terrace once the sun goes down.",
       tone: "olive",
-    },
-    {
-      word: "Linen",
-      label: "Friday · Lunch in the grove",
-      body: "Anything you would wear on a warm gravel track and still be happy in at five o’clock. Sun hats encouraged, flat soles strongly advised.",
-      tone: "ochre",
-      wide: true,
     },
   ],
 } as const;

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PhotoPanel } from "@/components/italy/PhotoPanel";
+import { PinterestBoard } from "@/components/italy/PinterestBoard";
 import { Eyebrow, Prose, SmallCaps } from "@/components/italy/Type";
 import { ITALY_DRESS } from "@/lib/italy-content";
 
@@ -14,10 +15,6 @@ const PANEL = {
     slot: "blacktie",
     gradient: "linear-gradient(200deg,#BFCBB4 0%,#6F8A6A 44%,#26382C 100%)",
   },
-  ochre: {
-    slot: "linen",
-    gradient: "linear-gradient(120deg,#EBD6A8 0%,#D9A25E 40%,#8C5A2B 100%)",
-  },
 } as const;
 
 export default function DressCodePage() {
@@ -31,22 +28,26 @@ export default function DressCodePage() {
         {ITALY_DRESS.panels.map((p) => {
           const wide = "wide" in p && p.wide;
           const look = PANEL[p.tone];
+          const pinterestUrl = "pinterestUrl" in p ? p.pinterestUrl : undefined;
+          const heroHeight = wide ? "h-[clamp(280px,26vw,380px)]" : "h-[clamp(300px,34vw,420px)]";
           return (
             <section key={p.word} className={`flex flex-col gap-3.5 ${wide ? "col-span-full" : ""}`}>
-              <PhotoPanel
-                slot={look.slot}
-                gradient={look.gradient}
-                sizes={wide ? "(min-width: 1080px) 1080px, 100vw" : "(min-width: 700px) 50vw, 100vw"}
-                className={`flex items-center justify-center ${
-                  wide ? "h-[clamp(280px,26vw,380px)]" : "h-[clamp(300px,34vw,420px)]"
-                }`}
-              >
-                <h2 className="relative font-flourish text-[clamp(44px,5vw,74px)] text-ivory [text-shadow:0_2px_20px_rgba(40,25,10,.32)]">
-                  {p.word}
-                </h2>
-              </PhotoPanel>
+              {pinterestUrl ? (
+                <PinterestBoard url={pinterestUrl} className={heroHeight} />
+              ) : (
+                <PhotoPanel
+                  slot={look.slot}
+                  gradient={look.gradient}
+                  sizes={wide ? "(min-width: 1080px) 1080px, 100vw" : "(min-width: 700px) 50vw, 100vw"}
+                  className={`flex items-center justify-center ${heroHeight}`}
+                >
+                  <h2 className="relative font-flourish text-[clamp(44px,5vw,74px)] text-ivory [text-shadow:0_2px_20px_rgba(40,25,10,.32)]">
+                    {p.word}
+                  </h2>
+                </PhotoPanel>
+              )}
               <SmallCaps>{p.label}</SmallCaps>
-              <Prose>{p.body}</Prose>
+              {pinterestUrl ? null : <Prose>{p.body}</Prose>}
             </section>
           );
         })}
