@@ -176,6 +176,14 @@ export const RSVP = {
   /* Post-submit + edit + closed states */
   successTitle: "Thank you!",
   successBody: "Your RSVP is in. We're so grateful you'll be part of our day.",
+
+  /* An extra destination offered after a reply that includes at least one
+     "yes" — the Italy side points this at the accommodation page. Declared
+     here (not only on ITALY_RSVP) because RsvpCopy is `typeof this object`,
+     so the modal can only read a field this object admits exists. null on the
+     church side, where there is nothing to link to, and the modal renders
+     nothing for it. */
+  successLink: null as { href: string; label: string; note: string } | null,
   editingNote: "You've responded before — your answers are filled in below. Update anything and resend.",
 
   /* Recap shown when a returning guest picks their party — read-only view of

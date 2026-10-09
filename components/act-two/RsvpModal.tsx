@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { RSVP as SAVE_THE_DATE_RSVP } from "@/lib/content";
 import { EASE_OUT } from "@/lib/motion";
@@ -111,6 +112,10 @@ export function RsvpModal({
   const [party, setParty] = useState<Match | null>(null);
   const [people, setPeople] = useState<Record<string, PersonAnswer>>({});
   const [plusOnes, setPlusOnes] = useState<Record<string, PlusOneAnswer>>({});
+  /* Whether the reply just sent included anyone attending — gates the
+     post-submit link (RSVP.successLink), which only makes sense for a party
+     that is actually coming. */
+  const [submittedAnyYes, setSubmittedAnyYes] = useState(false);
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [hp, setHp] = useState("");
@@ -153,6 +158,7 @@ export function RsvpModal({
       setHp("");
       setStatus("idle");
       setErrorMsg("");
+      setSubmittedAnyYes(false);
     }, 300);
     return () => window.clearTimeout(t);
   }, [open]);
@@ -305,6 +311,13 @@ export function RsvpModal({
         setStatus("error");
         return;
       }
+      /* Captured from the payload rather than derived at render time: the
+         success screen offers the accommodation link only to a party that is
+         actually coming, and this is the last point the answers are in hand. */
+      setSubmittedAnyYes(
+        payload.people.some((p) => p.attending === "yes") ||
+          payload.plusOnes.some((p) => p.attending === "yes"),
+      );
       setStatus("submitted");
     } catch {
       setErrorMsg(RSVP.errorBody);
@@ -374,6 +387,28 @@ export function RsvpModal({
                 <p className="mx-auto mt-5 max-w-[36ch] font-body text-[18.5px] leading-[1.75] text-ink-soft">
                   {RSVP.successBody}
                 </p>
+
+                {/* Only for a party that is actually coming, and only where
+                    the event has somewhere to send them — null on the church
+                    side, so nothing renders and no branching on event is
+                    needed. onClose fires with it: the open effect sets
+                    body overflow hidden, and navigating away without closing
+                    would leave the page behind it unscrollable. */}
+                {RSVP.successLink && submittedAnyYes && (
+                  <div className="mx-auto mt-7 flex max-w-[36ch] flex-col items-center gap-4">
+                    <p className="font-body text-[17px] leading-[1.7] text-ink-soft">
+                      {RSVP.successLink.note}
+                    </p>
+                    <Link
+                      href={RSVP.successLink.href}
+                      onClick={onClose}
+                      className="font-utility text-[13px] uppercase tracking-[0.24em] text-ink underline decoration-ink/30 underline-offset-[6px] hover:decoration-ink"
+                    >
+                      {RSVP.successLink.label}
+                    </Link>
+                  </div>
+                )}
+
                 <button
                   type="button"
                   onClick={onClose}

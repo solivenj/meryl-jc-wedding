@@ -209,6 +209,50 @@ export const ITALY_TRAVEL = {
   ],
 };
 
+/*
+ * /italy-wedding/accommodations — not in ITALY_NAV, and reachable only by a
+ * browser that has RSVP'd yes (see lib/accommodations-access.ts).
+ *
+ * The "two nights only" limit is the single most important line on the page.
+ * It is rendered as its own panel rather than a sentence inside a paragraph
+ * because guests scan, and a guest who misses it arrives expecting a room on
+ * a night nobody has booked for them.
+ */
+export const ITALY_ACCOMMODATION = {
+  eyebrow: "For our guests",
+  title: "Where you’ll stay",
+  intro:
+    "Thank you for deciding to celebrate our wedding with us. We are handling accommodation on behalf of our guests — here is exactly what that means.",
+  covered: {
+    label: "What we’re covering",
+    lines: [
+      "A room at Hotel Bramante, the Monastero’s own hotel, in the block we have reserved for our guests.",
+      "The two nights of the wedding: Wednesday the 21st and Thursday the 22nd of April, checking out on the Friday.",
+    ],
+  },
+  notCovered: {
+    label: "What we’re not",
+    lines: [
+      "Any night before the 21st or after the 22nd. Stay as long as you like — those nights are booked and paid directly with the hotel.",
+      "Extras: minibar, spa, laundry, and meals outside the wedding events, settled by you at checkout.",
+    ],
+  },
+  /* TBD — the hotel will give us a booking code or a form. */
+  howTo: {
+    label: "How to book",
+    lines: ["Details to follow — we will write to you with how to claim your room."],
+  },
+  deny: {
+    title: "Please reply first",
+    body: "This page holds the accommodation we have arranged for our guests. Send us your reply and it will open here.",
+    cta: { label: "Go to the RSVP", href: "/italy-wedding/rsvp" },
+  },
+  unavailable: {
+    title: "One moment",
+    body: "We couldn’t check your reply just now. Please refresh the page in a minute, or write to us at",
+  },
+};
+
 /* Mix of VERIFIED logistics and TBD policies (kids, shuttle, room blocks). */
 export const ITALY_FAQ = {
   eyebrow: "Questions, answered",
@@ -266,4 +310,10 @@ export const ITALY_RSVP = {
     after: " so we can save you a seat in Todi.",
   },
   successBody: "Your RSVP is in. We can’t wait to see you in Todi.",
+  /* Only rendered when the reply included at least one yes. */
+  successLink: {
+    href: "/italy-wedding/accommodations",
+    label: "See where you’ll stay",
+    note: "We’ll be handling accommodation on behalf of our guests — here is what we have arranged.",
+  },
 };
