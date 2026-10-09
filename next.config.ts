@@ -6,10 +6,22 @@ const nextConfig: NextConfig = {
   // which needs a Node runtime, so we no longer static-export (was output:"export").
   // Pages still prerender; only /api/submit runs at request time.
 
-  // The bare domain points at the Save the Date for now. Temporary (307) so it
-  // can be switched to /italy-wedding later without browsers caching it.
+  // The bare domain is the password gate now (app/page.tsx), so "/" no longer
+  // redirects. These two keep the pre-rename URLs alive; both are temporary
+  // (307) so they stay swappable.
   async redirects() {
-    return [{ source: "/", destination: "/save-the-date", permanent: false }];
+    return [
+      {
+        source: "/save-the-date",
+        destination: "/church-save-the-date",
+        permanent: false,
+      },
+      {
+        source: "/italy-wedding/stay",
+        destination: "/italy-wedding/travel",
+        permanent: false,
+      },
+    ];
   },
 };
 

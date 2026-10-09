@@ -9,7 +9,7 @@ const ctx = await browser.newContext({
   reducedMotion: mode === "reduced" ? "reduce" : "no-preference",
 });
 const page = await ctx.newPage();
-await page.goto("http://localhost:3000", { waitUntil: "networkidle" });
+await page.goto("http://localhost:3000/church-save-the-date", { waitUntil: "networkidle" });
 await page.waitForTimeout(3400);
 
 if (mode === "keyboard") {

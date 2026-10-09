@@ -12,7 +12,7 @@ const sizes = [
 const browser = await chromium.launch();
 for (const [w, h] of sizes) {
   const page = await (await browser.newContext({ viewport: { width: w, height: h } })).newPage();
-  await page.goto("http://localhost:3000", { waitUntil: "networkidle" });
+  await page.goto("http://localhost:3000/church-save-the-date", { waitUntil: "networkidle" });
   await page.waitForTimeout(3200);
   const m = await page.evaluate(() => {
     const sec = document.querySelector("section");

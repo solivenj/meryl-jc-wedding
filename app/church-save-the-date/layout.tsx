@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     "Save the date: Meryl & John are getting married on April 10, 2027 at St. Aloysius R.C. Church, Jersey City, NJ.",
 };
 
-export default function SaveTheDateLayout({
+export default function ChurchSaveTheDateLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

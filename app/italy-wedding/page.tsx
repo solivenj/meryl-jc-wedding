@@ -9,7 +9,7 @@ export default function ItalyHome() {
       {/* Slow-drifting photo band with the hero script over it. */}
       <PhotoCarousel>
         <h1 className="text-center font-flourish text-[clamp(50px,11.6vw,176px)] leading-none text-ivory [text-shadow:0_2px_26px_rgba(30,20,10,.34)]">
-          {ITALY_HOME.heroScript}
+          {/* {ITALY_HOME.heroScript} */}
         </h1>
       </PhotoCarousel>
 

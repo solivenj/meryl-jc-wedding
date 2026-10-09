@@ -5,7 +5,7 @@ import { chromium } from "playwright";
 const widths = [768, 1024, 1280, 1440, 1920];
 const browser = await chromium.launch();
 const page = await (await browser.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
-await page.goto("http://localhost:3000", { waitUntil: "networkidle" });
+await page.goto("http://localhost:3000/church-save-the-date", { waitUntil: "networkidle" });
 await page.waitForTimeout(3400);
 await page.locator("button[aria-label*='open the save the date']").click();
 await page.waitForTimeout(1400);

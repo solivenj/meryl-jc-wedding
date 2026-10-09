@@ -23,11 +23,13 @@ export const ITALY = {
   },
 };
 
+/* Travel sits before Dress Code: getting to Todi is the question guests ask
+   first, and the accommodation teaser there is what points them at the RSVP. */
 export const ITALY_NAV = [
   { href: "/italy-wedding", label: "Home" },
   { href: "/italy-wedding/schedule", label: "Schedule" },
+  { href: "/italy-wedding/travel", label: "Travel" },
   { href: "/italy-wedding/dress-code", label: "Dress Code" },
-  { href: "/italy-wedding/stay", label: "Stay" },
   { href: "/italy-wedding/faq", label: "FAQ" },
   { href: "/italy-wedding/rsvp", label: "RSVP" },
 ] as const;

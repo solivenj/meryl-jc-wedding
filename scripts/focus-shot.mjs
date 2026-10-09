@@ -4,7 +4,7 @@ import { chromium } from "playwright";
 const [out] = process.argv.slice(2);
 const browser = await chromium.launch();
 const page = await (await browser.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
-await page.goto("http://localhost:3000", { waitUntil: "networkidle" });
+await page.goto("http://localhost:3000/church-save-the-date", { waitUntil: "networkidle" });
 await page.waitForTimeout(3400);
 await page.keyboard.press("Tab");
 await page.waitForTimeout(300);

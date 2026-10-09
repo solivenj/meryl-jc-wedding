@@ -7,7 +7,7 @@ const [out, w = "1440", h = "900"] = process.argv.slice(2);
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: Number(w), height: Number(h) } });
 const page = await ctx.newPage();
-await page.goto("http://localhost:3000", { waitUntil: "networkidle" });
+await page.goto("http://localhost:3000/church-save-the-date", { waitUntil: "networkidle" });
 await page.waitForTimeout(3400);
 await page.locator("button[aria-label*='open the save the date']").click();
 await page.waitForTimeout(1400); // fade-out + Act II fade-in complete
