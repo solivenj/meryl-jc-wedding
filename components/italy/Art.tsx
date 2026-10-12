@@ -28,7 +28,10 @@ export function Motif({
         height={art.height}
         alt=""
         aria-hidden="true"
-        className={className}
+        /* motif-art lets a deep Band lighten these: the webp files are baked
+           to ink #1E231E, so unlike the Sketch fallbacks they do not follow
+           currentColor and would all but vanish on olive. */
+        className={`motif-art ${className}`}
         style={{ width: size, height: size, objectFit: "contain", ...style }}
       />
     );

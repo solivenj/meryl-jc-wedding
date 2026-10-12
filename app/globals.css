@@ -144,6 +144,14 @@ body {
   --color-hover-ink: var(--color-band);
 }
 
+/* The illustration webps are pre-tinted to ink, so the token re-point above
+   cannot reach them — only the SVG sketch fallbacks follow currentColor.
+   Inverting lifts the line work to roughly band-ink on the dark ground.
+   Scoped to .motif-art so it can never touch a photograph. */
+[data-tone="band"] .motif-art {
+  filter: invert(1) brightness(1.08);
+}
+
 /* Page rise on every tab change (app/italy/template.tsx remounts). */
 @keyframes italy-rise {
   from {

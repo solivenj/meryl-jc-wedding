@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Motif } from "@/components/italy/Art";
 import type { MotifName } from "@/components/italy/sketches";
+import { Band } from "@/components/italy/Band";
 import { Eyebrow, Prose, ScriptTitle, SmallCaps, capsLinkClass } from "@/components/italy/Type";
 import { ITALY_TRAVEL } from "@/lib/italy-content";
 
@@ -74,18 +75,22 @@ function MarginArt({ id }: { id: string }) {
 
 export default function TravelPage() {
   return (
-    <div className="px-4 pt-10">
-      <div className="flex flex-col items-center text-center">
+    <>
+      <Band tone="band" pad="tight">
         <h1 className="sr-only">Getting to Todi</h1>
         <Eyebrow>{ITALY_TRAVEL.eyebrow}</Eyebrow>
-      </div>
+      </Band>
 
-      <div className="mt-5 flex flex-col items-center">
-        {ITALY_TRAVEL.sections.map((s) => (
-          <section
-            key={s.id}
-            className="relative flex w-full flex-col items-center gap-[18px] py-[34px] text-center"
-          >
+      {/* width="full" matters here: MarginArt positions its motifs at
+          calc(25% - ...) against their own relative section, so capping the
+          Band measure would make that 25% of 1080px instead of the viewport
+          and pull the art in over the text. The inner column keeps its own
+          max-w-[29rem]. The relative <section> also has to stay - it is the
+          containing block, and being a grandchild of the .linen element is
+          what keeps the direct-child rule away from the absolute motifs. */}
+      {ITALY_TRAVEL.sections.map((s, i) => (
+        <Band key={s.id} tone={i % 2 === 0 ? "cream" : "band"} width="full">
+          <section className="relative flex w-full flex-col items-center gap-[18px] text-center">
             <MarginArt id={s.id} />
 
             <ScriptTitle>{s.title}</ScriptTitle>
@@ -116,17 +121,19 @@ export default function TravelPage() {
               </Link>
             )}
           </section>
-        ))}
-      </div>
+        </Band>
+      ))}
 
-      <div
-        aria-hidden="true"
-        className="flex flex-wrap justify-center gap-5 pt-4 text-ink min-[901px]:hidden"
-      >
-        {MOBILE_ROW.map((m) => (
-          <Motif key={m} name={m} size={46} />
-        ))}
-      </div>
-    </div>
+      <Band tone="cream" pad="tight">
+        <div
+          aria-hidden="true"
+          className="flex flex-wrap justify-center gap-5 text-ink min-[901px]:hidden"
+        >
+          {MOBILE_ROW.map((m) => (
+            <Motif key={m} name={m} size={46} />
+          ))}
+        </div>
+      </Band>
+    </>
   );
 }

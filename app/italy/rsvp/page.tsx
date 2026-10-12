@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Band } from "@/components/italy/Band";
 import { Motif } from "@/components/italy/Art";
 import { PhotoPanel } from "@/components/italy/PhotoPanel";
 import { RsvpReply } from "@/components/italy/RsvpReply";
@@ -23,7 +24,7 @@ export default function RsvpPage() {
         </p>
       </PhotoPanel>
 
-      <div className="flex flex-col items-center gap-[26px] px-4 pt-[86px] pb-[30px] text-center">
+      <Band tone="cream" width="wide" className="gap-[26px]">
         <ScriptTitle>{ITALY_RSVP_PAGE.replyTitle}</ScriptTitle>
         <Prose>{ITALY_RSVP_PAGE.replyBody}</Prose>
         <div className="flex flex-wrap items-center justify-center gap-x-[34px] gap-y-5">
@@ -50,7 +51,7 @@ export default function RsvpPage() {
             </div>
           </>
         )}
-      </div>
+      </Band>
     </>
   );
 }
