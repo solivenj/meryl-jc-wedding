@@ -21,6 +21,12 @@ const nextConfig: NextConfig = {
         destination: "/italy/travel",
         permanent: false,
       },
+      // The three days moved onto the home page; the tab is gone.
+      {
+        source: "/italy/schedule",
+        destination: "/italy",
+        permanent: false,
+      },
       // The Italy section lived at /italy-wedding until the shorter path.
       {
         source: "/italy-wedding",

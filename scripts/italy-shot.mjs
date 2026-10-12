@@ -8,7 +8,7 @@ const [base = "http://localhost:3000", outDir = "shots/italy"] = process.argv.sl
 // Nav order, then /accommodations — which is not in the nav and only renders
 // its real content for a browser that has RSVP'd yes (otherwise you shoot the
 // "please reply first" state, which is also worth seeing).
-const PAGES = ["", "/schedule", "/travel", "/dress-code", "/faq", "/rsvp", "/accommodations"];
+const PAGES = ["", "/our-story", "/dress-code", "/travel", "/faq", "/rsvp", "/accommodations"];
 const WIDTHS = [390, 768, 1440];
 
 /* /italy sits behind the password gate (proxy.ts), so each context has

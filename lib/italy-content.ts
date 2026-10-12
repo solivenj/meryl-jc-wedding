@@ -23,24 +23,122 @@ export const ITALY = {
   },
 };
 
-/* Travel sits before Dress Code: getting to Todi is the question guests ask
-   first, and the accommodation teaser there is what points them at the RSVP. */
+/*
+ * The essentials (the days, the run of show, the details, the reply) live on
+ * the home page now, so the tabs carry only what a guest does not need in
+ * order to turn up. Schedule is gone - it is a home section. RSVP has no tab
+ * either: the home section is the front door, and /italy/rsvp survives for
+ * the registry and for links sent straight to it.
+ *
+ * Home stays a tab because the names lockup in the header is the only other
+ * route back and it does not read as a link.
+ */
 export const ITALY_NAV = [
   { href: "/italy", label: "Home" },
-  { href: "/italy/schedule", label: "Schedule" },
-  { href: "/italy/travel", label: "Travel" },
+  { href: "/italy/our-story", label: "Our Story" },
   { href: "/italy/dress-code", label: "Dress Code" },
+  { href: "/italy/travel", label: "Travel" },
   { href: "/italy/faq", label: "FAQ" },
-  { href: "/italy/rsvp", label: "RSVP" },
 ] as const;
 
+/*
+ * The home page is the whole invitation now: a welcome, the three days, the
+ * Thursday run of show with the practical details beside it, and the reply.
+ * Each key below is one Band.
+ */
 export const ITALY_HOME = {
-  heroScript: "Il nostro giorno",
-  kicker: "Save the date",
-  /* TBD — rewrite freely. Venue facts are verified; the plans are placeholders. */
-  intro:
-    "Three days in a hill town above the Tiber valley — a welcome aperitivo on the piazza, a ceremony at the Monastero Santa Margherita, and a long dinner beneath its frescoed ceilings. Bring good shoes for the stone lanes and something warm for the evening; April in Umbria is green, bright at noon, and cool after dark. Formal invitations will follow; this page will hold everything you need until then.",
-  replyBy: "Kindly reply by the first of February",
+  hero: { script: "Il nostro giorno", tagline: "Three days in Umbria" },
+  welcome: {
+    script: "We’re getting married",
+    /* TBD — rewrite freely. */
+    body: "And we couldn’t imagine doing it without you. However long you have been part of our lives — from the very beginning, or somewhere along the way — we are so grateful to share this with you.",
+    body2: "Join us for three days in a hill town above the Tiber valley: a pizza party on the first night, a ceremony at the Monastero Santa Margherita, and a long dinner beneath its frescoed ceilings.",
+    button: "RSVP here",
+  },
+  about: {
+    title: "About our wedding",
+    columns: [
+      {
+        motif: "rings",
+        title: "The Ceremony",
+        body: "Four in the afternoon at the Monastero Santa Margherita, just outside the town walls, with the bells going across the valley.",
+      },
+      {
+        motif: "coupe",
+        title: "The Reception",
+        body: "Aperitivo on the terrace while the sun goes down, then a long dinner beneath the frescoes, and dancing after.",
+      },
+      {
+        motif: "hat",
+        title: "The Dress Code",
+        body: "Summer cocktail on the Wednesday, black tie on the Thursday — with palettes and rather more detail.",
+        href: "/italy/dress-code",
+      },
+    ],
+  },
+  days: { title: "The three days" },
+  rsvp: {
+    script: "Will you join us?",
+    replyBy: "Kindly reply by the first of February, 2027",
+    button: "RSVP here",
+    registryLink: "See the registry, or write to us",
+  },
+};
+
+/*
+ * Thursday's run of show.
+ *
+ * TBD — only the four o'clock ceremony and the eight o'clock dinner are
+ * settled. Rather than stamping TBD on every row, rows carry a flag and the
+ * page prints one note beneath the list.
+ */
+export const ITALY_PROGRAM = {
+  title: "Program",
+  note: "Times other than the ceremony and dinner are still being settled.",
+  rows: [
+    { time: "3:30", item: "Guests arrive", tbd: true },
+    { time: "4:00", item: "The ceremony" },
+    { time: "4:45", item: "Aperitivo and photographs", tbd: true },
+    { time: "6:30", item: "Drinks on the terrace", tbd: true },
+    { time: "8:00", item: "Dinner" },
+    { time: "10:00", item: "Dancing", tbd: true },
+    { time: "1:00", item: "Carriages", tbd: true },
+  ],
+};
+
+/* The column beside the program — practical things that do not belong in a
+   timeline. TBD where noted. */
+export const ITALY_DETAILS = {
+  title: "Details",
+  blocks: [
+    {
+      label: "Arriving",
+      lines: ["Come by half past three, so there is time to find a seat and say hello before the ceremony starts."],
+    },
+    {
+      label: "Getting there",
+      lines: ["The Monastero sits just outside the town walls, with free parking on site. The historic centre above it is a limited-traffic zone — leave the car below."],
+    },
+    /* TBD — confirm before this goes out. */
+    { label: "Children", lines: ["Details to follow with the formal invitation."] },
+    {
+      label: "Gifts",
+      lines: ["Your presence in Todi is the whole of it. There is a note on the RSVP page if you would like to mark the day."],
+    },
+  ],
+};
+
+/*
+ * TBD — PLACEHOLDER. Meryl & John to replace entirely. Structure only: three
+ * chapters, each a passage beside a photograph.
+ */
+export const ITALY_STORY = {
+  eyebrow: "How we got here",
+  chapters: [
+    { heading: "How we met", body: "A placeholder for the beginning — where you were, who introduced you, and the detail you both still disagree about." },
+    { heading: "The proposal", body: "A placeholder for the question — where it happened, whether it was a surprise, and what was said immediately afterwards." },
+    { heading: "And now, Todi", body: "A placeholder for why Umbria — the trip that started it, the hill town you kept going back to, and why you wanted everyone there for it." },
+  ],
 };
 
 /* TBD — the whole order of days is a placeholder built on real Todi places. */

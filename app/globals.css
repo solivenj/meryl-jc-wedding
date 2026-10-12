@@ -152,6 +152,21 @@ body {
   filter: invert(1) brightness(1.08);
 }
 
+/*
+ * A light surface sitting INSIDE a deep Band — a note card, a polaroid mount,
+ * anything on paper. The band re-point above would otherwise hand it cream
+ * ink on cream stock. Restates the .theme-italy defaults rather than trying
+ * to unset, because custom properties inherit and there is nothing to revert
+ * to at this depth.
+ */
+.on-paper {
+  --color-ink: #1e231e;
+  --color-ink-soft: #55564c;
+  --color-forest: #1e312c;
+  --color-rule: rgb(30 35 30 / 0.2);
+  --color-hover-ink: var(--color-ivory);
+}
+
 /* Page rise on every tab change (app/italy/template.tsx remounts). */
 @keyframes italy-rise {
   from {

@@ -25,6 +25,23 @@ import { GATE_COOKIE, hasGrant, sectionForPath } from "@/lib/site-gate";
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
+  /*
+   * Static files under public/italy (photos, art) share the /italy prefix
+   * with the routes, so the matcher catches them too. They must not be
+   * gated: next/image's optimizer fetches the source server-side, with no
+   * cookie of its own, so a gated asset comes back as a redirect and the
+   * optimizer 400s. Everything renders in dev only because .next/cache holds
+   * images optimized before the gate existed; on a cold deploy every photo
+   * on the Italy site would break.
+   *
+   * Page routes have no file extension, static assets always do. The cost is
+   * that someone who guesses an exact filename can fetch it ungated - the
+   * photos are not what the gate is for, and the alternative is a site with
+   * no images.
+   */
+  const lastSegment = pathname.slice(pathname.lastIndexOf("/") + 1);
+  if (lastSegment.includes(".")) return NextResponse.next();
+
   const section = sectionForPath(pathname);
   if (!section) return NextResponse.next();
 
