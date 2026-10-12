@@ -44,14 +44,15 @@ export const metadata: Metadata = {
 export default function ItalyLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className={`${baskerville.variable} ${cormorant.variable} theme-italy flex min-h-screen flex-1 flex-col overflow-x-clip bg-ivory font-body text-ink`}
+      className={`${baskerville.variable} ${cormorant.variable} theme-italy linen flex min-h-screen flex-1 flex-col overflow-x-clip bg-ivory font-body text-ink`}
     >
-      <div aria-hidden="true" className="italy-grain" />
-
-      <header className="flex flex-col items-center gap-[18px] px-4 pt-[46px] pb-[34px]">
+      {/* Header and footer are the deep half of the two-tone ground — the same
+          rails the stationery reads as. linen-dark flips the weave to
+          soft-light so it lifts out of the band instead of muddying it. */}
+      <header className="linen linen-dark flex flex-col items-center gap-[18px] bg-[var(--color-band)] px-4 pt-[46px] pb-[34px] text-[var(--color-band-ink)]">
         <Link
           href="/italy"
-          className="text-center font-flourish text-[clamp(40px,6.4vw,66px)] leading-[1.12] text-ink"
+          className="text-center font-flourish text-[clamp(40px,6.4vw,66px)] leading-[1.12] text-[var(--color-band-ink)]"
         >
           {ITALY.names}
         </Link>
@@ -60,19 +61,19 @@ export default function ItalyLayout({ children }: { children: React.ReactNode })
 
       <main className="flex-1">{children}</main>
 
-      <footer className="flex flex-col items-center gap-2.5 px-4 pt-[70px] pb-[84px]">
+      <footer className="linen linen-dark mt-[70px] flex flex-col items-center gap-2.5 bg-[var(--color-band)] px-4 pt-[70px] pb-[84px]">
         {/* pb clears the script's descender — Pinyon's is shallower than the
             Monsieur this was tuned for, so it needs about half the old 0.3em. */}
-        <p className="pb-[0.14em] font-flourish text-[clamp(54px,7.4vw,96px)] leading-none text-ink">
+        <p className="pb-[0.14em] font-flourish text-[clamp(54px,7.4vw,96px)] leading-none text-[var(--color-band-ink)]">
           {ITALY.monogram}
         </p>
-        <p className="font-caps text-[10px] uppercase tracking-[0.24em] text-ink-soft">
+        <p className="font-caps text-[10px] uppercase tracking-[0.24em] text-[var(--color-band-ink-soft)]">
           {ITALY.footerLine}
         </p>
         {/* Required by the Vecteezy free license — see public/italy/CREDITS.md */}
         <a
           href="https://www.vecteezy.com/free-vector/doodle"
-          className="mt-6 font-body text-[13px] text-ink-soft/70 underline-offset-4 hover:underline"
+          className="mt-6 font-body text-[13px] text-[var(--color-band-ink-soft)] underline-offset-4 hover:underline"
         >
           Illustrations by Vecteezy
         </a>

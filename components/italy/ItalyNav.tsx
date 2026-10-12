@@ -20,12 +20,12 @@ export function ItalyNav() {
             key={item.href}
             href={item.href}
             aria-current={current ? "page" : undefined}
-            className="group relative whitespace-nowrap pb-1.5 font-caps text-[11.5px] uppercase tracking-[0.155em] text-forest"
+            className="group relative whitespace-nowrap pb-1.5 font-caps text-[11.5px] uppercase tracking-[0.155em] text-[var(--color-band-ink)]"
           >
             {item.label}
             <span
               aria-hidden="true"
-              className={`absolute inset-x-0 bottom-0 h-px bg-forest transition-transform duration-[350ms] ease-out motion-reduce:transition-none ${
+              className={`absolute inset-x-0 bottom-0 h-px bg-[var(--color-band-ink)] transition-transform duration-[350ms] ease-out motion-reduce:transition-none ${
                 current
                   ? "scale-x-100"
                   : "scale-x-0 group-hover:scale-x-100 group-focus-visible:scale-x-100"

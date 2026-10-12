@@ -110,6 +110,13 @@ body {
   --color-ribbon-light: rgb(30 35 30 / 0.12);
   --color-scrim: rgb(20 24 20 / 0.45);
 
+  /* The two-tone ground. Cream stays the page field; band is the deep half
+     used for the header/footer rails (and, later, alternating sections).
+     Swap --color-band to #1e312c for forest instead of olive. */
+  --color-band: #4b4b30; /* olive */
+  --color-band-ink: #f4efe2; /* type on the band */
+  --color-band-ink-soft: rgb(244 239 226 / 0.72);
+
   --font-display: var(--font-pinyon); /* section script */
   --font-body: var(--font-cormorant);
   --font-utility: var(--font-baskerville);
@@ -137,15 +144,48 @@ body {
   }
 }
 
-/* Fixed paper grain over the whole Italy page (decorative, click-through). */
-.italy-grain {
-  position: fixed;
+/*
+ * Woven linen.
+ *
+ * Two anisotropic turbulence layers multiplied together give a warp/weft
+ * cross-hatch; a single isotropic noise (what this used to be) reads as paper
+ * grain, not cloth. 240px tile, so the weave repeats without a visible seam.
+ *
+ * Applied per surface rather than as one fixed overlay, because the blend has
+ * to differ by ground: on a dark band soft-light lifts the threads out, while
+ * on cream the same blend is invisible and only a low-alpha multiply shows.
+ */
+:root {
+  --linen: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='l'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75 0.02' numOctaves='2' seed='3' stitchTiles='stitch' result='a'/%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02 0.75' numOctaves='2' seed='11' stitchTiles='stitch' result='b'/%3E%3CfeBlend in='a' in2='b' mode='multiply' result='w'/%3E%3CfeColorMatrix in='w' type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23l)'/%3E%3C/svg%3E");
+}
+
+.linen {
+  position: relative;
+  isolation: isolate; /* keep the blend off whatever sits behind the surface */
+}
+
+.linen::after {
+  content: "";
+  position: absolute;
   inset: 0;
-  z-index: 60;
+  z-index: 0;
   pointer-events: none;
-  opacity: 0.045;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-image: var(--linen);
+  background-size: 240px 240px;
+  mix-blend-mode: var(--linen-blend, multiply);
+  opacity: var(--linen-opacity, 0.12);
+}
+
+/* Content has to clear the ::after weave. */
+.linen > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Dark surfaces: the weave reads as lit thread, not dirt. */
+.linen-dark {
+  --linen-blend: soft-light;
+  --linen-opacity: 0.55;
 }
 
 /*
