@@ -247,8 +247,8 @@ export const ITALY_DRESS: {
         body: "A printed silk, a midi, or a long cotton dress. Soft draping, florals and delicate details are all right at home. Block heels or dressy sandals — the lanes are cobbled.",
         palette: [
           { name: "Butter", hex: "#f2e3b8" },
-          { name: "Blush", hex: "#f3d9d2" },
-          { name: "Sage", hex: "#b9c4ad" },
+          { name: "Floral", texture: "/italy/attire/swatch-floral.webp" },
+          { name: "Lily", texture: "/italy/attire/swatch-lily.webp" },
           { name: "Sky", hex: "#aec6d8" },
           { name: "Apricot", hex: "#e8b893" },
           { name: "Lilac", hex: "#cdc0dd" },
@@ -259,7 +259,7 @@ export const ITALY_DRESS: {
         heading: "For the gentlemen",
         body: "A light suit, no tie, sleeves rolled by ten. Linen and cotton over anything heavy. Loafers rather than trainers.",
         palette: [
-          { name: "Cream", hex: "#eee3cd" },
+          { name: "Linen", texture: "/italy/attire/swatch-linen.webp" },
           { name: "Sand", hex: "#d6c3a2" },
           { name: "Olive", hex: "#8a8b63" },
           { name: "Sage", hex: "#b9c4ad" },
@@ -296,7 +296,7 @@ export const ITALY_DRESS: {
         palette: [
           { name: "Black", hex: "#14140f" },
           { name: "Midnight", hex: "#1c2233" },
-          { name: "Charcoal", hex: "#3a3a3c" },
+          { name: "Flannel", texture: "/italy/attire/swatch-flannel.webp" },
           { name: "Ivory", hex: "#efe7d6" },
           { name: "Forest", hex: "#1e312c" },
           { name: "Oxblood", hex: "#4a1f23" },
