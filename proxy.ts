@@ -17,7 +17,7 @@ import { GATE_COOKIE, hasGrant, sectionForPath } from "@/lib/site-gate";
  * Cookie-only check, no I/O: proxy runs on every matched request including
  * prefetches, so anything that reads a sheet belongs in a page, not here. The
  * one thing genuinely worth protecting — the accommodation details — does its
- * own check against the RSVP responses in app/italy-wedding/accommodations.
+ * own check against the RSVP responses in app/italy/accommodations.
  *
  * Do NOT add `export const runtime` to this file; Next throws on it. Proxy is
  * already Node.js, which is what lets it share lib/site-gate's node:crypto.
@@ -48,7 +48,7 @@ export const config = {
      also catches BotID's injected proxy rewrites and the gate page itself.
      Naming the gated paths cannot. */
   matcher: [
-    "/italy-wedding/:path*",
+    "/italy/:path*",
     "/church-save-the-date/:path*",
     "/api/italy/:path*",
     "/api/guests/:path*",

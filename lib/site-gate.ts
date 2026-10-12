@@ -26,7 +26,7 @@ const SECTIONS: GateSection[] = ["italy", "church"];
 
 /** Where each section's gate sends a guest once they're through. */
 export const SECTION_HOME: Record<GateSection, string> = {
-  italy: "/italy-wedding",
+  italy: "/italy",
   church: "/church-save-the-date",
 };
 
@@ -137,7 +137,7 @@ export function hasGrant(
  * Used by proxy.ts to decide which grant a request needs.
  */
 export function sectionForPath(pathname: string): GateSection | null {
-  if (pathname === "/italy-wedding" || pathname.startsWith("/italy-wedding/")) {
+  if (pathname === "/italy" || pathname.startsWith("/italy/")) {
     return "italy";
   }
   if (

@@ -1,4 +1,4 @@
-# /italy-wedding illustration credits
+# /italy illustration credits
 
 All icons are processed by `scripts/process-illustrations.mjs`, which crops them, removes the background and tints them to ink #1E231E.
 
@@ -12,6 +12,6 @@ All icons are processed by `scripts/process-illustrations.mjs`, which crops them
 | art/hat.webp | "Summer monochrome doodles collection". https://www.vecteezy.com/vector-art/57992478 | Vecteezy Free License. Attribution required. |
 | art/swallow.webp | "Illustration out line of swallow on white background". https://www.vecteezy.com/vector-art/35369449-illustration-out-line-of-swallow-on-white-backgroud | Vecteezy Free License. Attribution required. |
 
-The attribution is shown in the /italy-wedding footer ("Illustrations by Vecteezy"). A Vecteezy Pro subscription removes the attribution requirement.
+The attribution is shown in the /italy footer ("Illustrations by Vecteezy"). A Vecteezy Pro subscription removes the attribution requirement.
 
 These files are currently cut from Vecteezy's preview images. For sharper icons, download the full assets while signed in to Vecteezy, export each sheet at 2× to JPG or PNG, and re-run the script with the crop boxes doubled.

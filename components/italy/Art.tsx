@@ -3,7 +3,7 @@ import { MOTIF_ART, SCENE_ART } from "@/lib/italy-art";
 import { MOTIF_PATHS, SCENE_PATHS, Sketch, type MotifName, type SceneName } from "./sketches";
 
 /*
- * Illustrations for /italy-wedding. Renders the approved hand-drawn image when
+ * Illustrations for /italy. Renders the approved hand-drawn image when
  * one is registered in lib/italy-art.ts, otherwise the design's line sketch.
  * Motifs are decorative (alt=""); scenes describe the place.
  */

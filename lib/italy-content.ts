@@ -1,5 +1,5 @@
 /*
- * All copy for /italy-wedding in one place — same pattern as lib/content.ts.
+ * All copy for /italy in one place — same pattern as lib/content.ts.
  *
  * Facts marked VERIFIED came from venue / transport sources (Sept 2026).
  * Anything marked TBD is a placeholder in the right voice that Meryl & John
@@ -26,12 +26,12 @@ export const ITALY = {
 /* Travel sits before Dress Code: getting to Todi is the question guests ask
    first, and the accommodation teaser there is what points them at the RSVP. */
 export const ITALY_NAV = [
-  { href: "/italy-wedding", label: "Home" },
-  { href: "/italy-wedding/schedule", label: "Schedule" },
-  { href: "/italy-wedding/travel", label: "Travel" },
-  { href: "/italy-wedding/dress-code", label: "Dress Code" },
-  { href: "/italy-wedding/faq", label: "FAQ" },
-  { href: "/italy-wedding/rsvp", label: "RSVP" },
+  { href: "/italy", label: "Home" },
+  { href: "/italy/schedule", label: "Schedule" },
+  { href: "/italy/travel", label: "Travel" },
+  { href: "/italy/dress-code", label: "Dress Code" },
+  { href: "/italy/faq", label: "FAQ" },
+  { href: "/italy/rsvp", label: "RSVP" },
 ] as const;
 
 export const ITALY_HOME = {
@@ -105,7 +105,7 @@ export const ITALY_DRESS = {
  * The room block is covered for guests who reply yes, and advertising that
  * publicly invites RSVPs for the lodging and an overbooked block, so the
  * accommodation section is a teaser that points at the RSVP and the real
- * detail lives on /italy-wedding/accommodations behind that reply.
+ * detail lives on /italy/accommodations behind that reply.
  *
  * Travel times marked VERIFIED came from Sept 2026 research; everything TBD
  * still needs confirming closer to the date.
@@ -160,9 +160,9 @@ export const ITALY_TRAVEL = {
     {
       id: "accommodation",
       title: "Where to stay",
-      /* Deliberately names nothing. See app/italy-wedding/accommodations. */
+      /* Deliberately names nothing. See app/italy/accommodations. */
       body: "We are arranging rooms for our guests, and what we can offer depends on who is coming — so please send your reply first. Once your RSVP is in, this is where you will find the details.",
-      cta: { label: "Go to the RSVP", href: "/italy-wedding/rsvp" },
+      cta: { label: "Go to the RSVP", href: "/italy/rsvp" },
     },
     {
       /* =====================================================================
@@ -210,7 +210,7 @@ export const ITALY_TRAVEL = {
 };
 
 /*
- * /italy-wedding/accommodations — not in ITALY_NAV, and reachable only by a
+ * /italy/accommodations — not in ITALY_NAV, and reachable only by a
  * browser that has RSVP'd yes (see lib/accommodations-access.ts).
  *
  * The "two nights only" limit is the single most important line on the page.
@@ -245,7 +245,7 @@ export const ITALY_ACCOMMODATION = {
   deny: {
     title: "Please reply first",
     body: "This page holds the accommodation we have arranged for our guests. Send us your reply and it will open here.",
-    cta: { label: "Go to the RSVP", href: "/italy-wedding/rsvp" },
+    cta: { label: "Go to the RSVP", href: "/italy/rsvp" },
   },
   unavailable: {
     title: "One moment",
@@ -312,7 +312,7 @@ export const ITALY_RSVP = {
   successBody: "Your RSVP is in. We can’t wait to see you in Todi.",
   /* Only rendered when the reply included at least one yes. */
   successLink: {
-    href: "/italy-wedding/accommodations",
+    href: "/italy/accommodations",
     label: "See where you’ll stay",
     note: "We’ll be handling accommodation on behalf of our guests — here is what we have arranged.",
   },

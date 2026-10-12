@@ -1,4 +1,4 @@
-// Dev-only: full-page screenshots of every /italy-wedding tab at phone,
+// Dev-only: full-page screenshots of every /italy tab at phone,
 // tablet and desktop widths, plus a horizontal-overflow check.
 // Usage: node scripts/italy-shot.mjs [baseUrl] [outDir]
 import { chromium } from "playwright";
@@ -11,7 +11,7 @@ const [base = "http://localhost:3000", outDir = "shots/italy"] = process.argv.sl
 const PAGES = ["", "/schedule", "/travel", "/dress-code", "/faq", "/rsvp", "/accommodations"];
 const WIDTHS = [390, 768, 1440];
 
-/* /italy-wedding sits behind the password gate (proxy.ts), so each context has
+/* /italy sits behind the password gate (proxy.ts), so each context has
    to unlock before it can load anything. ctx.request shares the context's
    cookie jar, so one POST grants every page opened in it. Skipped silently
    when the var is unset, so the script still works against an ungated build. */
@@ -29,7 +29,7 @@ for (const width of WIDTHS) {
   }
   const page = await ctx.newPage();
   for (const p of PAGES) {
-    await page.goto(`${base}/italy-wedding${p}`, { waitUntil: "networkidle" });
+    await page.goto(`${base}/italy${p}`, { waitUntil: "networkidle" });
     await page.waitForTimeout(800);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,

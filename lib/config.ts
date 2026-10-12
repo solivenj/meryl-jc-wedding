@@ -14,7 +14,7 @@
  */
 export const RSVP_DEADLINE: string | null = null;
 
-/** Same as RSVP_DEADLINE, for the Italy wedding RSVP (/italy-wedding/rsvp). */
+/** Same as RSVP_DEADLINE, for the Italy wedding RSVP (/italy/rsvp). */
 export const ITALY_RSVP_DEADLINE: string | null = null;
 
 /**

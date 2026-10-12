@@ -1,6 +1,6 @@
 # Wiring up the Italy RSVP
 
-The Italy RSVP form is already built and live at `/italy-wedding/rsvp`. What it
+The Italy RSVP form is already built and live at `/italy/rsvp`. What it
 does **not** have is a spreadsheet to write to.
 
 Until `ITALY_GOOGLE_SHEET_ID` is set, the Italy flow runs in *fixture mode*: it
@@ -100,7 +100,7 @@ after editing `.env.local`; redeploy after changing Vercel.
 3. Confirm a row actually appears in the `Responses` tab. This is the real
    proof; the success screen alone doesn't tell you anything.
 4. Confirm the success screen offers the accommodation link, and that
-   `/italy-wedding/accommodations` opens.
+   `/italy/accommodations` opens.
 5. Delete the test rows.
 
 ---

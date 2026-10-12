@@ -32,7 +32,7 @@ const jost = Jost({
   display: "swap",
 });
 
-/* Each route (save-the-date, italy-wedding) sets its own title + description. */
+/* Each route (save-the-date, italy) sets its own title + description. */
 export const metadata: Metadata = {
   title: "Meryl & John",
   description: "Meryl & John are getting married.",

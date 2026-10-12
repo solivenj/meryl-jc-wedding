@@ -22,12 +22,12 @@
   --font-body: var(--font-garamond);
   --font-utility: var(--font-jost);
 
-  /* /italy-wedding only — unused names elsewhere, so the save-the-date is unaffected. */
+  /* /italy only — unused names elsewhere, so the save-the-date is unaffected. */
   --color-forest: #1e312c; /* nav, links, caps labels */
   --color-rule: rgb(30 35 30 / 0.2); /* hairlines */
 }
 
-/* Inline: --font-baskerville only exists inside the italy-wedding layout (set
+/* Inline: --font-baskerville only exists inside the italy layout (set
    there by next/font), so this must compile to var(--font-baskerville) at the
    use site rather than resolve once at :root. --font-flourish used to live
    here too, pointing at Monsieur La Doulaise; it is Pinyon now, which the root
@@ -95,7 +95,7 @@ body {
 }
 
 /*
- * /italy-wedding theme. Scoped re-point of the shared tokens, so every utility
+ * /italy theme. Scoped re-point of the shared tokens, so every utility
  * (and the shared RSVP modal, which renders inline) picks up the Italy palette
  * and type without code changes. Nothing outside .theme-italy is touched.
  */
@@ -115,7 +115,7 @@ body {
   --font-utility: var(--font-baskerville);
 }
 
-/* Page rise on every tab change (app/italy-wedding/template.tsx remounts). */
+/* Page rise on every tab change (app/italy/template.tsx remounts). */
 @keyframes italy-rise {
   from {
     opacity: 0;

@@ -17,8 +17,19 @@ const nextConfig: NextConfig = {
         permanent: false,
       },
       {
-        source: "/italy-wedding/stay",
-        destination: "/italy-wedding/travel",
+        source: "/italy/stay",
+        destination: "/italy/travel",
+        permanent: false,
+      },
+      // The Italy section lived at /italy-wedding until the shorter path.
+      {
+        source: "/italy-wedding",
+        destination: "/italy",
+        permanent: false,
+      },
+      {
+        source: "/italy-wedding/:path*",
+        destination: "/italy/:path*",
         permanent: false,
       },
     ];

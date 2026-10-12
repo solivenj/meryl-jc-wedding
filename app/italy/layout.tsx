@@ -5,7 +5,7 @@ import { ItalyNav } from "@/components/italy/ItalyNav";
 import { ITALY } from "@/lib/italy-content";
 
 /*
- * /italy-wedding typography (Pinyon Script comes from the root layout):
+ * /italy typography (Pinyon Script comes from the root layout):
  *  flourish — Pinyon Script: the names, hero script, monogram
  *  display  — Pinyon Script: section titles
  *  caps     — Libre Baskerville: tracked uppercase nav/labels
@@ -50,7 +50,7 @@ export default function ItalyLayout({ children }: { children: React.ReactNode })
 
       <header className="flex flex-col items-center gap-[18px] px-4 pt-[46px] pb-[34px]">
         <Link
-          href="/italy-wedding"
+          href="/italy"
           className="text-center font-flourish text-[clamp(40px,6.4vw,66px)] leading-[1.12] text-ink"
         >
           {ITALY.names}

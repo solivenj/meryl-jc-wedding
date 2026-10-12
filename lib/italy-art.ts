@@ -1,7 +1,7 @@
 import type { MotifName, SceneName } from "@/components/italy/sketches";
 
 /*
- * Approved, licensed hand-drawn illustrations for /italy-wedding. Files live
+ * Approved, licensed hand-drawn illustrations for /italy. Files live
  * in public/italy/art/ (processed by scripts/process-illustrations.mjs: paper
  * knocked out, tinted to ink #1E231E, WebP). Sources + licenses are recorded in
  * public/italy/CREDITS.md.
