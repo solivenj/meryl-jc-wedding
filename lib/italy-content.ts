@@ -176,27 +176,140 @@ export const ITALY_SCHEDULE = {
   ],
 } as const;
 
-/* TBD — dress codes mirror the schedule above. */
-export const ITALY_DRESS = {
+/*
+ * Dress code.
+ *
+ * Two codes, each split for ladies and gentlemen, each with a palette and a
+ * strip of attire photographs. Declared types rather than `as const`: the
+ * shape is heterogeneous (optional swatch textures, optional strips) and
+ * `as const` would turn every optional field into a narrowing chore at the
+ * call site — which is exactly why the old version had to write
+ * `"pinterestUrl" in p`.
+ *
+ * Swatches are hex by default. A `texture` is only for the two or three
+ * fabric-pattern capsules; a flat colour needs no file, no licence and no
+ * credit row.
+ */
+export type Swatch = { name: string; hex?: string; texture?: string };
+
+export type DressSection = {
+  heading: string;
+  body: string;
+  palette: Swatch[];
+  /* PhotoSlot keys — see lib/italy-art.ts. Render as gradients until the
+     real images are registered. */
+  strip: string[];
+};
+
+export type DressCode = {
+  key: string;
+  day: string;
+  word: string;
+  subtitle: string;
+  heroSlot: string;
+  intro: string;
+  /* Meryl's board, embedded live rather than rehosted. */
+  pinterestUrl?: string;
+  ladies: DressSection;
+  gentlemen: DressSection;
+};
+
+export const ITALY_DRESS: {
+  eyebrow: string;
+  title: string;
+  intro: string;
+  explainer: { heading: string; body: string };
+  paletteNote: string;
+  codes: DressCode[];
+  notToWear: { heading: string; body: string };
+} = {
   eyebrow: "What to wear",
+  title: "The Dress Code",
   intro:
-    "Three occasions, three registers. Nothing here is a rule so much as a temperature — April in Umbria is bright at noon and genuinely cold after nine, and most floors you will stand on are stone.",
-  panels: [
+    "Two evenings, two registers. Nothing here is a rule so much as a temperature — April in Umbria is bright at noon and genuinely cold after nine, and most floors you will stand on are stone.",
+  explainer: {
+    heading: "So what does that mean?",
+    body: "It means dress for a garden in spring and a frescoed room after dark. Think elegant silhouettes and fabrics that move — and shoes that will forgive fifteen minutes on cobbles.",
+  },
+  paletteNote: "Use these as inspiration — no need to match exactly.",
+  codes: [
     {
-      word: "Cocktail",
-      label: "Wednesday · Welcome",
-      body: "Printed silk, a light suit, no tie. Colour is welcome — the piazza is pale travertine and everything reads well against it.",
-      tone: "terracotta",
+      key: "cocktail",
+      day: "Wednesday · Welcome",
+      word: "Summer Cocktail",
+      subtitle: "Pizza, piazza, lamps coming on",
+      heroSlot: "cocktail",
+      intro:
+        "The first night is the loose one. Colour is welcome — the piazza is pale travertine and everything reads well against it.",
       pinterestUrl: "https://www.pinterest.com/merylfranco/wedding-attire/",
+      ladies: {
+        heading: "For the ladies",
+        body: "A printed silk, a midi, or a long cotton dress. Soft draping, florals and delicate details are all right at home. Block heels or dressy sandals — the lanes are cobbled.",
+        palette: [
+          { name: "Butter", hex: "#f2e3b8" },
+          { name: "Blush", hex: "#f3d9d2" },
+          { name: "Sage", hex: "#b9c4ad" },
+          { name: "Sky", hex: "#aec6d8" },
+          { name: "Apricot", hex: "#e8b893" },
+          { name: "Lilac", hex: "#cdc0dd" },
+        ],
+        strip: ["cocktailLadies1", "cocktailLadies2", "cocktailLadies3", "cocktailLadies4", "cocktailLadies5"],
+      },
+      gentlemen: {
+        heading: "For the gentlemen",
+        body: "A light suit, no tie, sleeves rolled by ten. Linen and cotton over anything heavy. Loafers rather than trainers.",
+        palette: [
+          { name: "Cream", hex: "#eee3cd" },
+          { name: "Sand", hex: "#d6c3a2" },
+          { name: "Olive", hex: "#8a8b63" },
+          { name: "Sage", hex: "#b9c4ad" },
+          { name: "Sky", hex: "#9db7cc" },
+          { name: "Stone", hex: "#b4aa9c" },
+        ],
+        strip: ["cocktailGents1", "cocktailGents2", "cocktailGents3", "cocktailGents4", "cocktailGents5"],
+      },
     },
     {
+      key: "blacktie",
+      day: "Thursday · The wedding",
       word: "Black Tie",
-      label: "Thursday · Ceremony",
-      body: "Long dress, dinner jacket. A block heel will thank you on the old stone floors; bring a wrap for the terrace once the sun goes down.",
-      tone: "olive",
+      subtitle: "Ceremony at four, dinner at eight",
+      heroSlot: "blacktie",
+      intro:
+        "The evening everything is for. Long, dark and properly dressed — and bring something for your shoulders, because the terrace turns cold the moment the sun goes.",
+      ladies: {
+        heading: "For the ladies",
+        body: "A floor-length gown, or an elegant midi in a formal fabric — silk, satin, chiffon, velvet. A block heel will thank you on the old stone floors; a wrap will thank you on the terrace.",
+        palette: [
+          { name: "Midnight", hex: "#1c2233" },
+          { name: "Forest", hex: "#1e312c" },
+          { name: "Burgundy", hex: "#5a1f2a" },
+          { name: "Bronze", hex: "#8a6a3f" },
+          { name: "Champagne", hex: "#e3d3b4" },
+          { name: "Black", hex: "#14140f" },
+        ],
+        strip: ["blacktieLadies1", "blacktieLadies2", "blacktieLadies3", "blacktieLadies4", "blacktieLadies5"],
+      },
+      gentlemen: {
+        heading: "For the gentlemen",
+        body: "A dinner jacket, black or midnight. Bow tie preferred, and a dark shoe you can dance in. If you do not own one, a very dark suit and a black tie will not look out of place.",
+        palette: [
+          { name: "Black", hex: "#14140f" },
+          { name: "Midnight", hex: "#1c2233" },
+          { name: "Charcoal", hex: "#3a3a3c" },
+          { name: "Ivory", hex: "#efe7d6" },
+          { name: "Forest", hex: "#1e312c" },
+          { name: "Oxblood", hex: "#4a1f23" },
+        ],
+        strip: ["blacktieGents1", "blacktieGents2", "blacktieGents3", "blacktieGents4", "blacktieGents5"],
+      },
     },
   ],
-} as const;
+  notToWear: {
+    heading: "What not to wear",
+    body: "Please leave white, ivory and anything that reads as white to the bride. Beyond that: no denim, no trainers, no flip-flops, and nothing with a logo doing the talking.",
+  },
+};
 
 /*
  * Travel (was Stay). No hotel is named on this page — not even Hotel Bramante.
