@@ -122,6 +122,28 @@ body {
   --font-utility: var(--font-baskerville);
 }
 
+/*
+ * Sections sitting on the deep band re-point the ink tokens instead of every
+ * component taking a `tone` prop.
+ *
+ * Tailwind v4 resolves text-ink to var(--color-ink) at the USE SITE, so a
+ * scoped override reaches everything already written — all of Type.tsx,
+ * FaqAccordion's row borders and its currentColor chevron, Eyebrow's rule,
+ * the RsvpReply button — with no component edits and no prop threading.
+ * Same mechanism .theme-italy above uses to re-point the whole Italy palette.
+ *
+ * Set by components/italy/Band.tsx when tone="band".
+ */
+[data-tone="band"] {
+  --color-ink: var(--color-band-ink);
+  --color-ink-soft: var(--color-band-ink-soft);
+  --color-forest: var(--color-band-ink);
+  --color-rule: rgb(244 239 226 / 0.28);
+  /* An inverted button on this ground has to fill to the BAND colour; on
+     cream it falls back to ivory. Without this a hover goes cream-on-cream. */
+  --color-hover-ink: var(--color-band);
+}
+
 /* Page rise on every tab change (app/italy/template.tsx remounts). */
 @keyframes italy-rise {
   from {
