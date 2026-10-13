@@ -42,7 +42,7 @@ export default async function GatePage({
       <span aria-hidden="true" className="mt-8 block h-px w-[52px] bg-ink/35" />
 
       <p className="mt-7 font-utility text-[11px] uppercase tracking-[0.22em] text-ink-soft">
-        The word on your invitation
+        Please enter the password found on your invitation
       </p>
 
       <GateForm next={next} />
