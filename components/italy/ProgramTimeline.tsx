@@ -23,18 +23,18 @@ export function ProgramTimeline({
 }) {
   return (
     <div className="w-full text-left">
-      <h3 className="font-caps text-[12px] uppercase tracking-[0.2em] text-ink">{title}</h3>
+      <h3 className="font-caps text-[calc(12px*var(--fs-scale))] uppercase tracking-[0.2em] text-ink">{title}</h3>
       <ol className="mt-6">
         {rows.map((row, i) => (
           <li
             key={row.time + row.item}
             className={`flex items-baseline gap-6 py-4 ${i > 0 ? "border-t border-rule" : ""}`}
           >
-            <span className="w-20 shrink-0 font-utility text-[11px] tracking-[0.18em] tabular-nums text-ink-soft">
+            <span className="w-20 shrink-0 font-utility text-[calc(11px*var(--fs-scale))] tracking-[0.18em] tabular-nums text-ink-soft">
               {row.time}
             </span>
             <span
-              className={`font-body text-[17.5px] leading-[1.6] font-light text-ink-soft ${
+              className={`font-body text-[calc(17.5px*var(--fs-scale))] leading-[1.6] font-light text-ink-soft ${
                 row.tbd ? "italic" : ""
               }`}
             >
@@ -44,7 +44,7 @@ export function ProgramTimeline({
         ))}
       </ol>
       {note && (
-        <p className="mt-5 font-body text-[14.5px] leading-[1.6] font-light text-ink-soft/80 italic">
+        <p className="mt-5 font-body text-[calc(14.5px*var(--fs-scale))] leading-[1.6] font-light text-ink-soft/80 italic">
           {note}
         </p>
       )}

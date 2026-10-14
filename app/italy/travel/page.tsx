@@ -106,7 +106,7 @@ export default function TravelPage() {
                 s.blocks?.map((b) => (
                   <div key={b.label} className="flex w-full flex-col items-start gap-2.5">
                     <SmallCaps>{b.label}</SmallCaps>
-                    <ul className="flex flex-col gap-2 font-body text-[18px] leading-[1.7] font-light text-ink-soft">
+                    <ul className="flex flex-col gap-2 font-body text-[calc(18px*var(--fs-scale))] leading-[1.7] font-light text-ink-soft">
                       {b.lines.map((line) => (
                         <li key={line}>{line}</li>
                       ))}

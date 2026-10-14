@@ -25,7 +25,7 @@ export function RsvpReply({ label }: { label: string }) {
            button works on either ground. The hover fill has to invert to the
            SURFACE colour, not a fixed ivory — on a band that would be
            cream-on-cream. bg-current + the ground colour does it. */
-        className="rounded-full border border-forest/40 px-9 py-3 font-caps text-[11.5px] uppercase tracking-[0.155em] text-forest transition-colors hover:bg-forest hover:text-[var(--color-hover-ink,var(--color-ivory))]"
+        className="rounded-full border border-forest/40 px-9 py-3 font-caps text-[calc(11.5px*var(--fs-scale))] uppercase tracking-[0.155em] text-forest transition-colors hover:bg-forest hover:text-[var(--color-hover-ink,var(--color-ivory))]"
       >
         {label}
       </button>

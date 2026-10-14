@@ -48,7 +48,7 @@ export function PolaroidStack({
       {/* on-paper: a cream card inside a deep Band has to opt out of the band
           ink re-point, or it renders cream type on cream stock. */}
       {note && (
-        <p className="on-paper w-[min(300px,82vw)] bg-paper px-7 py-6 text-center font-body text-[15.5px] leading-[1.55] tracking-[0.02em] text-ink shadow-[0_10px_26px_rgba(30,25,15,0.22)] sm:-rotate-2 sm:self-center">
+        <p className="on-paper w-[min(300px,82vw)] bg-paper px-7 py-6 text-center font-body text-[calc(15.5px*var(--fs-scale))] leading-[1.55] tracking-[0.02em] text-ink shadow-[0_10px_26px_rgba(30,25,15,0.22)] sm:-rotate-2 sm:self-center">
           {note}
         </p>
       )}

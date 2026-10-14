@@ -24,7 +24,7 @@ export function PaletteRow({ swatches }: { swatches: readonly Swatch[] }) {
                 : { background: s.hex }
             }
           />
-          <span className="font-caps text-[9.5px] uppercase tracking-[0.18em] text-ink-soft">
+          <span className="font-caps text-[calc(9.5px*var(--fs-scale))] uppercase tracking-[0.18em] text-ink-soft">
             {s.name}
           </span>
         </li>

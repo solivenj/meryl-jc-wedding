@@ -31,7 +31,7 @@ export function DetailBlocks({
           }`}
         >
           <SmallCaps>{b.label}</SmallCaps>
-          <ul className="flex flex-col gap-2 font-body text-[17.5px] leading-[1.7] font-light text-ink-soft">
+          <ul className="flex flex-col gap-2 font-body text-[calc(17.5px*var(--fs-scale))] leading-[1.7] font-light text-ink-soft">
             {b.lines.map((line) => (
               <li key={line}>{line}</li>
             ))}

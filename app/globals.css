@@ -36,6 +36,21 @@
   --font-caps: var(--font-baskerville); /* tracked uppercase labels */
 }
 
+/*
+ * One knob for the size of every typeface on the Italy side.
+ *
+ * All of its font sizes are Tailwind arbitrary values written as
+ * text-[calc(Npx*var(--fs-scale))], so changing the number below moves the
+ * whole page together and keeps the relationships between heading, body and
+ * label intact. Tracking is in em and leading is unitless, so both follow.
+ *
+ * The root value is 1 so the same classes behave normally anywhere outside
+ * .theme-italy; the church save-the-date is untouched either way.
+ */
+:root {
+  --fs-scale: 1;
+}
+
 body {
   background: var(--color-ivory);
   color: var(--color-ink);
@@ -120,6 +135,9 @@ body {
   --font-display: var(--font-pinyon); /* section script */
   --font-body: var(--font-cormorant);
   --font-utility: var(--font-baskerville);
+
+  /* Type size for the whole Italy site. See the note at :root. */
+  --fs-scale: 1.1;
 }
 
 /*

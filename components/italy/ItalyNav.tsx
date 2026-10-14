@@ -20,7 +20,7 @@ export function ItalyNav() {
             key={item.href}
             href={item.href}
             aria-current={current ? "page" : undefined}
-            className="group relative whitespace-nowrap pb-1.5 font-caps text-[11.5px] uppercase tracking-[0.155em] text-[var(--color-band-ink)]"
+            className="group relative whitespace-nowrap pb-1.5 font-caps text-[calc(11.5px*var(--fs-scale))] uppercase tracking-[0.155em] text-[var(--color-band-ink)]"
           >
             {item.label}
             <span

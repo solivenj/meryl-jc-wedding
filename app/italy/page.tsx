@@ -70,7 +70,7 @@ ${ITALY.dates}`}
             <div key={c.title} className="flex flex-col items-center gap-4 text-center">
               <Motif name={c.motif as MotifName} size={74} className="text-ink" />
               <Label>{c.title}</Label>
-              <p className="max-w-[34ch] font-body text-[17px] leading-[1.7] font-light text-ink-soft">
+              <p className="max-w-[34ch] font-body text-[calc(17px*var(--fs-scale))] leading-[1.7] font-light text-ink-soft">
                 {c.body}
               </p>
               {c.href && (
@@ -91,14 +91,14 @@ ${ITALY.dates}`}
             <div key={d.day} className="flex flex-col items-center gap-3.5 text-center">
               <SmallCaps>{d.day}</SmallCaps>
               <ScriptTitle as="h3">{d.title}</ScriptTitle>
-              <p className="font-body text-[17px] leading-[1.6] font-light text-ink-soft italic">
+              <p className="font-body text-[calc(17px*var(--fs-scale))] leading-[1.6] font-light text-ink-soft italic">
                 “{d.quote}”
               </p>
-              <p className="font-body text-[16.5px] leading-[1.6] font-light text-ink-soft">
+              <p className="font-body text-[calc(16.5px*var(--fs-scale))] leading-[1.6] font-light text-ink-soft">
                 {d.time}
               </p>
               {"place" in d && (
-                <p className="font-body text-[16.5px] leading-[1.6] font-light text-ink-soft">
+                <p className="font-body text-[calc(16.5px*var(--fs-scale))] leading-[1.6] font-light text-ink-soft">
                   {d.place}
                 </p>
               )}
@@ -118,7 +118,7 @@ ${ITALY.dates}`}
             note={ITALY_PROGRAM.note}
           />
           <div className="w-full text-left">
-            <h3 className="font-caps text-[12px] uppercase tracking-[0.2em] text-ink">
+            <h3 className="font-caps text-[calc(12px*var(--fs-scale))] uppercase tracking-[0.2em] text-ink">
               {ITALY_DETAILS.title}
             </h3>
             <DetailBlocks className="mt-6" blocks={ITALY_DETAILS.blocks} />
@@ -130,7 +130,7 @@ ${ITALY.dates}`}
       <Band tone="cream" width="prose" className="gap-6">
         <ScriptTitle>{ITALY_HOME.rsvp.script}</ScriptTitle>
         <Motif name="rings" size={92} className="text-ink" />
-        <p className="font-caps text-[10px] uppercase tracking-[0.24em] text-ink-soft">
+        <p className="font-caps text-[calc(10px*var(--fs-scale))] uppercase tracking-[0.24em] text-ink-soft">
           {ITALY_HOME.rsvp.replyBy}
         </p>
         <RsvpReply label={ITALY_HOME.rsvp.button} />

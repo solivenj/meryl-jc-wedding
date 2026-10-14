@@ -22,7 +22,7 @@ function CodeSection({ section }: { section: DressSection }) {
       <Label>{section.heading}</Label>
       <div className="mt-6 flex w-full flex-col items-center gap-3">
         <ScriptTitle as="h3">palette</ScriptTitle>
-        <p className="font-body text-[16.5px] leading-[1.6] font-light text-ink-soft italic">
+        <p className="font-body text-[calc(16.5px*var(--fs-scale))] leading-[1.6] font-light text-ink-soft italic">
           {ITALY_DRESS.paletteNote}
         </p>
       </div>
@@ -58,7 +58,7 @@ export default function DressCodePage() {
           <Band tone="band" width="wide" className="gap-5">
             <SmallCaps>{code.day}</SmallCaps>
             <ScriptTitle as="h2">{code.word}</ScriptTitle>
-            <p className="font-caps text-[11px] uppercase tracking-[0.24em] text-ink-soft">
+            <p className="font-caps text-[calc(11px*var(--fs-scale))] uppercase tracking-[0.24em] text-ink-soft">
               {code.subtitle}
             </p>
             <PhotoPanel

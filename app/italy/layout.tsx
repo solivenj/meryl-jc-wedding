@@ -52,7 +52,7 @@ export default function ItalyLayout({ children }: { children: React.ReactNode })
       <header className="linen linen-dark flex flex-col items-center gap-[18px] bg-[var(--color-band)] px-4 pt-[46px] pb-[34px] text-[var(--color-band-ink)]">
         <Link
           href="/italy"
-          className="text-center font-flourish text-[clamp(40px,6.4vw,66px)] leading-[1.12] text-[var(--color-band-ink)]"
+          className="text-center font-flourish text-[calc(clamp(40px,6.4vw,66px)*var(--fs-scale))] leading-[1.12] text-[var(--color-band-ink)]"
         >
           {ITALY.names}
         </Link>
@@ -67,16 +67,16 @@ export default function ItalyLayout({ children }: { children: React.ReactNode })
       <footer className="linen linen-dark flex flex-col items-center gap-2.5 bg-[var(--color-band)] px-4 pt-[70px] pb-[84px]">
         {/* pb clears the script's descender — Pinyon's is shallower than the
             Monsieur this was tuned for, so it needs about half the old 0.3em. */}
-        <p className="pb-[0.14em] font-flourish text-[clamp(54px,7.4vw,96px)] leading-none text-[var(--color-band-ink)]">
+        <p className="pb-[0.14em] font-flourish text-[calc(clamp(54px,7.4vw,96px)*var(--fs-scale))] leading-none text-[var(--color-band-ink)]">
           {ITALY.monogram}
         </p>
-        <p className="font-caps text-[10px] uppercase tracking-[0.24em] text-[var(--color-band-ink-soft)]">
+        <p className="font-caps text-[calc(10px*var(--fs-scale))] uppercase tracking-[0.24em] text-[var(--color-band-ink-soft)]">
           {ITALY.footerLine}
         </p>
         {/* Required by the Vecteezy free license — see public/italy/CREDITS.md */}
         <a
           href="https://www.vecteezy.com/free-vector/doodle"
-          className="mt-6 font-body text-[13px] text-[var(--color-band-ink-soft)] underline-offset-4 hover:underline"
+          className="mt-6 font-body text-[calc(13px*var(--fs-scale))] text-[var(--color-band-ink-soft)] underline-offset-4 hover:underline"
         >
           Illustrations by Vecteezy
         </a>

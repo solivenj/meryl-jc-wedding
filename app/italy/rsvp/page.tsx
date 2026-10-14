@@ -16,10 +16,10 @@ export default function RsvpPage() {
         gradient="linear-gradient(170deg,#D6D2CA 0%,#8C8880 50%,#26261F 100%)"
         className="flex h-[clamp(320px,46vw,520px)] flex-col items-center justify-center gap-[18px]"
       >
-        <h1 className="relative indent-[0.34em] font-caps text-[clamp(22px,3.4vw,38px)] tracking-[0.34em] text-ivory">
+        <h1 className="relative indent-[0.34em] font-caps text-[calc(clamp(22px,3.4vw,38px)*var(--fs-scale))] tracking-[0.34em] text-ivory">
           {ITALY_RSVP_PAGE.hero}
         </h1>
-        <p className="relative px-4 text-center font-caps text-[10px] uppercase tracking-[0.24em] text-ivory/80">
+        <p className="relative px-4 text-center font-caps text-[calc(10px*var(--fs-scale))] uppercase tracking-[0.24em] text-ivory/80">
           {ITALY_RSVP_PAGE.heroSub}
         </p>
       </PhotoPanel>

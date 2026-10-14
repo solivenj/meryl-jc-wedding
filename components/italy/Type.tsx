@@ -9,7 +9,7 @@
 export function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col items-center gap-4 text-center">
-      <p className="font-caps text-[10px] uppercase tracking-[0.24em] text-ink-soft">{children}</p>
+      <p className="font-caps text-[calc(10px*var(--fs-scale))] uppercase tracking-[0.24em] text-ink-soft">{children}</p>
       <Rule />
     </div>
   );
@@ -21,13 +21,13 @@ export function Rule({ className = "" }: { className?: string }) {
 
 export function Label({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <p className={`font-caps text-[12px] uppercase tracking-[0.2em] text-ink ${className}`}>{children}</p>
+    <p className={`font-caps text-[calc(12px*var(--fs-scale))] uppercase tracking-[0.2em] text-ink ${className}`}>{children}</p>
   );
 }
 
 export function SmallCaps({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <p className={`font-caps text-[10px] uppercase tracking-[0.24em] text-forest ${className}`}>{children}</p>
+    <p className={`font-caps text-[calc(10px*var(--fs-scale))] uppercase tracking-[0.24em] text-forest ${className}`}>{children}</p>
   );
 }
 
@@ -39,7 +39,7 @@ export function ScriptTitle({
   children: React.ReactNode;
 }) {
   return (
-    <Tag className="font-display text-[clamp(26px,3.4vw,38px)] leading-[1.25] font-normal text-ink">
+    <Tag className="font-display text-[calc(clamp(26px,3.4vw,38px)*var(--fs-scale))] leading-[1.25] font-normal text-ink">
       {children}
     </Tag>
   );
@@ -48,7 +48,7 @@ export function ScriptTitle({
 export function Prose({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
     <p
-      className={`max-w-[62ch] text-left font-body text-[17px] leading-[1.65] font-light text-ink-soft ${className}`}
+      className={`max-w-[62ch] text-left font-body text-[calc(17px*var(--fs-scale))] leading-[1.65] font-light text-ink-soft ${className}`}
     >
       {children}
     </p>
@@ -57,4 +57,4 @@ export function Prose({ children, className = "" }: { children: React.ReactNode;
 
 /* Tracked, underlined caps link (email, registry). */
 export const capsLinkClass =
-  "font-caps text-[11.5px] uppercase tracking-[0.155em] text-forest underline underline-offset-[6px] decoration-forest/40 hover:decoration-forest";
+  "font-caps text-[calc(11.5px*var(--fs-scale))] uppercase tracking-[0.155em] text-forest underline underline-offset-[6px] decoration-forest/40 hover:decoration-forest";

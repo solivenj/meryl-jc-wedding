@@ -19,7 +19,7 @@ export function FaqAccordion({ items }: { items: readonly { q: string; a: string
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setOpen(isOpen ? -1 : i)}
-                className="flex w-full items-center justify-between gap-5 px-0.5 py-[22px] text-left font-caps text-[14px] leading-normal text-forest"
+                className="flex w-full items-center justify-between gap-5 px-0.5 py-[22px] text-left font-caps text-[calc(14px*var(--fs-scale))] leading-normal text-forest"
               >
                 {item.q}
                 <svg
@@ -47,7 +47,7 @@ export function FaqAccordion({ items }: { items: readonly { q: string; a: string
               }`}
             >
               <div className="overflow-hidden" inert={!isOpen}>
-                <p className="max-w-[62ch] px-0.5 pb-6 font-body text-[17px] leading-[1.65] font-light text-ink-soft">
+                <p className="max-w-[62ch] px-0.5 pb-6 font-body text-[calc(17px*var(--fs-scale))] leading-[1.65] font-light text-ink-soft">
                   {item.a}
                 </p>
               </div>
