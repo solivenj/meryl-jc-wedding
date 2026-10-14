@@ -64,7 +64,7 @@ export default function ItalyLayout({ children }: { children: React.ReactNode })
             {/* No top margin: every page is a stack of Bands that own their own
           vertical rhythm, and a margin here shows as a cream stripe above the
           footer whenever the last Band is the deep one. */}
-      <footer className="linen linen-dark flex flex-col items-center gap-2.5 bg-[var(--color-band)] px-4 pt-[70px] pb-[84px]">
+      <footer className="linen linen-dark flex flex-col items-center gap-2.5 bg-[var(--color-band)] px-4 pt-[70px] pb-[52px]">
         {/* pb clears the script's descender — Pinyon's is shallower than the
             Monsieur this was tuned for, so it needs about half the old 0.3em. */}
         <p className="pb-[0.14em] font-flourish text-[calc(clamp(54px,7.4vw,96px)*var(--fs-scale))] leading-none text-[var(--color-band-ink)]">
