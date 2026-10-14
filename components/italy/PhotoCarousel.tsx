@@ -7,8 +7,9 @@ import Image from "next/image";
  * into public/italy/photos/ joins it (filename order) — read at build time, so
  * a redeploy picks up new photos. Pure CSS animation (.italy-marquee in
  * globals.css): the set is rendered twice and the track slides by exactly one
- * set, so the loop is seamless. Hover pauses; reduced motion gets a still,
- * swipeable row instead.
+ * set, so the loop is seamless. It does not pause on hover — the band is
+ * decoration, and one that stops under the cursor reads as a stall rather
+ * than a control. Reduced motion gets a still, swipeable row instead.
  */
 
 const PHOTO_DIR = path.join(process.cwd(), "public/italy/photos");
@@ -42,7 +43,7 @@ function listPhotos(): string[] {
 const slideClass =
   "relative h-[clamp(240px,40vw,430px)] w-[calc(clamp(240px,40vw,430px)*0.8)] flex-none overflow-hidden";
 
-export function PhotoCarousel({ children }: { children?: React.ReactNode }) {
+export function PhotoCarousel() {
   const found = listPhotos();
   const usePhotos = found.length >= MIN_PHOTOS;
   const photos = [...found];
@@ -77,11 +78,6 @@ export function PhotoCarousel({ children }: { children?: React.ReactNode }) {
         {slides(0)}
         {slides(1)}
       </div>
-      {children && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-[rgb(20_15_10/0.18)] px-4">
-          {children}
-        </div>
-      )}
     </section>
   );
 }

@@ -251,10 +251,6 @@ body {
   animation: italy-marquee var(--marquee-duration, 54s) linear infinite;
 }
 
-.italy-marquee:hover .italy-marquee-track {
-  animation-play-state: paused;
-}
-
 /* Reduced motion: no drift — a still row the visitor can swipe instead. */
 @media (prefers-reduced-motion: reduce) {
   .italy-marquee {

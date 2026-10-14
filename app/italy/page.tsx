@@ -36,18 +36,11 @@ const WELCOME_PHOTOS = [
 export default function ItalyHome() {
   return (
     <>
-      {/* Hero. The h1 lives here and must stay filled — it is the page's only
-          heading, and it sat empty while the script was commented out. */}
-      <PhotoCarousel>
-        <div className="flex flex-col items-center gap-4 text-center">
-          <h1 className="font-flourish text-[clamp(46px,10.4vw,150px)] leading-none text-ivory [text-shadow:0_2px_26px_rgba(30,20,10,.42)]">
-            {ITALY.names}
-          </h1>
-          <p className="font-caps text-[10px] uppercase tracking-[0.28em] text-ivory/90 [text-shadow:0_1px_14px_rgba(30,20,10,.5)]">
-            {ITALY_HOME.hero.tagline}
-          </p>
-        </div>
-      </PhotoCarousel>
+      {/* Hero. Nothing is set over the photographs now, but the h1 has to
+          stay — it is the page's only heading, and the page shipped without one
+          once already. The names lockup in the header carries it visually. */}
+      <h1 className="sr-only">{ITALY.names}</h1>
+      <PhotoCarousel />
 
       {/* Welcome — blurb beside the photographs */}
       <Band tone="band" width="wide" align="left">
