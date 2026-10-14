@@ -30,7 +30,7 @@ import {
    added to it. */
 const WELCOME_PHOTOS = [
   { src: "/italy/photos/IMG_7083.JPG", alt: "Meryl and John", rotate: -5 },
-  { src: "/italy/photos/IMG_7098.JPG", alt: "Meryl and John", rotate: 4 },
+  { src: "/italy/photos/0U1A5834.jpg", alt: "Meryl and John", rotate: 4 },
 ];
 
 export default function ItalyHome() {
