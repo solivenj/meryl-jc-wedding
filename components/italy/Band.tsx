@@ -46,7 +46,6 @@ export function Band({
   width = "wide",
   pad = "normal",
   align = "center",
-  rise = "page",
   id,
   className = "",
   children,
@@ -55,11 +54,6 @@ export function Band({
   width?: keyof typeof WIDTH;
   pad?: keyof typeof PAD;
   align?: "center" | "left";
-  /* "content" keeps this Band’s ground still on a tab change and rises only
-     what sits inside it. A page that is one deep Band edge to edge cannot use
-     the page-level rise: it fades the olive in over the cream layout behind,
-     which reads as a flash. See .band-rise-content in globals.css. */
-  rise?: "page" | "content";
   id?: string;
   className?: string;
   children: ReactNode;
@@ -69,7 +63,7 @@ export function Band({
     <section
       id={id}
       data-tone={deep ? "band" : undefined}
-      className={`linen w-full ${rise === "content" ? "band-rise-content " : ""}${
+      className={`linen w-full ${
         deep
           ? "linen-dark bg-[var(--color-band)] text-[var(--color-band-ink)]"
           : "bg-ivory text-ink"
