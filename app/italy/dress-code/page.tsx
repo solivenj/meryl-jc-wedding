@@ -37,6 +37,28 @@ function CodeSection({ section }: { section: DressSection }) {
   );
 }
 
+/*
+ * Tones down the page, with the opening title on cream so it does not run
+ * into the deep header, and the closing section on cream so it does not run
+ * into the deep footer.
+ *
+ * Ten bands between those two ends is an even count, so strict alternation
+ * cannot land cream at both. The one repeat is deliberate and placed where a
+ * reader expects it least to matter: a code's Pinterest board takes the same
+ * ground as the gentlemen's section above it, because the two read as one
+ * thought — here is the attire, here is more like it. Everything else
+ * alternates, and it still alternates if a code gains or loses a board.
+ */
+function codeTones(i: number) {
+  const opensCream = i % 2 === 0;
+  return {
+    hero: opensCream ? ("cream" as const) : ("band" as const),
+    ladies: opensCream ? ("band" as const) : ("cream" as const),
+    /* The board below inherits this one. */
+    gentlemen: opensCream ? ("cream" as const) : ("band" as const),
+  };
+}
+
 export default function DressCodePage() {
   return (
     <>
@@ -47,15 +69,14 @@ export default function DressCodePage() {
         <Prose>{ITALY_DRESS.intro}</Prose>
       </Band>
 
-      <Band tone="cream" width="prose" className="gap-5">
+      <Band tone="band" width="prose" className="gap-5">
         <Label>{ITALY_DRESS.explainer.heading}</Label>
         <Prose>{ITALY_DRESS.explainer.body}</Prose>
       </Band>
 
-      {ITALY_DRESS.codes.map((code) => (
+      {ITALY_DRESS.codes.map((code, i) => (
         <section key={code.key}>
-          {/* Each code opens on the deep ground with its own hero. */}
-          <Band tone="band" width="wide" className="gap-5">
+          <Band tone={codeTones(i).hero} width="wide" className="gap-5">
             <SmallCaps>{code.day}</SmallCaps>
             <ScriptTitle as="h2">{code.word}</ScriptTitle>
             <p className="font-caps text-[calc(11px*var(--fs-scale))] uppercase tracking-[0.24em] text-ink-soft">
@@ -70,18 +91,18 @@ export default function DressCodePage() {
             <Prose className="mt-6">{code.intro}</Prose>
           </Band>
 
-          <Band tone="cream" width="wide">
+          <Band tone={codeTones(i).ladies} width="wide">
             <CodeSection section={code.ladies} />
           </Band>
 
-          <Band tone="band" width="wide">
+          <Band tone={codeTones(i).gentlemen} width="wide">
             <CodeSection section={code.gentlemen} />
           </Band>
 
           {/* Meryl's board, embedded live rather than rehosted — it is the one
               source of attire inspiration that stays current on its own. */}
           {code.pinterestUrl && (
-            <Band tone="cream" width="prose" className="gap-6">
+            <Band tone={codeTones(i).gentlemen} width="prose" className="gap-6">
               <Label>More like this</Label>
               <PinterestBoard url={code.pinterestUrl} className="h-[clamp(300px,34vw,420px)]" />
             </Band>
