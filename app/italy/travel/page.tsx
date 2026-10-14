@@ -76,7 +76,7 @@ function MarginArt({ id }: { id: string }) {
 export default function TravelPage() {
   return (
     <>
-      <Band tone="band" pad="tight">
+      <Band tone="cream" pad="tight">
         <h1 className="sr-only">Getting to Todi</h1>
         <Eyebrow>{ITALY_TRAVEL.eyebrow}</Eyebrow>
       </Band>

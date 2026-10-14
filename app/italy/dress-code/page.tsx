@@ -40,7 +40,7 @@ function CodeSection({ section }: { section: DressSection }) {
 export default function DressCodePage() {
   return (
     <>
-      <Band tone="band" width="prose" className="gap-5">
+      <Band tone="cream" width="prose" className="gap-5">
         <h1 className="sr-only">Dress code</h1>
         <Eyebrow>{ITALY_DRESS.eyebrow}</Eyebrow>
         <ScriptTitle>{ITALY_DRESS.title}</ScriptTitle>

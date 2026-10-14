@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "FAQ" };
 
 export default function FaqPage() {
   return (
-    <Band tone="band" width="wide" className="gap-5">
+    <Band tone="band" width="wide" rise="content" className="gap-5">
       <h1 className="sr-only">Frequently asked questions</h1>
       <Eyebrow>{ITALY_FAQ.eyebrow}</Eyebrow>
       <FaqAccordion items={ITALY_FAQ.items} />

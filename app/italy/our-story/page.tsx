@@ -17,7 +17,7 @@ const PHOTOS = [
 export default function OurStoryPage() {
   return (
     <>
-      <Band tone="band" pad="tight">
+      <Band tone="cream" pad="tight">
         <h1 className="sr-only">Our story</h1>
         <Eyebrow>{ITALY_STORY.eyebrow}</Eyebrow>
       </Band>

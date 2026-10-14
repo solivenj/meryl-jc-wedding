@@ -201,8 +201,28 @@ body {
   animation: italy-rise 550ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
+/*
+ * A page that is one full-bleed Band cannot use the page-level rise: fading
+ * and sliding the whole thing shows the cream layout behind it until the
+ * animation lands. Such a Band marks itself, the rise moves to its single
+ * inner wrapper, and the ground and its weave hold still while the type
+ * comes up.
+ *
+ * :has() is what lets a page opt out from the inside, with no client component
+ * and no route check in the template. Where it is unsupported the page simply
+ * animates the way it does today.
+ */
+.italy-rise:has(> .band-rise-content) {
+  animation: none;
+}
+
+.band-rise-content > * {
+  animation: italy-rise 550ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .italy-rise {
+  .italy-rise,
+  .band-rise-content > * {
     animation: none;
   }
 }
