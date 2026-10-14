@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { GateForm } from "@/components/gate/GateForm";
 import { COUPLE } from "@/lib/content";
-import { GATE_COOKIE, SECTION_HOME, grantedSections } from "@/lib/site-gate";
-import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Meryl & John",
@@ -18,6 +15,13 @@ export const metadata: Metadata = {
  * into the same field. Built on the root tokens (Pinyon / Jost / EB Garamond
  * on #f6f1e8) rather than either site's theme — it is shared ground, so it
  * commits to neither, and with no imagery it stays the fastest page here.
+ *
+ * It never reads the gate cookie, so a guest who is already through still
+ * sees the field rather than a Continue shortcut. That is deliberate while
+ * replies are open — the field has to stay reachable so a second word can be
+ * entered, and a shortcut on a shared screen walks the next person straight
+ * in. Bring the shortcut back once RSVPs close; lib/site-gate exports
+ * grantedSections and SECTION_HOME for exactly that.
  */
 export default async function GatePage({
   searchParams,
@@ -26,7 +30,6 @@ export default async function GatePage({
   searchParams: Promise<{ next?: string }>;
 }) {
   const { next } = await searchParams;
-  const granted = grantedSections((await cookies()).get(GATE_COOKIE)?.value);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-ivory px-6 py-16 text-center">
@@ -46,20 +49,6 @@ export default async function GatePage({
       </p>
 
       <GateForm next={next} />
-
-      {/* Never auto-forwards a guest who already holds a grant: the field has
-          to stay reachable so a second word can be entered. Only the most
-          recent grant is offered — the cookie is newest-first, and listing
-          every grant would both label the sections and tell a guest holding
-          one that there is another to find. */}
-      {granted[0] && (
-        <Link
-          href={SECTION_HOME[granted[0]]}
-          className="mt-10 font-utility text-[11px] uppercase tracking-[0.24em] text-ink underline decoration-ink/30 underline-offset-[6px] hover:decoration-ink"
-        >
-          Continue
-        </Link>
-      )}
     </main>
   );
 }
