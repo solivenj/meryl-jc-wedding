@@ -17,13 +17,19 @@ const PHOTOS = [
 export default function OurStoryPage() {
   return (
     <>
-      <Band tone="cream" pad="tight">
-        <h1 className="sr-only">Our story</h1>
-        <Eyebrow>{ITALY_STORY.eyebrow}</Eyebrow>
-      </Band>
-
       {ITALY_STORY.chapters.map((c, i) => (
-        <Band key={c.heading} tone={i % 2 === 0 ? "cream" : "band"} width="wide">
+        <Band
+          key={c.heading}
+          tone={i % 2 === 0 ? "cream" : "band"}
+          width="wide"
+          className={i === 0 ? "gap-10" : ""}
+        >
+          {i === 0 && (
+            <>
+              <h1 className="sr-only">Our story</h1>
+              <Eyebrow>{ITALY_STORY.eyebrow}</Eyebrow>
+            </>
+          )}
           {/* The photo leads on alternate chapters, so the eye zig-zags down
               the page rather than running straight. order- only applies from
               800px; stacked, the photo is always first. */}

@@ -41,6 +41,15 @@ export const ITALY_NAV = [
   { href: "/italy/faq", label: "FAQ" },
 ] as const;
 
+/* A subject in the About band. Declared rather than inferred so the optional
+   link survives the list being trimmed to one entry. */
+export type AboutColumn = {
+  motif: string;
+  title: string;
+  body: string;
+  href?: string;
+};
+
 /*
  * The home page is the whole invitation now: a welcome, the three days, the
  * Thursday run of show with the practical details beside it, and the reply.
@@ -49,32 +58,26 @@ export const ITALY_NAV = [
 export const ITALY_HOME = {
   hero: { script: "Il nostro giorno", tagline: "Three days in Umbria" },
   welcome: {
-    script: "We’re getting married",
+    script: "We’re getting married!",
     /* TBD — rewrite freely. */
-    body: "And we couldn’t imagine doing it without you. However long you have been part of our lives — from the very beginning, or somewhere along the way — we are so grateful to share this with you.",
-    body2: "Join us for three days in a hill town above the Tiber valley: a pizza party on the first night, a ceremony at the Monastero Santa Margherita, and a long dinner beneath its frescoed ceilings.",
+    body: "And we couldn’t imagine doing it without you. However long you have been part of our lives, we are so grateful to share this special moment with you.",
+    body2: "Join us for three days at Monastero Santa Margherita in the beautiful region of Umbria, Italy.",
     button: "RSVP here",
   },
   about: {
     title: "About our wedding",
+    /* One subject for now. The page renders however many are here: one
+       centred, several in a row. The Destination and Dress Code entries that
+       used to sit either side of this are in the history if they are wanted
+       back — the Dress Code one carried the only link to that page from the
+       home page, which the nav still provides. */
     columns: [
-      {
-        motif: "rings",
-        title: "The Ceremony",
-        body: "Four in the afternoon at the Monastero Santa Margherita, just outside the town walls, with the bells going across the valley.",
-      },
       {
         motif: "coupe",
         title: "The Reception",
         body: "Aperitivo on the terrace while the sun goes down, then a long dinner beneath the frescoes, and dancing after.",
       },
-      {
-        motif: "hat",
-        title: "The Dress Code",
-        body: "Summer cocktail on the Wednesday, black tie on the Thursday — with palettes and rather more detail.",
-        href: "/italy/dress-code",
-      },
-    ],
+    ] as AboutColumn[],
   },
   days: { title: "The three days" },
   rsvp: {

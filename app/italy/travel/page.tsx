@@ -76,11 +76,6 @@ function MarginArt({ id }: { id: string }) {
 export default function TravelPage() {
   return (
     <>
-      <Band tone="cream" pad="tight">
-        <h1 className="sr-only">Getting to Todi</h1>
-        <Eyebrow>{ITALY_TRAVEL.eyebrow}</Eyebrow>
-      </Band>
-
       {/* width="full" matters here: MarginArt positions its motifs at
           calc(25% - ...) against their own relative section, so capping the
           Band measure would make that 25% of 1080px instead of the viewport
@@ -89,7 +84,21 @@ export default function TravelPage() {
           containing block, and being a grandchild of the .linen element is
           what keeps the direct-child rule away from the absolute motifs. */}
       {ITALY_TRAVEL.sections.map((s, i) => (
-        <Band key={s.id} tone={i % 2 === 0 ? "cream" : "band"} width="full">
+        <Band
+          key={s.id}
+          tone={i % 2 === 0 ? "cream" : "band"}
+          width="full"
+          className={i === 0 ? "gap-5" : ""}
+        >
+          {/* The page heading and eyebrow ride inside the first section rather
+              than in a band of their own: two stacked bands put their padding
+              end to end and left a void between the label and the first word. */}
+          {i === 0 && (
+            <>
+              <h1 className="sr-only">Getting to Todi</h1>
+              <Eyebrow>{ITALY_TRAVEL.eyebrow}</Eyebrow>
+            </>
+          )}
           <section className="relative flex w-full flex-col items-center gap-[18px] text-center">
             <MarginArt id={s.id} />
 

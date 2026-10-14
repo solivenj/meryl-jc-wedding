@@ -55,17 +55,21 @@ export default function ItalyHome() {
           </div>
           <PolaroidStack
             items={WELCOME_PHOTOS}
-            note={`Join us as we say “I do”
+            note={`Celebrate our love with us
 ${ITALY.dates}`}
             className="whitespace-pre-line min-[900px]:w-[320px]"
           />
         </div>
       </Band>
 
-      {/* About — the three columns */}
+      {/* About */}
       <Band tone="cream" width="wide">
         <ScriptTitle>{ITALY_HOME.about.title}</ScriptTitle>
-        <div className="mt-12 grid w-full gap-12 min-[800px]:grid-cols-3 min-[800px]:gap-8">
+        <div
+          className={`mt-12 grid w-full gap-12 min-[800px]:gap-8 ${
+            ITALY_HOME.about.columns.length > 1 ? "min-[800px]:grid-cols-3" : "max-w-[46ch]"
+          }`}
+        >
           {ITALY_HOME.about.columns.map((c) => (
             <div key={c.title} className="flex flex-col items-center gap-4 text-center">
               <Motif name={c.motif as MotifName} size={74} className="text-ink" />
