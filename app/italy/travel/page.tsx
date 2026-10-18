@@ -29,9 +29,13 @@ type MarginMotif = {
 };
 
 const SECTION_MOTIFS: Record<string, MarginMotif[]> = {
+  entering: [
+    { name: "swallow", side: "left", jitter: -20, top: 60, size: 88, rot: -6 },
+    { name: "arch", side: "right", jitter: -15, top: 120, size: 86, rot: 3 },
+  ],
   arriving: [
     { name: "vespa", side: "left", jitter: -20, top: 30, size: 84, rot: -5 },
-    { name: "swallow", side: "left", jitter: -15, top: 330, size: 90, rot: -4 },
+    { name: "lemon", side: "left", jitter: -15, top: 330, size: 90, rot: -4 },
     { name: "olive", side: "right", jitter: -20, top: 90, size: 92, rot: 5 },
     { name: "boat", side: "right", jitter: 20, top: 420, size: 80, rot: -4 },
   ],
@@ -122,6 +126,14 @@ export default function TravelPage() {
                     </ul>
                   </div>
                 ))}
+
+              {/* The section note: where a block of copy has a shelf life,
+                  the date it was last checked travels with it. */}
+              {"note" in s && s.note && (
+                <p className="font-body text-[calc(15px*var(--fs-scale))] leading-[1.6] font-light text-ink-soft italic">
+                  {s.note}
+                </p>
+              )}
             </div>
 
             {"cta" in s && s.cta && (
