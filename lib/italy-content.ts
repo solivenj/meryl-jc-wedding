@@ -330,7 +330,7 @@ export const ITALY_TRAVEL = {
      and two deep surfaces meeting read as one slab — and it used to hold
      nothing but a row of motifs that are hidden above 900px. */
   closing: {
-    body: "Anything we have not covered — a flight, a train, where to leave the car — just ask.",
+    body: "If there is something we have not covered here, please ask.",
     cta: "Write to us",
   },
   sections: [
@@ -350,68 +350,66 @@ export const ITALY_TRAVEL = {
           /* VERIFIED Oct 2026 — the Schengen rule is issued within ten years
              and valid three months past departure. The dates are ours. */
           lines: [
-            "It needs to have been issued within the last ten years and still be valid three months after you leave Europe — for our dates, issued after April 2017 and good past late July 2027",
-            "Renewals have been slow. If yours is near either line, start it now rather than in the new year",
+            "Please keep your passports up to date! They need to have been issued within the last ten years and still be valid three months after you leave Europe",
           ],
         },
-        {
-          label: "At the border",
-          /* VERIFIED Oct 2026 — EES became fully operational 10 April 2026. */
-          lines: [
-            "Since April 2026 the EU records arrivals electronically instead of stamping passports. Nothing to apply for, nothing to pay, nothing to do before you fly",
-            "The first time, you have a photograph and fingerprints taken when you land. It takes a few minutes, and you are then in the system for three years",
-          ],
-        },
+        // {
+        //   label: "At the border",
+        //   /* VERIFIED Oct 2026 — EES became fully operational 10 April 2026. */
+        //   lines: [
+        //     "Since April 2026 the EU records arrivals electronically instead of stamping passports. Nothing to apply for, nothing to pay, nothing to do before you fly",
+        //     "The first time, you have a photograph and fingerprints taken when you land. It takes a few minutes, and you are then in the system for three years",
+        //   ],
+        // },
         {
           label: "If you are connecting",
           /* VERIFIED Oct 2026 — you are enrolled at the first Schengen entry,
              not at the final destination. Ireland is outside EES and the UK
              is outside the EU, so neither Dublin nor London enrols you. */
           lines: [
-            "You are processed at the first European airport you land in, not the last one. Fly through Amsterdam or Frankfurt on the way to Rome and that is where the queue is",
-            "So give that first stop a generous layover — two to three hours is the advice going round, and a tight connection is the thing that actually goes wrong",
-            "Dublin and London sit outside the zone, so connecting through either means you are processed on arrival in Italy instead",
+            "Please allow extra time for any layovers, especially in countries within the EES. You will be processed at the first European airport you land in.",
+            "Dublin and London are outside the zone, so connecting through either means you are processed on arrival in Italy instead",
           ],
         },
         {
           /* TBD — ETIAS. The Q4 2026 target was dropped from the official
              page in July 2026 and 2027 is the current expectation, which is
              our year. Do not write this as settled until it is. */
-          label: "One more, maybe",
+          label: "ETIAS",
           lines: [
-            "A separate online authorisation called ETIAS is coming: twenty euros for adults, free under eighteen and over seventy, good for three years",
-            "It is not running yet and the date has moved more than once. The expectation now is sometime in 2027, which could land on our dates",
-            "Nothing to do today. We will put the details here the moment there is a firm one",
+            "ETIAS is a separate online authorisation the EU plans to introduce. Twenty euros for adults, free under eighteen and over seventy, and it lasts three years",
+            "It is not running yet, and the start date has already moved several times. The current expectation is sometime in 2027, which could fall around our dates",
+            "There is nothing to do about it now. We will add the details once there is a firm date",
           ],
         },
       ],
-      note: "Checked 18 October 2026. These rules are still moving — the official page is travel-europe.europa.eu, and we will keep this section current.",
+      note: "Checked 18 October 2026. The rules are still changing, so travel-europe.europa.eu is the page to trust over this one.",
     },
     {
       id: "arriving",
       title: "Arriving",
-      body: "Todi sits on a hill above the Tiber valley, an hour or two from three airports and — despite having a railway station — nowhere near a reliable train. Here is what actually works.",
+      body: "Todi sits on a hill above the Tiber valley, an hour or two from three airports. It has a railway station, but no reliable train service to go with it.",
       blocks: [
         {
           label: "By air",
           /* VERIFIED Sept 2026 — drive times, not flight times. */
           lines: [
-            "Rome Fiumicino (FCO) — about two hours by car, and far the most international flights",
-            "Perugia San Francesco (PEG) — about forty minutes, small, a handful of European routes",
-            "Florence (FLR) — about two and a quarter hours north",
-            "A non-stop into Rome is worth paying for if you can find one — see above for why a European connection wants a long layover",
+            "Rome Fiumicino (FCO): about two hours by car, and by far the most international flights",
+            "Perugia San Francesco (PEG): about forty minutes, small, with a handful of European routes",
+            "Florence (FLR): about two and a quarter hours north",
+            "A non-stop into Rome is worth paying for if you can find one, since a European connection means clearing the border at the first stop",
           ],
         },
         {
           label: "By train from Rome",
           lines: [
             /* TBD — re-confirm FCU service status before this goes to guests. */
-            "Todi has its own station on the Ferrovia Centrale Umbra, but service has been unreliable and partly suspended — we would not plan around it",
+            "Todi has its own station on the Ferrovia Centrale Umbra, but the service has been unreliable and partly suspended, so we would not plan around it",
             /* VERIFIED Sept 2026 */
-            "The route that works: Roma Termini to Orvieto, an hour to an hour and a quarter, then about forty minutes by taxi or hire car",
+            "The route that works is Roma Termini to Orvieto, an hour to an hour and a quarter, then about forty minutes by taxi or hire car",
             /* TBD — confirm the frequency, and whether taxis actually wait at
                Orvieto, before this goes to guests. */
-            "Trains on that line run through the day rather than a handful of times, so you are not planning the trip around one departure",
+            "Trains on that line run through the day, so you are not planning the trip around a single departure",
             "Arrange the car for that last stretch before you travel rather than hoping for a taxi at the station",
             "Or Roma Termini to Perugia, then about forty-five minutes by road",
           ],
@@ -419,7 +417,7 @@ export const ITALY_TRAVEL = {
         {
           label: "By car",
           lines: [
-            "Hiring a car is the easiest way to see Umbria — collect it at the airport and keep it for the three days",
+            "Hiring a car is the easiest way to see Umbria. Collect it at the airport and keep it for the three days",
             /* TBD — confirm the road numbers. */
             "From Rome: the A1 north, then the E45 up the Tiber valley, about two hours",
             "There is free parking at the Monastero",
@@ -430,12 +428,12 @@ export const ITALY_TRAVEL = {
           lines: [
             /* VERIFIED — Italy requires an International Driving Permit
                alongside a foreign licence, issued in your own country. */
-            "Italy wants an International Driving Permit alongside your own licence. AAA issues them for about twenty dollars, and it has to be done before you leave — you cannot get one once you are there",
+            "Italy requires an International Driving Permit alongside your own licence. AAA issues them for about twenty dollars, and you have to get one before you leave, since you cannot arrange it once you are there",
             /* Deliberately "check", not "you are covered": Italy is commonly
                on the excluded list for credit-card rental cover, and getting
                that wrong costs a guest real money at the desk. */
-            "Before you wave off the desk insurance, look for Italy by name in your card benefits guide. It is one of the countries cards often leave out",
-            "Everything inside the old walls is a limited-traffic zone — read the next block before you point the car at it",
+            "Before you wave off the insurance at the desk, look for Italy by name in your card benefits guide. It is one of the countries cards often leave out",
+            "You will be leaving the car outside the old walls, which are closed to traffic",
           ],
         },
         {
@@ -453,7 +451,7 @@ export const ITALY_TRAVEL = {
       id: "accommodation",
       title: "Where to stay",
       /* Deliberately names nothing. See app/italy/accommodations. */
-      body: "We are arranging rooms for our guests, and what we can offer depends on who is coming — so please send your reply first. Once your RSVP is in, this is where you will find the details.",
+      body: "We are arranging rooms for our guests, and what we can offer depends on who is coming, so please send your reply first. The details will be here once your RSVP is in.",
       cta: { label: "Go to the RSVP", href: "/italy/rsvp" },
     },
     {
@@ -463,12 +461,12 @@ export const ITALY_TRAVEL = {
        * ===================================================================== */
       id: "nearby",
       title: "Things we love nearby",
-      body: "If you are making a week of it — and you should — these are the places we keep going back to.",
+      body: "If you are making a week of it, and you should, these are the places we keep going back to.",
       blocks: [
         {
           label: "In Todi",
           lines: [
-            "Piazza del Popolo at the top of the town — three palazzi, one cathedral, and the best coffee of the morning on the south side",
+            "Piazza del Popolo at the top of the town, with three palazzi, one cathedral, and the best coffee of the morning on the south side",
             "Santa Maria della Consolazione, the domed church below the walls, ten minutes on foot from the Monastero",
             "The Roman cisterns, if you like your history underneath you",
           ],
@@ -484,14 +482,14 @@ export const ITALY_TRAVEL = {
         {
           label: "A longer day",
           lines: [
-            "Assisi, Spoleto and Perugia — each an hour or less",
+            "Assisi, Spoleto and Perugia, each an hour or less",
             "Lake Trasimeno, for a slow lunch by the water",
           ],
         },
         {
           label: "Eat & drink",
           lines: [
-            "Black truffle is in season into spring — ask for tagliatelle al tartufo and do not share",
+            "Black truffle is in season into spring. Ask for tagliatelle al tartufo and do not share",
             "Torta al testo, the flatbread that comes with everything",
             "Olive oil from the Tiber valley, the thing to carry home",
           ],
@@ -563,17 +561,17 @@ export const ITALY_FAQ = {
     },
     {
       q: "Do we need anything special to enter Italy?",
-      a: "A passport issued within the last ten years and still valid three months after you leave, and a few minutes at the border for a photograph and fingerprints — the EU stopped stamping passports in 2026. A separate online authorisation may be in place by then as well. Travel has the detail, including why a European connection needs a long layover.",
+      a: "A passport issued within the last ten years and still valid for three months after you leave. The EU stopped stamping passports in 2026 and takes a photograph and fingerprints at the border instead, which adds a few minutes on arrival. A separate online authorisation may also be in place by 2027. The Travel page covers all of it, including why a European connection needs a long layover.",
     },
     {
       q: "Do we need an international driving licence?",
-      a: "If you are hiring a car, yes. Italy wants an International Driving Permit alongside your own licence, and it has to be issued before you leave home — AAA does them for about twenty dollars. Travel has the rest, including the limited-traffic zone in the old town.",
+      a: "If you are hiring a car, yes. Italy requires an International Driving Permit alongside your own licence, and you have to get it before you leave home. AAA issues them for about twenty dollars. The Travel page has the rest, including the limited-traffic zone in the old town.",
     },
     /* TBD — the real answer belongs with the accommodation details, once the
        room block and the day timings are settled. */
     {
       q: "Are you arranging transport on the wedding day?",
-      a: "We are working on it, and we will confirm it alongside the accommodation details. If you are planning around it, write to us.",
+      a: "We are still working this out, and we will confirm alongside the accommodation details. If you are planning around it, please write to us.",
     },
     {
       q: "What will the weather be?",
