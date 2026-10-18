@@ -4,7 +4,7 @@ import { Motif } from "@/components/italy/Art";
 import type { MotifName } from "@/components/italy/sketches";
 import { Band } from "@/components/italy/Band";
 import { Eyebrow, Prose, ScriptTitle, SmallCaps, capsLinkClass } from "@/components/italy/Type";
-import { ITALY_TRAVEL } from "@/lib/italy-content";
+import { ITALY_RSVP, ITALY_TRAVEL } from "@/lib/italy-content";
 
 export const metadata: Metadata = { title: "Travel" };
 
@@ -145,7 +145,7 @@ export default function TravelPage() {
         </Band>
       ))}
 
-      <Band tone="cream" pad="tight">
+      <Band tone="cream" pad="tight" className="gap-5">
         <div
           aria-hidden="true"
           className="flex flex-wrap justify-center gap-5 text-ink min-[901px]:hidden"
@@ -154,6 +154,16 @@ export default function TravelPage() {
             <Motif key={m} name={m} size={46} />
           ))}
         </div>
+
+        {/* The band has to stay cream so it does not merge into the deep
+            footer, and until now it held only the motif row above, which is
+            hidden over 900px — so every desktop ended on an empty strip. */}
+        <p className="max-w-[42ch] font-body text-[calc(17px*var(--fs-scale))] leading-[1.6] font-light text-ink-soft">
+          {ITALY_TRAVEL.closing.body}
+        </p>
+        <a href={`mailto:${ITALY_RSVP.mailtoFallback}`} className={capsLinkClass}>
+          {ITALY_TRAVEL.closing.cta}
+        </a>
       </Band>
     </>
   );

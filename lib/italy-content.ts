@@ -326,6 +326,13 @@ export const ITALY_DRESS: {
  */
 export const ITALY_TRAVEL = {
   eyebrow: "Getting to Todi",
+  /* The closing band. It has to stay cream — the footer is the deep ground,
+     and two deep surfaces meeting read as one slab — and it used to hold
+     nothing but a row of motifs that are hidden above 900px. */
+  closing: {
+    body: "Anything we have not covered — a flight, a train, where to leave the car — just ask.",
+    cta: "Write to us",
+  },
   sections: [
     {
       /* Border rules — the only thing on this site with an expiry date on it.
@@ -336,7 +343,7 @@ export const ITALY_TRAVEL = {
          out; if ETIAS is running by then, rewrite that block. */
       id: "entering",
       title: "Before you book",
-      body: "The European border works differently than it used to, and one more change is still on its way. None of it is hard, but the passport part has a lead time — so this is the part to read now, and the rest whenever.",
+      // body: "The European border works differently than it used to, and one more change is still on its way. None of it is hard, but the passport part has a lead time — so this is the part to read now, and the rest whenever.",
       blocks: [
         {
           label: "Passports",

@@ -47,7 +47,7 @@ export function FaqAccordion({ items }: { items: readonly { q: string; a: string
               }`}
             >
               <div className="overflow-hidden" inert={!isOpen}>
-                <p className="max-w-[62ch] px-0.5 pb-6 font-body text-[calc(17px*var(--fs-scale))] leading-[1.65] font-light text-ink-soft">
+                <p className="max-w-[62ch] px-0.5 pb-6 text-left font-body text-[calc(17px*var(--fs-scale))] leading-[1.65] font-light text-ink-soft">
                   {item.a}
                 </p>
               </div>
