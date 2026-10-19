@@ -27,7 +27,7 @@ const SECTIONS: GateSection[] = ["italy", "church"];
 /** Where each section's gate sends a guest once they're through. */
 export const SECTION_HOME: Record<GateSection, string> = {
   italy: "/italy",
-  church: "/church-save-the-date",
+  church: "/church",
 };
 
 function secret(): string | null {
@@ -140,10 +140,7 @@ export function sectionForPath(pathname: string): GateSection | null {
   if (pathname === "/italy" || pathname.startsWith("/italy/")) {
     return "italy";
   }
-  if (
-    pathname === "/church-save-the-date" ||
-    pathname.startsWith("/church-save-the-date/")
-  ) {
+  if (pathname === "/church" || pathname.startsWith("/church/")) {
     return "church";
   }
   /* The RSVP endpoints answer questions about real guests by name, so they

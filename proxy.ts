@@ -66,7 +66,7 @@ export const config = {
      Naming the gated paths cannot. */
   matcher: [
     "/italy/:path*",
-    "/church-save-the-date/:path*",
+    "/church/:path*",
     "/api/italy/:path*",
     "/api/guests/:path*",
     "/api/submit",
