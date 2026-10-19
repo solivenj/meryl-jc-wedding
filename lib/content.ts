@@ -268,10 +268,9 @@ export const FAQ = {
     {
       question: "What happens between the ceremony and the reception?",
       answer:
-        "We'll slip away for photos after the ceremony, so there's a gap " +
-        "before the reception at six. Cocktails start as soon as you arrive. " +
-        "And if you'd like a coffee or a drink first, the Ironbound is full " +
-        "of places to sit.",
+        "There's a little bit of time between the end of the ceremony and " +
+        "the reception. The Ironbound neighborhood has lots of places for coffee or a drink, and " +
+        "cocktails can be ordered at the Adega Grill bar before the reception begins.",
     },
   ],
 };
