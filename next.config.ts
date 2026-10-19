@@ -13,7 +13,17 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/save-the-date",
-        destination: "/church-save-the-date",
+        destination: "/church",
+        permanent: false,
+      },
+      {
+        source: "/church-save-the-date",
+        destination: "/church",
+        permanent: false,
+      },
+      {
+        source: "/church-save-the-date/:path*",
+        destination: "/church/:path*",
         permanent: false,
       },
       {
