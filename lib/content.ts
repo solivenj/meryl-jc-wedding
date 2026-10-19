@@ -242,7 +242,7 @@ export const TRAVEL = {
     {
       label: "Between the Venues",
       body:
-        "The ceremony and the reception are about twenty minutes apart — St. " +
+        "The ceremony and the reception are about twenty minutes apart. Please navigate to St. " +
         "Aloysius in Jersey City, then Adega Grill in Newark.",
     }
   ],
@@ -268,9 +268,10 @@ export const FAQ = {
     {
       question: "What happens between the ceremony and the reception?",
       answer:
-        "There's a bit of a gap while we steal away for photos — the reception " +
-        "starts at six. Cocktails begin the moment you arrive, and there's " +
-        "plenty nearby in the Ironbound if you'd like a coffee or a drink first.",
+        "We'll slip away for photos after the ceremony, so there's a gap " +
+        "before the reception at six. Cocktails start as soon as you arrive. " +
+        "And if you'd like a coffee or a drink first, the Ironbound is full " +
+        "of places to sit.",
     },
   ],
 };
