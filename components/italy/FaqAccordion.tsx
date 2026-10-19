@@ -2,7 +2,15 @@
 
 import { useId, useState } from "react";
 
-/* Single-open accordion: first item open, a second click closes it. */
+/*
+ * Single-open accordion: first item open, a second click closes it.
+ *
+ * CHEVRON_GUTTER is the room the question row gives the arrow: size-4 (16px)
+ * plus the gap-5 (20px) before it. The answer reserves the same width on the
+ * right, so both wrap on the same line rather than the answer running under
+ * the arrow or stopping short of it. Change it if either class changes.
+ */
+const CHEVRON_GUTTER = "max-w-[calc(100%-36px)]";
 export function FaqAccordion({ items }: { items: readonly { q: string; a: string }[] }) {
   const [open, setOpen] = useState(0);
   const base = useId();
@@ -47,7 +55,7 @@ export function FaqAccordion({ items }: { items: readonly { q: string; a: string
               }`}
             >
               <div className="overflow-hidden" inert={!isOpen}>
-                <p className="max-w-[62ch] px-0.5 pb-6 text-left font-body text-[calc(17px*var(--fs-scale))] leading-[1.65] font-light text-ink-soft">
+                <p className={`${CHEVRON_GUTTER} px-0.5 pb-6 text-left font-body text-[calc(17px*var(--fs-scale))] leading-[1.65] font-light text-ink-soft`}>
                   {item.a}
                 </p>
               </div>
