@@ -114,14 +114,13 @@ export const RECEPTION = {
     {
       label: "Dinner & Drinks",
       body:
-        "Dinner is served family style, with plenty of it, and the bar stays " +
-        "open through the night. If you let us know about allergies or " +
-        "restrictions in your RSVP, the kitchen will take care of the rest.",
+        "A wonderful Portuguese family-style dinner will be served, with plenty of drinks. " +
+        "If you let us know about allergies or dietary restrictions in your RSVP, the kitchen will take care of the rest.",
     },
     {
       label: "Parking & Directions",
       body:
-        "Free parking is available on site, with designated areas for " +
+        "Free parking is available a short walk away, with designated areas for " +
         "rideshare pick up and drop off close to the entrance.",
     },
   ],
@@ -263,14 +262,15 @@ export const FAQ = {
       answer:
         "Cocktail attire and traditional Filipino wear! Please save ivory for the bride.",
     },
-    /* The ceremony is at three and dinner isn't until six — the likeliest
-       question any guest will have, and the only place the site answers it. */
+    /* The ceremony is at three and the reception is not until seven, with
+       cocktail hour at six, so this gap is the likeliest question any guest
+       will have. The times themselves live in PROGRAM. */
     {
       question: "What happens between the ceremony and the reception?",
       answer:
-        "There's a little bit of time between the end of the ceremony and " +
-        "the reception. The Ironbound neighborhood has lots of places for coffee or a drink, and " +
-        "cocktails can be ordered at the Adega Grill bar before the reception begins.",
+        "We'll be off taking photos for a short while. The Ironbound neighborhood " +
+        "has lots to offer in the meantime, and cocktails can be ordered at " +
+        "the Adega Grill bar before the reception begins.",
     },
   ],
 };
