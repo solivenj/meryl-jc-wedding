@@ -114,7 +114,7 @@ export const RECEPTION = {
     {
       label: "Dinner & Drinks",
       body:
-        "A wonderful Portuguese family style dinner will be served, with plenty of drinks." +
+        "A wonderful Portuguese family-style dinner will be served, with plenty of drinks. " +
         "If you let us know about allergies or dietary restrictions in your RSVP, the kitchen will take care of the rest.",
     },
     {
