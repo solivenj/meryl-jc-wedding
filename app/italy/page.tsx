@@ -4,17 +4,10 @@ import { Band } from "@/components/italy/Band";
 import { DetailBlocks } from "@/components/italy/DetailBlocks";
 import { PhotoCarousel } from "@/components/italy/PhotoCarousel";
 import { PolaroidStack } from "@/components/italy/PolaroidStack";
-import { ProgramTimeline } from "@/components/italy/ProgramTimeline";
-import { Label, Prose, Rule, ScriptTitle, SmallCaps, capsLinkClass } from "@/components/italy/Type";
+import { Prose, Rule, ScriptTitle, SmallCaps, capsLinkClass } from "@/components/italy/Type";
 import { RsvpReply } from "@/components/italy/RsvpReply";
 import type { MotifName } from "@/components/italy/sketches";
-import {
-  ITALY,
-  ITALY_DETAILS,
-  ITALY_HOME,
-  ITALY_PROGRAM,
-  ITALY_SCHEDULE,
-} from "@/lib/italy-content";
+import { ITALY, ITALY_DETAILS, ITALY_HOME, ITALY_SCHEDULE } from "@/lib/italy-content";
 
 /*
  * The home page carries the invitation. Everything a guest needs in order to
@@ -23,11 +16,21 @@ import {
  * Bands alternate cream and the deep ground. The last one before the footer
  * is deliberately cream — the footer is the deep ground, and two deep
  * surfaces meeting reads as one slab.
+ *
+ * The run of show is not here. It covered Thursday only and repeated the two
+ * hours the days section already gives, so it is parked in ITALY_PROGRAM
+ * until the replies are in; see the three-day layouts before putting it back.
  */
 
 /* TBD — swap for chosen photographs. Any file in public/italy/photos also
    feeds the hero carousel, so these are picked from that set rather than
    added to it. */
+/* The three motifs are drawn at different scales inside their own boxes:
+   the rings are wide and shallow, the coupe is tall, and the sun is a sketch
+   that only fills about three quarters of its viewBox. Sized by eye so the
+   three read as the same weight rather than the same number. */
+const MOTIF_SIZE: Record<string, number> = { coupe: 64, rings: 80, sun: 74 };
+
 const WELCOME_PHOTOS = [
   { src: "/italy/photos/IMG_7083.JPG", alt: "Meryl and John", rotate: -5 },
   { src: "/italy/photos/0U1A5834.jpg", alt: "Meryl and John", rotate: 4 },
@@ -62,37 +65,19 @@ ${ITALY.dates}`}
         </div>
       </Band>
 
-      {/* About */}
+      {/* The three days. Cream: it follows the deep welcome band and leads
+          the deep Details band below it. */}
       <Band tone="cream" width="wide">
-        <ScriptTitle>{ITALY_HOME.about.title}</ScriptTitle>
-        <div
-          className={`mt-12 grid w-full gap-12 min-[800px]:gap-8 ${
-            ITALY_HOME.about.columns.length > 1 ? "min-[800px]:grid-cols-3" : "max-w-[46ch]"
-          }`}
-        >
-          {ITALY_HOME.about.columns.map((c) => (
-            <div key={c.title} className="flex flex-col items-center gap-4 text-center">
-              <Motif name={c.motif as MotifName} size={74} className="text-ink" />
-              <Label>{c.title}</Label>
-              <p className="max-w-[34ch] font-body text-[calc(17px*var(--fs-scale))] leading-[1.7] font-light text-ink-soft">
-                {c.body}
-              </p>
-              {c.href && (
-                <Link href={c.href} className={capsLinkClass}>
-                  See the dress code
-                </Link>
-              )}
-            </div>
-          ))}
-        </div>
-      </Band>
-
-      {/* The three days */}
-      <Band tone="band" width="wide">
         <ScriptTitle>{ITALY_HOME.days.title}</ScriptTitle>
         <div className="mt-12 grid w-full gap-12 min-[800px]:grid-cols-3 min-[800px]:gap-10">
           {ITALY_SCHEDULE.days.map((d) => (
             <div key={d.day} className="flex flex-col items-center gap-3.5 text-center">
+              {/* A fixed box so the three names start on the same line: the
+                  motifs are different shapes and sizes, and left to itself
+                  each column would set its own top edge. */}
+              <span className="flex h-[76px] items-end justify-center">
+                <Motif name={d.motif as MotifName} size={MOTIF_SIZE[d.motif]} className="text-ink" />
+              </span>
               <SmallCaps>{d.day}</SmallCaps>
               <ScriptTitle as="h3">{d.title}</ScriptTitle>
               <p className="font-body text-[calc(17px*var(--fs-scale))] leading-[1.6] font-light text-ink-soft italic">
@@ -113,20 +98,15 @@ ${ITALY.dates}`}
         </div>
       </Band>
 
-      {/* Program + Details */}
-      <Band tone="cream" width="wide">
-        <div className="grid w-full gap-14 min-[800px]:grid-cols-2 min-[800px]:gap-20">
-          <ProgramTimeline
-            title={ITALY_PROGRAM.title}
-            rows={ITALY_PROGRAM.rows}
-            note={ITALY_PROGRAM.note}
-          />
-          <div className="w-full text-left">
-            <h3 className="font-caps text-[calc(12px*var(--fs-scale))] uppercase tracking-[0.2em] text-ink">
-              {ITALY_DETAILS.title}
-            </h3>
-            <DetailBlocks className="mt-6" blocks={ITALY_DETAILS.blocks} />
-          </div>
+      {/* Details. Prose width holds the column at roughly what it measured
+          as half of the old two-up grid, so the lines do not get longer now
+          that the program is no longer beside it. */}
+      <Band tone="band" width="prose">
+        <div className="w-full text-left">
+          <h3 className="font-caps text-[calc(12px*var(--fs-scale))] uppercase tracking-[0.2em] text-ink">
+            {ITALY_DETAILS.title}
+          </h3>
+          <DetailBlocks className="mt-6" blocks={ITALY_DETAILS.blocks} />
         </div>
       </Band>
 

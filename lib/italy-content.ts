@@ -41,15 +41,6 @@ export const ITALY_NAV = [
   { href: "/italy/faq", label: "FAQ" },
 ] as const;
 
-/* A subject in the About band. Declared rather than inferred so the optional
-   link survives the list being trimmed to one entry. */
-export type AboutColumn = {
-  motif: string;
-  title: string;
-  body: string;
-  href?: string;
-};
-
 /*
  * The home page is the whole invitation now: a welcome, the three days, the
  * Thursday run of show with the practical details beside it, and the reply.
@@ -63,21 +54,6 @@ export const ITALY_HOME = {
     body: "And we couldn’t imagine doing it without you. However long you have been part of our lives, we are so grateful to share this special moment with you.",
     body2: "Join us for three days at Monastero Santa Margherita in the beautiful region of Umbria, Italy.",
     button: "RSVP here",
-  },
-  about: {
-    title: "About our wedding",
-    /* One subject for now. The page renders however many are here: one
-       centred, several in a row. The Destination and Dress Code entries that
-       used to sit either side of this are in the history if they are wanted
-       back — the Dress Code one carried the only link to that page from the
-       home page, which the nav still provides. */
-    columns: [
-      {
-        motif: "coupe",
-        title: "The Reception",
-        body: "Aperitivo on the terrace while the sun goes down, then a long dinner beneath the frescoes, and dancing after.",
-      },
-    ] as AboutColumn[],
   },
   days: { title: "The three days" },
   rsvp: {
@@ -94,6 +70,13 @@ export const ITALY_HOME = {
  * TBD — only the four o'clock ceremony and the eight o'clock dinner are
  * settled. Rather than stamping TBD on every row, rows carry a flag and the
  * page prints one note beneath the list.
+ */
+/*
+ * PARKED. The run of show is off the home page until the replies are in and
+ * the Thursday times are settled; it goes back as one of the three-day
+ * layouts rather than the single Thursday column it was. Kept here so the
+ * real hours are not lost: four o'clock and eight are settled, the rest are
+ * flagged.
  */
 export const ITALY_PROGRAM = {
   title: "Program",
@@ -151,6 +134,7 @@ export const ITALY_SCHEDULE = {
     {
       day: "Wednesday, April 21st",
       art: "villa",
+      motif: "coupe",
       title: "Pizza Party",
       quote: "Come as you are, stay until the lamps go on",
       time: "Seven in the evening",
@@ -160,6 +144,7 @@ export const ITALY_SCHEDULE = {
     {
       day: "Thursday, April 22nd",
       art: "chapel",
+      motif: "rings",
       title: "The Ceremony & Reception",
       quote: "Four o’clock, and the bells across the valley",
       time: "Four in the afternoon, dinner at eight",
@@ -171,6 +156,7 @@ export const ITALY_SCHEDULE = {
     {
       day: "Friday, April 23rd",
       art: "loggia",
+      motif: "sun",
       title: "A farewell day",
       quote: "No schedule, no hurry",
       time: "Leave when you like",

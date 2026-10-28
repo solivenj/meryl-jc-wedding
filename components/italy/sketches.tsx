@@ -20,7 +20,8 @@ export type MotifName =
   | "pizza"
   | "gelato"
   | "wineglass"
-  | "flowers";
+  | "flowers"
+  | "sun";
 
 export type SceneName = "villa" | "chapel" | "loggia";
 
@@ -93,6 +94,16 @@ export const MOTIF_PATHS: Partial<Record<MotifName, string[]>> = {
     "M8 88c8 5 15-4 23 0s15-4 23 0 15-4 23 0",
   ],
   arch: ["M32 84V48a18 18 0 0 1 36 0v36z", "M50 30v54", "M32 58h36", "M26 88h48"],
+  /* Friday has nothing scheduled, so it gets the only motif here with no
+     object in it. Drawn rather than photographed: there is no sun in the
+     Vecteezy set, and a sketch follows currentColor, so it works on either
+     ground without the invert the webp motifs need. */
+  sun: [
+    "M32 50a18 18 0 0 1 36 0a18 18 0 0 1-36 0",
+    "M50 24V14", "M50 76v10", "M24 50H14", "M76 50h10",
+    "M68.4 31.6 74.7 25.3", "M31.6 31.6 25.3 25.3",
+    "M68.4 68.4 74.7 74.7", "M31.6 68.4 25.3 74.7",
+  ],
   rings: [
     "M23 58a17 17 0 1 0 34 0a17 17 0 1 0-34 0",
     "M45 58a17 17 0 1 0 34 0a17 17 0 1 0-34 0",
