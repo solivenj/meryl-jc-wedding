@@ -28,11 +28,20 @@ import type { ReactNode } from "react";
  * data-tone="band" re-points the ink tokens (see globals.css) so every
  * existing primitive works on the dark ground without a `tone` prop.
  *
- * An `id` means something links to this Band, so it also gets the scroll
- * margin that keeps its heading clear of the sticky day bar on the dress
- * code page. Without it the browser puts the anchor at the very top of the
- * viewport and the bar covers the first line. Two values because the bar
- * wraps to two lines below about 414px and is then 74px tall, not 47.
+ * An `id` means something links to this Band, so it also gets a scroll
+ * margin for the sticky day bar on the dress code page.
+ *
+ * The margin is deliberately a little SHORTER than the bar, so this Band
+ * slides a few pixels under it. Overshoot even slightly and a strip of the
+ * previous Band shows between the bar and this one, which reads as a bug
+ * because the two grounds differ. Undershooting hides nothing: what ends up
+ * behind the bar is the top of this Band’s own padding, which is at least
+ * 56px before any text.
+ *
+ * Two values because the bar wraps to two lines below about 414px, where it
+ * is 74px tall against 47px above. Both leave roughly a dozen pixels of
+ * overlap, which absorbs the couple of pixels the bar can vary by when the
+ * font metrics settle.
  */
 
 const WIDTH = {
@@ -69,7 +78,7 @@ export function Band({
     <section
       id={id}
       data-tone={deep ? "band" : undefined}
-      className={`linen w-full ${id ? "scroll-mt-[88px] min-[560px]:scroll-mt-[64px]" : ""} ${
+      className={`linen w-full ${id ? "scroll-mt-[60px] min-[560px]:scroll-mt-[36px]" : ""} ${
         deep
           ? "linen-dark bg-[var(--color-band)] text-[var(--color-band-ink)]"
           : "bg-ivory text-ink"
