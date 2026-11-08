@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Band } from "@/components/italy/Band";
+import { DayJump } from "@/components/italy/DayJump";
 import { PaletteRow } from "@/components/italy/PaletteRow";
 import { PhotoPanel } from "@/components/italy/PhotoPanel";
 import { PhotoStrip } from "@/components/italy/PhotoStrip";
@@ -62,6 +63,11 @@ function codeTones(i: number) {
 export default function DressCodePage() {
   return (
     <>
+      {/* Above the title, so the page names both codes before anything is
+          scrolled. Cream on cream with the title band below it, which is why
+          it carries its own hairline. */}
+      <DayJump items={ITALY_DRESS.codes.map((c) => ({ id: c.key, label: c.short }))} />
+
       <Band tone="cream" width="prose" className="gap-5">
         <h1 className="sr-only">Dress code</h1>
         <Eyebrow>{ITALY_DRESS.eyebrow}</Eyebrow>
@@ -76,7 +82,7 @@ export default function DressCodePage() {
 
       {ITALY_DRESS.codes.map((code, i) => (
         <section key={code.key}>
-          <Band tone={codeTones(i).hero} width="wide" className="gap-5">
+          <Band id={code.key} tone={codeTones(i).hero} width="wide" className="gap-5">
             <SmallCaps>{code.day}</SmallCaps>
             <ScriptTitle as="h2">{code.word}</ScriptTitle>
             <p className="font-caps text-[calc(11px*var(--fs-scale))] uppercase tracking-[0.24em] text-ink-soft">

@@ -185,6 +185,14 @@ body {
   --color-hover-ink: var(--color-ivory);
 }
 
+/* Anchor jumps on the dress code page. Guarded, because a long smooth
+   scroll is exactly the motion someone turns that setting off to avoid. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 /* Page rise on every tab change (app/italy/template.tsx remounts). */
 @keyframes italy-rise {
   from {

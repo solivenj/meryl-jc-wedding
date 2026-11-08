@@ -27,6 +27,12 @@ import type { ReactNode } from "react";
  *
  * data-tone="band" re-points the ink tokens (see globals.css) so every
  * existing primitive works on the dark ground without a `tone` prop.
+ *
+ * An `id` means something links to this Band, so it also gets the scroll
+ * margin that keeps its heading clear of the sticky day bar on the dress
+ * code page. Without it the browser puts the anchor at the very top of the
+ * viewport and the bar covers the first line. Two values because the bar
+ * wraps to two lines below about 414px and is then 74px tall, not 47.
  */
 
 const WIDTH = {
@@ -63,7 +69,7 @@ export function Band({
     <section
       id={id}
       data-tone={deep ? "band" : undefined}
-      className={`linen w-full ${
+      className={`linen w-full ${id ? "scroll-mt-[88px] min-[560px]:scroll-mt-[64px]" : ""} ${
         deep
           ? "linen-dark bg-[var(--color-band)] text-[var(--color-band-ink)]"
           : "bg-ivory text-ink"

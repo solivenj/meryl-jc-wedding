@@ -193,6 +193,8 @@ export type DressSection = {
 export type DressCode = {
   key: string;
   day: string;
+  /* What the day bar calls it. Both halves on purpose. */
+  short: string;
   word: string;
   subtitle: string;
   heroSlot: string;
@@ -225,6 +227,7 @@ export const ITALY_DRESS: {
     {
       key: "cocktail",
       day: "Wednesday · Welcome",
+      short: "Wednesday · Summer Cocktail",
       word: "Summer Cocktail",
       subtitle: "Pizza, piazza, lamps coming on",
       heroSlot: "cocktail",
@@ -261,6 +264,7 @@ export const ITALY_DRESS: {
     {
       key: "blacktie",
       day: "Thursday · The wedding",
+      short: "Thursday · Black Tie",
       word: "Black Tie",
       subtitle: "Ceremony at four, dinner at eight",
       heroSlot: "blacktie",
