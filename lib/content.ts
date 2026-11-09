@@ -91,8 +91,7 @@ export const PROGRAM = {
   rows: [
     { time: "2:15 PM", item: "Arrive at Church"},
     { time: "3:00 PM", item: "Marriage Ceremony Begins" },
-    { time: "6:00 PM", item: "Cocktail Hour" },
-    { time: "7:00 PM", item: "Reception" },
+    { time: "6:00 PM", item: "Reception" },
     { time: "9:00 PM", item: "Dancing!" },
   ],
 };
@@ -174,7 +173,7 @@ export const RSVP = {
 
   /* Post-submit + edit + closed states */
   successTitle: "Thank you!",
-  successBody: "Your RSVP is in. We're so grateful you'll be part of our day.",
+  successBody: "Your RSVP is in. Thank you for responding!",
 
   /* An extra destination offered after a reply that includes at least one
      "yes" — the Italy side points this at the accommodation page. Declared
@@ -262,14 +261,14 @@ export const FAQ = {
       answer:
         "Cocktail attire and traditional Filipino wear! Please save ivory for the bride.",
     },
-    /* The ceremony is at three and the reception is not until seven, with
-       cocktail hour at six, so this gap is the likeliest question any guest
-       will have. The times themselves live in PROGRAM. */
+    /* The ceremony is at three and the reception is not until six, so this
+       gap is the likeliest question any guest will have. The times
+       themselves live in PROGRAM. */
     {
       question: "What happens between the ceremony and the reception?",
       answer:
         "We'll be off taking photos for a short while. The Ironbound neighborhood " +
-        "has lots to offer in the meantime, and cocktails can be ordered at " +
+        "has lots to offer in the meantime, and drinks can be ordered at " +
         "the Adega Grill bar before the reception begins.",
     },
   ],
