@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Pinyon_Script, EB_Garamond, Jost } from "next/font/google";
 import "./globals.css";
 
@@ -48,7 +49,10 @@ export default function RootLayout({
       lang="en"
       className={`${pinyon.variable} ${garamond.variable} ${jost.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
