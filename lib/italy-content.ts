@@ -277,7 +277,7 @@ export const ITALY_DETAILS = {
  * blogs recommend. Live pages on Zola and Joy run 50–150 words in total,
  * first-person plural, addressed to the guest; the long multi-chapter
  * timelines are what listicles pick out, not the norm. So: four short
- * chapters, roughly 55–75 words each, each one scene rather than a summary.
+ * chapters, roughly 45 to 65 words each, each one scene rather than a summary.
  * The `kicker` is a scene label, not a date — the dated-milestone convention
  * is strong on those sites, but we have no dates to put in it yet, and a
  * fabricated year is a worse lie than no year.
@@ -292,50 +292,50 @@ export const ITALY_DETAILS = {
 export const ITALY_STORY = {
   eyebrow: "How we got here",
   /* One line under the eyebrow, before the first photograph. */
-  intro: "Two weddings, one answer. Here is the long version.",
+  intro: "The long version, for anyone with time for it.",
   chapters: [
     {
       kicker: "Where it started",
       heading: "We met over homework",
       body:
-        "It began as study sessions, which is less romantic than it turned out to be. " +
-        "The sessions ran long, then they turned into meals, and then into most of our " +
-        "free time without either of us deciding that was what was happening. By the " +
-        "time we went out properly — dinner and a movie, nothing clever — we were only " +
-        "confirming something we already knew.",
+        "It started as study sessions, which were about as romantic as they sound. " +
+        "They ran long. Then they turned into meals, and then into most of our free " +
+        "time, without either of us deciding that was what was happening. By the time " +
+        "we went out properly, dinner and a movie, we were confirming something we had " +
+        "both already worked out.",
     },
     {
-      kicker: "Three thousand miles",
+      /* Not a mileage: the two coasts are real, the number was not. */
+      kicker: "A country in between",
       heading: "Opposite coasts",
       body:
-        "Then came the years with a country in the middle: two time zones, two " +
-        "calendars, and a running list of flights we could just about afford. It is " +
-        "the part of the story we would least like to repeat and would least like to " +
-        "give back. Distance is a decent test. We came out of it as each other's " +
-        "first call, every time, about everything.",
+        "Then came the years with the whole country in the middle, two time zones and a " +
+        "running list of flights we could just about afford. We would not choose it " +
+        "again. We would not give those years back either. What came out of them is " +
+        "that we are each other's first call now, about anything.",
     },
     {
       kicker: "The question",
       heading: "And then we asked",
       body:
-        "One of us had been carrying the question around for a while. The other knew, " +
-        "more or less, and let it happen anyway. What we remember is not the words but " +
-        "everything immediately after them — the phone calls, the telling of people, " +
-        "the long afternoon where nothing else got done.",
+        "One of us had been carrying the question around for a while. The other had " +
+        "worked it out and let it happen anyway. We remember the hours afterwards " +
+        "better than the words. There were a great many phone calls, and an afternoon " +
+        "where nothing else got done.",
     },
     {
       kicker: "Why Umbria",
       heading: "And now, Todi",
       body:
         "We are getting married twice. Once at home in New Jersey, in the church, with " +
-        "everyone who can be there. And once here, on a hill in Umbria, over three " +
-        "unhurried days, because a wedding you can only attend for five hours is not " +
-        "the same as a wedding you can live in for a week. Todi is small, old and " +
-        "walkable, and nobody has to drive. That is the whole of the reasoning.",
+        "everyone who can get there. And once here, on a hill in Umbria, over three " +
+        "unhurried days, because we wanted one of the two to last longer than an " +
+        "afternoon. Todi is small and walkable, and once you arrive you can put the car " +
+        "keys away until you leave.",
     },
   ],
   /* Sits alone on the last band, under the final chapter. */
-  closing: "The rest of it we would rather tell you in person, in April, with a drink.",
+  closing: "We would rather tell you the rest of it in April, over a drink.",
 };
 /* TBD — the whole order of days is a placeholder built on real Todi places. */
 export const ITALY_SCHEDULE = {
