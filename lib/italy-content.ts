@@ -255,18 +255,88 @@ export const ITALY_DETAILS = {
 };
 
 /*
- * TBD — PLACEHOLDER. Meryl & John to replace entirely. Structure only: three
- * chapters, each a passage beside a photograph.
+ * Our Story.
+ *
+ * DRAFT, not placeholder. Written from the only account of the two of you
+ * that exists in this repo — STORY.invitation in lib/content.ts, which John
+ * wrote for the church site: college, study sessions, a first date of dinner
+ * and a movie, long distance on opposite coasts, each other's #1 person.
+ * Those are the facts. The shape and the wording are mine and are meant to be
+ * overwritten.
+ *
+ * TBD(Meryl & John) — the specifics I had no way to know, and deliberately
+ * wrote around rather than invent:
+ *   - which college, and the year you met
+ *   - which two coasts, and how long the distance lasted
+ *   - the proposal: where, when, who asked, whether it was a surprise, and
+ *     the first thing either of you said afterwards. Chapter three is the
+ *     thinnest for exactly this reason.
+ *   - why Todi specifically — a trip, somebody's family, a photograph
+ *
+ * Shape follows what real couples actually publish, not what the wedding
+ * blogs recommend. Live pages on Zola and Joy run 50–150 words in total,
+ * first-person plural, addressed to the guest; the long multi-chapter
+ * timelines are what listicles pick out, not the norm. So: four short
+ * chapters, roughly 55–75 words each, each one scene rather than a summary.
+ * The `kicker` is a scene label, not a date — the dated-milestone convention
+ * is strong on those sites, but we have no dates to put in it yet, and a
+ * fabricated year is a worse lie than no year.
+ *
+ * Chapter four has no precedent in the sites surveyed: not one destination
+ * wedding, including two other Todi weddings and one on Lake Garda, explains
+ * its destination on the story page — that lands on the travel page, if
+ * anywhere. It belongs here anyway, because this is the second of two
+ * weddings and "why are we flying to Umbria" is the question this page is
+ * actually being read to answer.
  */
 export const ITALY_STORY = {
   eyebrow: "How we got here",
+  /* One line under the eyebrow, before the first photograph. */
+  intro: "Two weddings, one answer. Here is the long version.",
   chapters: [
-    { heading: "How we met", body: "A placeholder for the beginning — where you were, who introduced you, and the detail you both still disagree about." },
-    { heading: "The proposal", body: "A placeholder for the question — where it happened, whether it was a surprise, and what was said immediately afterwards." },
-    { heading: "And now, Todi", body: "A placeholder for why Umbria — the trip that started it, the hill town you kept going back to, and why you wanted everyone there for it." },
+    {
+      kicker: "Where it started",
+      heading: "We met over homework",
+      body:
+        "It began as study sessions, which is less romantic than it turned out to be. " +
+        "The sessions ran long, then they turned into meals, and then into most of our " +
+        "free time without either of us deciding that was what was happening. By the " +
+        "time we went out properly — dinner and a movie, nothing clever — we were only " +
+        "confirming something we already knew.",
+    },
+    {
+      kicker: "Three thousand miles",
+      heading: "Opposite coasts",
+      body:
+        "Then came the years with a country in the middle: two time zones, two " +
+        "calendars, and a running list of flights we could just about afford. It is " +
+        "the part of the story we would least like to repeat and would least like to " +
+        "give back. Distance is a decent test. We came out of it as each other's " +
+        "first call, every time, about everything.",
+    },
+    {
+      kicker: "The question",
+      heading: "And then we asked",
+      body:
+        "One of us had been carrying the question around for a while. The other knew, " +
+        "more or less, and let it happen anyway. What we remember is not the words but " +
+        "everything immediately after them — the phone calls, the telling of people, " +
+        "the long afternoon where nothing else got done.",
+    },
+    {
+      kicker: "Why Umbria",
+      heading: "And now, Todi",
+      body:
+        "We are getting married twice. Once at home in New Jersey, in the church, with " +
+        "everyone who can be there. And once here, on a hill in Umbria, over three " +
+        "unhurried days, because a wedding you can only attend for five hours is not " +
+        "the same as a wedding you can live in for a week. Todi is small, old and " +
+        "walkable, and nobody has to drive. That is the whole of the reasoning.",
+    },
   ],
+  /* Sits alone on the last band, under the final chapter. */
+  closing: "The rest of it we would rather tell you in person, in April, with a drink.",
 };
-
 /* TBD — the whole order of days is a placeholder built on real Todi places. */
 export const ITALY_SCHEDULE = {
   eyebrow: "The order of the days",
