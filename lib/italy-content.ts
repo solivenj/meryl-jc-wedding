@@ -56,12 +56,152 @@ export const ITALY_HOME = {
     button: "RSVP here",
   },
   days: { title: "The three days" },
+  collageAlt: "Photographs, an envelope and a card laid out on a table",
   rsvp: {
     script: "Will you join us?",
     replyBy: "Kindly reply by the first of February, 2027",
     button: "RSVP here",
     registryLink: "See the registry, or write to us",
   },
+};
+
+/*
+ * The collage under the carousel.
+ *
+ * It exists because the first screen of /italy never said when or where the
+ * wedding was. The card carries those facts; the props around it carry the
+ * feeling. Modelled on a scrapbook reference John supplied.
+ *
+ * Coordinates live here, not in the component, so the arrangement is tuned by
+ * editing numbers. Every piece has two packs, both in percentages of the
+ * stage: the wide one (l/t/w/r) and a tall one (pl/pt/pw/pr) used below 640px.
+ * See .collage-* in app/globals.css for why there are two.
+ *
+ * The photographs are referenced straight out of public/italy/photos rather
+ * than copied, so they are the same files the carousel above is already
+ * showing. A guest will see two or three of them twice on one screen; in a
+ * scrapbook that reads as intent rather than as a mistake, but it is the one
+ * thing to look at first if the band feels repetitive.
+ */
+export type CollagePiece = {
+  kind: "card" | "photo" | "doily" | "prop";
+  src?: string;
+  alt?: string;
+  /* Intrinsic pixels — only needed so next/image can reserve the box. */
+  w?: number;
+  h?: number;
+  landscape?: boolean;
+  /* object-position, for a crop that would otherwise cut faces. */
+  focus?: string;
+  /* Wide pack. */
+  l: number;
+  t: number;
+  width: number;
+  r?: number;
+  z: number;
+  /* Tall pack, under 640px. Omitted keys fall back to the wide value. */
+  pl?: number;
+  pt?: number;
+  pwidth?: number;
+  pr?: number;
+};
+
+export const ITALY_COLLAGE: {
+  card: {
+    dates: string;
+    year: string;
+    venue: string;
+    place: string;
+  };
+  pieces: readonly CollagePiece[];
+} = {
+  card: {
+    dates: "April 21 – 23",
+    year: "2027",
+    venue: ITALY.venue.name,
+    /* The place, not the postal address. The full street address is still on
+       the Travel tab, which is where someone actually navigating from it will
+       be; on the card it was four lines of detail nobody reads at a glance. */
+    place: "Todi, Umbria, Italy",
+  },
+  pieces: [
+    {
+      /* John's own envelope, hue-rotated from dusty blue to cream by
+         scripts/process-collage.mjs. It carries the ribbon and the embossed
+         M&J, so it is the bow and the envelope in one object. */
+      kind: "prop",
+      src: "/italy/collage/envelope-cream.webp",
+      alt: "",
+      w: 900,
+      h: 643,
+      l: 8,
+      t: 12,
+      width: 30,
+      r: -7,
+      z: 1,
+      pl: -2,
+      pt: 70,
+      pwidth: 52,
+      pr: -6,
+    },
+    {
+      /* A tight two-shot, because the circle is the smallest frame here and a
+         wide one loses its subjects entirely. The faces sit about a third of
+         the way down the original, so a square crop has to be pulled up or it
+         cuts them off at the top. */
+      kind: "doily",
+      src: "/italy/photos/IMG_7089.JPG",
+      alt: "",
+      focus: "50% 15%",
+      l: 16,
+      t: 40,
+      width: 25,
+      r: 5,
+      z: 2,
+      pl: 48,
+      pt: 62,
+      pwidth: 42,
+    },
+    {
+      kind: "photo",
+      src: "/italy/photos/IMG_7083.JPG",
+      alt: "",
+      l: 68,
+      t: 3,
+      width: 21,
+      r: 5,
+      z: 3,
+      pl: 1,
+      pt: 44,
+      pwidth: 38,
+      pr: -5,
+    },
+    {
+      kind: "photo",
+      src: "/italy/photos/0U1A5834.jpg",
+      alt: "",
+      landscape: true,
+      l: 64,
+      t: 44,
+      width: 24,
+      r: -6,
+      z: 4,
+      pl: 45,
+      pt: 42,
+      pwidth: 43,
+      pr: 4,
+    },
+    {
+      /* Last, and highest: the card sits proud of everything else. */
+      kind: "card",
+      l: 34,
+      t: 2,
+      width: 38,
+      z: 5,
+      pt: 0,
+      pwidth: 84,
+    },
+  ],
 };
 
 /*
@@ -137,19 +277,27 @@ export const ITALY_SCHEDULE = {
       motif: "coupe",
       title: "Pizza Party",
       quote: "Come as you are, stay until the lamps go on",
-      time: "Seven in the evening",
+      /* `start` rides on the date line. It is the only clock time a day
+         carries — Friday has none, and nothing sits below the title. */
+      start: "7PM",
       // place: "Piazza del Popolo · Todi",
-      dress: "Summer Cocktail",
+      /* Each day closes on one link to the tab that answers it. The first two
+         deep-link to their own code on the dress page (ids are the `key`
+         below); Friday has no code, so it points at the tab a guest leaving
+         that morning actually wants. */
+      link: { label: "Dress code", href: "/italy/dress-code#cocktail" },
     },
     {
       day: "Thursday, April 22nd",
       art: "chapel",
       motif: "rings",
-      title: "The Ceremony & Reception",
+      /* No leading "The": it is the longest of the three day titles and has
+         to hold one line in the home grid. */
+      title: "Ceremony & Reception",
       quote: "Four o’clock, and the bells across the valley",
-      time: "Four in the afternoon, dinner at eight",
+      start: "4PM",
       place: "Monastero Santa Margherita · Todi",
-      dress: "Black Tie",
+      link: { label: "Dress code", href: "/italy/dress-code#blacktie" },
     },
     /* No farewell lunch — Friday is an open day, with people leaving at their
        own pace. Nothing is scheduled, so there is no `place` or fixed time. */
@@ -157,10 +305,10 @@ export const ITALY_SCHEDULE = {
       day: "Friday, April 23rd",
       art: "loggia",
       motif: "sun",
-      title: "A farewell day",
+      title: "Farewell",
       quote: "No schedule, no hurry",
-      time: "Leave when you like",
-      dress: "Whatever you travel in",
+      /* No start: nothing is scheduled, so the date line carries no clock. */
+      link: { label: "Travelling home", href: "/italy/travel" },
     },
   ],
 } as const;

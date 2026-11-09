@@ -48,3 +48,22 @@ monogram have no business here regardless of licensing.
 The black-tie strips are intentionally unregistered — the reference set is a
 garden wedding in pastels with nothing formal in it, so those slots stay on
 gradients until the right images are chosen.
+
+## Home collage (components/italy/DetailCollage.tsx)
+
+Built by `scripts/process-collage.mjs`. Nothing here is third-party.
+
+| File | Source | Treatment |
+|---|---|---|
+| collage/envelope-cream.webp | `public/envelope.webp` — John's own, already used on the church save-the-date | Hue rotated +185 and desaturated, taking the dusty-blue satin to a warm cream that sits on the olive band. Hue rotation rather than a flat tint, so the satin keeps its own highlights and still reads as fabric. |
+| collage/envelope-blush.webp | same | The same pass at +167, a warmer pink-champagne. **Not currently used** — it is the alternative to `envelope-cream.webp`, and swapping is one line in `ITALY_COLLAGE`. |
+
+The polaroids and the photograph set in the doily are referenced straight out
+of `public/italy/photos`, not copied, so they are the same files the hero
+carousel is already showing. Two or three photographs therefore appear twice
+on the first screen; in a scrapbook that reads as intent, but it is the first
+thing to change if the band ever feels repetitive.
+
+The doily itself is drawn in SVG inside the component rather than
+photographed — there is no lace in the repo. A real photographed paper doily
+would be richer, and would drop straight into the same slot.

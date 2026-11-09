@@ -17,7 +17,9 @@ export const MOTIF_ART: Partial<Record<MotifName, ArtImage>> = {
   olive: { src: "/italy/art/olive.webp", width: 86, height: 229 },
   pizza: { src: "/italy/art/pizza.webp", width: 120, height: 125 },
   gelato: { src: "/italy/art/gelato.webp", width: 82, height: 243 },
-  rings: { src: "/italy/art/rings.webp", width: 101, height: 60 },
+  /* Trying the bolder pair. The old thin-line rings.webp is still in
+     public/italy/art if this reads too heavy next to the other motifs. */
+  rings: { src: "/italy/art/rings-a150.webp", width: 294, height: 218 },
   swallow: { src: "/italy/art/swallow.webp", width: 219, height: 187 },
   /* Round 3 */
   wineglass: { src: "/italy/art/wineglass.webp", width: 92, height: 92 },
