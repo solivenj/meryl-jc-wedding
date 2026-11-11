@@ -29,18 +29,17 @@ const FORECAST_URL =
   "https://api.open-meteo.com/v1/forecast" +
   `?latitude=${live.latitude}&longitude=${live.longitude}` +
   "&current=temperature_2m,apparent_temperature,weather_code,cloud_cover,is_day" +
-  "&hourly=temperature_2m,weather_code,precipitation_probability,cloud_cover,is_day" +
-  "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,cloud_cover_mean" +
+  "&hourly=temperature_2m,weather_code,precipitation_probability,is_day" +
+  "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max" +
   `&timezone=${encodeURIComponent(live.timeZone)}&forecast_days=3`;
 
-type Slot = { time: string; temp: number; code: number; rain: number | null; cloud: number; isDay: boolean };
+type Slot = { time: string; temp: number; code: number; rain: number | null; isDay: boolean };
 type Day = {
   date: string;
   code: number;
   high: number;
   low: number;
   rain: number | null;
-  cloud: number;
   slots: Slot[];
 };
 type Weather = {
@@ -120,7 +119,6 @@ function shape(j: any): Weather {
         temp: h.temperature_2m[k],
         code: h.weather_code[k],
         rain: h.precipitation_probability[k],
-        cloud: h.cloud_cover[k],
         isDay: h.is_day[k] === 1,
       });
     });
@@ -130,7 +128,6 @@ function shape(j: any): Weather {
       high: d.temperature_2m_max[i],
       low: d.temperature_2m_min[i],
       rain: d.precipitation_probability_max[i],
-      cloud: d.cloud_cover_mean[i],
       slots,
     };
   });
@@ -183,13 +180,25 @@ function useTodiWeather() {
 
 /* ---- pieces --------------------------------------------------------------- */
 
+/* Celsius, set small and light beside the Fahrenheit it follows: most guests
+   read °F, and a second full-size figure competes with the one they need. */
+function Celsius({ value, className = "" }: { value: number; className?: string }) {
+  return (
+    <span className={`font-body text-[calc(12px*var(--fs-scale))] font-light text-ink-soft tabular-nums lining-nums ${className}`}>
+      {c(value)}°C
+    </span>
+  );
+}
+
 function Stat({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex min-w-0 flex-col gap-1">
       <span className="font-caps text-[calc(9px*var(--fs-scale))] uppercase tracking-[0.22em] text-ink-soft">
         {label}
       </span>
-      <span className="font-body text-[calc(17px*var(--fs-scale))] leading-[1.35] text-ink">{children}</span>
+      <span className="font-body text-[calc(17px*var(--fs-scale))] leading-[1.35] font-semibold text-ink tabular-nums lining-nums">
+        {children}
+      </span>
     </div>
   );
 }
@@ -289,9 +298,7 @@ function HourStrip({ day, nowTime }: { day: Day; nowTime: string }) {
               <span className="font-body text-[calc(18px*var(--fs-scale))] leading-none text-ink tabular-nums lining-nums">
                 {f(s.temp)}°
               </span>
-              <span className="font-body text-[calc(13px*var(--fs-scale))] leading-none text-ink-soft tabular-nums lining-nums">
-                {c(s.temp)}°C
-              </span>
+              <Celsius value={s.temp} className="leading-none" />
               <span
                 className="font-body text-[calc(13px*var(--fs-scale))] leading-none text-ink-soft tabular-nums lining-nums"
                 aria-label={`${s.rain ?? 0}% chance of rain`}
@@ -369,9 +376,7 @@ export function TodiWeather() {
               <span className="font-body leading-none font-light text-ink tabular-nums lining-nums [font-size:calc(clamp(46px,9vw,60px)*var(--fs-scale))]">
                 {data ? `${f(data.now.temp)}°F` : "–"}
               </span>
-              <span className="font-body text-[calc(18px*var(--fs-scale))] text-ink-soft tabular-nums lining-nums">
-                {data ? `${c(data.now.temp)}°C` : ""}
-              </span>
+              {data && <Celsius value={data.now.temp} className="text-[calc(14px*var(--fs-scale))]" />}
             </div>
             <span className="font-body text-[calc(18px*var(--fs-scale))] leading-snug text-ink">
               {data ? describe(data.now.code, data.now.isDay) : "Loading the sky over Todi…"}
@@ -383,8 +388,24 @@ export function TodiWeather() {
         </div>
 
         <div className="grid grid-cols-2 gap-x-6 gap-y-4 border-y border-[var(--color-rule)] py-4 @min-[28rem]:grid-cols-4 @min-[34rem]:grid-cols-2 @min-[34rem]:border-y-0 @min-[34rem]:border-l @min-[34rem]:py-1 @min-[34rem]:pl-6">
-          <Stat label="High">{today ? `${f(today.high)}° / ${c(today.high)}°C` : "–"}</Stat>
-          <Stat label="Low">{today ? `${f(today.low)}° / ${c(today.low)}°C` : "–"}</Stat>
+          <Stat label="High">
+            {today ? (
+              <>
+                {f(today.high)}°F <Celsius value={today.high} className="ml-1" />
+              </>
+            ) : (
+              "–"
+            )}
+          </Stat>
+          <Stat label="Low">
+            {today ? (
+              <>
+                {f(today.low)}°F <Celsius value={today.low} className="ml-1" />
+              </>
+            ) : (
+              "–"
+            )}
+          </Stat>
           <Stat label="Rain">{today ? `${today.rain ?? 0}% chance` : "–"}</Stat>
           <Stat label="Sky">{data ? `${skyWords(data.now.cloud)} · ${data.now.cloud}%` : "–"}</Stat>
         </div>
@@ -450,7 +471,9 @@ export function TodiWeather() {
       </div>
 
       {/* The selected day */}
-      <div id="todi-day-panel" role="tabpanel" aria-labelledby={`todi-day-${active}`} className="min-h-[214px]">
+      {/* min-h holds the panel open while one day's strip fades out and the
+          next fades in, so the card doesn't jump. */}
+      <div id="todi-day-panel" role="tabpanel" aria-labelledby={`todi-day-${active}`} className="min-h-[170px]">
         <AnimatePresence mode="wait" initial={false}>
           {day && data && (
             <motion.div
@@ -459,13 +482,7 @@ export function TodiWeather() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: reduced ? 0.1 : 0.3, ease: EASE_OUT }}
-              className="flex flex-col gap-4"
             >
-              <p className="font-body text-[calc(16.5px*var(--fs-scale))] leading-[1.55] font-light text-ink-soft">
-                <span className="text-ink">{weekday(day.date, "long")}:</span> {describe(day.code, true).toLowerCase()},{" "}
-                {skyWords(day.cloud).toLowerCase()}. High {f(day.high)}°F ({c(day.high)}°C), low {f(day.low)}°F ({c(day.low)}°C),
-                and a {day.rain ?? 0}% chance of rain.
-              </p>
               <HourStrip day={day} nowTime={data.now.time} />
             </motion.div>
           )}

@@ -26,7 +26,9 @@ const baskerville = Libre_Baskerville({
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
-  weight: ["300", "400"],
+  /* 600 is for the few figures set bold (the weather stats on the Italy
+     tab); without the real weight the browser smears a fake bold. */
+  weight: ["300", "400", "600"],
   style: ["normal", "italic"],
   subsets: ["latin"],
   display: "swap",
