@@ -446,9 +446,13 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
   return {
     render,
     layout,
+    /* Undo everything createDrive added, so a later createDrive on the same
+       DOM (motion turned back on, Fast Refresh, a preserved route) starts
+       clean instead of stacking a second set of cars and digits. */
     destroy() {
       window.clearTimeout(swapTimer);
       cleanups.forEach((f) => f());
+      for (const g of [measure, V, digits, stopsUl]) g.replaceChildren();
     },
   };
 }

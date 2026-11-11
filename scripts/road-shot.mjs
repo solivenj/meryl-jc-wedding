@@ -34,7 +34,8 @@ export async function drive(page, p) {
     const top = d.getBoundingClientRect().top + scrollY;
     scrollTo(0, top + p * (d.offsetHeight - innerHeight));
   }, p);
-  await page.waitForTimeout(1600);
+  /* The glide eases in over ~1.5 s at 60 fps; a busy dev server needs longer. */
+  await page.waitForTimeout(3000);
 }
 
 /* Unlock once and reuse the session: the gate rate-limits repeated unlocks,
@@ -171,6 +172,46 @@ if (flags.has("--checks")) {
     }
     await ctx.close();
     if (hits.length) return `card covers the car at ${hits.join(", ")}`;
+  });
+
+  await check("no ending flash before the script runs", async () => {
+    // Block the page's JS so the server HTML stays as it first paints.
+    const ctx = await context(browser, 390, 600);
+    await ctx.route(/\/_next\/static\/chunks\/.*\.js/, (r) => r.abort());
+    const page = await ctx.newPage();
+    await page.goto(PAGE, { waitUntil: "domcontentloaded" });
+    await page.waitForTimeout(800);
+    const shown = await page.evaluate(() =>
+      ["#world", ".hud-sign", ".odo", ".stops"].filter((s) => getComputedStyle(document.querySelector(s)).visibility !== "hidden"),
+    );
+    await ctx.close();
+    if (shown.length) return `visible before the drive is ready: ${shown.join(", ")}`;
+  });
+
+  await check("motion toggles cleanly", async () => {
+    const ctx = await context(browser, 1440, 900);
+    const page = await ctx.newPage();
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(PAGE, { waitUntil: "networkidle" });
+    await page.waitForTimeout(600);
+    const counts = () =>
+      page.evaluate(() => ({
+        digits: document.querySelectorAll("#digits > .d").length,
+        stops: document.querySelectorAll("#stops button").length,
+        vehicles: document.querySelectorAll("#vehicles > g").length,
+        ready: document.querySelector(".road-trip").classList.contains("road-ready"),
+      }));
+    for (const mode of ["no-preference", "reduce", "no-preference"]) {
+      await page.emulateMedia({ reducedMotion: mode });
+      await page.waitForTimeout(400);
+    }
+    await drive(page, 0.42);
+    const c = await counts();
+    const chip = await text(page, "chip");
+    await ctx.close();
+    if (!c.ready) return "drive never started after motion was turned back on";
+    if (c.digits !== 5 || c.stops !== 10 || c.vehicles !== 6) return `duplicated or missing DOM: ${JSON.stringify(c)}`;
+    if (chip !== "Chicago") return `drive not running: chip reads ${chip}`;
   });
 
   await check("content", async () => {

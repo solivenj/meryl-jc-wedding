@@ -155,6 +155,14 @@
   .road-trip .odo .unit.flip { animation: none; }
 }
 
+/* Until the engine has placed the camera, the world is unscaled at its top
+   (the ending). Keep it and the HUD hidden until then; the stage shows its
+   plain linen, as the prototype did before its script ran. */
+.road-trip:not(.road-ready) #world,
+.road-trip:not(.road-ready) .hud-sign,
+.road-trip:not(.road-ready) .odo,
+.road-trip:not(.road-ready) .stops { visibility: hidden; }
+
 /* ---------- drive or fallback (design doc §9) ----------
    The fallback is the one copy of the story assistive tech reads. While the
    drive shows it is visually hidden (Tailwind's sr-only, spelled out); with

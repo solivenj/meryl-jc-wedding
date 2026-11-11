@@ -74,37 +74,57 @@ export function RoadTrip() {
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    /* Reduced motion: road.css hides the drive and shows the fallback, so
-       there is nothing to animate. */
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const section = root.querySelector<HTMLElement>("#drive")!;
-    const engine = createDrive(root, ITALY_STORY, { reduceMotion: false });
 
-    let shown = progressOf(section);
-    let last = -1;
-    let raf = 0;
-    const onResize = () => {
-      engine.layout();
-      last = -1;
-    };
-    const loop = () => {
-      const target = progressOf(section);
-      shown += (target - shown) * SMOOTHING;
-      if (Math.abs(target - shown) < 1e-5) shown = target;
-      if (shown !== last) {
-        engine.render(shown);
-        last = shown;
-      }
+    /* Runs the drive; returns how to stop it. Under reduced motion road.css
+       hides the drive and shows the fallback, so nothing runs — and the
+       setting can flip while the page is open (battery saver, say). */
+    const run = () => {
+      const engine = createDrive(root, ITALY_STORY, { reduceMotion: false });
+      let shown = progressOf(section);
+      let last = -1;
+      let raf = 0;
+      const onResize = () => {
+        engine.layout();
+        last = -1;
+      };
+      const loop = () => {
+        const target = progressOf(section);
+        shown += (target - shown) * SMOOTHING;
+        if (Math.abs(target - shown) < 1e-5) shown = target;
+        if (shown !== last) {
+          engine.render(shown);
+          last = shown;
+        }
+        raf = requestAnimationFrame(loop);
+      };
+      engine.render(shown);
+      last = shown;
+      root.classList.add("road-ready");
+      addEventListener("resize", onResize);
       raf = requestAnimationFrame(loop);
+      return () => {
+        cancelAnimationFrame(raf);
+        removeEventListener("resize", onResize);
+        engine.destroy();
+        root.classList.remove("road-ready");
+      };
     };
-    engine.render(shown);
-    last = shown;
-    addEventListener("resize", onResize);
-    raf = requestAnimationFrame(loop);
+
+    const motion = matchMedia("(prefers-reduced-motion: reduce)");
+    let stop: (() => void) | null = motion.matches ? null : run();
+    const onMotionChange = () => {
+      if (motion.matches) {
+        stop?.();
+        stop = null;
+      } else if (!stop) {
+        stop = run();
+      }
+    };
+    motion.addEventListener("change", onMotionChange);
     return () => {
-      cancelAnimationFrame(raf);
-      removeEventListener("resize", onResize);
-      engine.destroy();
+      motion.removeEventListener("change", onMotionChange);
+      stop?.();
     };
   }, []);
 
