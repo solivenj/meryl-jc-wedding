@@ -119,6 +119,25 @@ export const SPURS = {
   b: `M 1240 ${Y0 + 260} C 700 ${Y0 + 260} 63 ${Y0 + 24} ${XL} ${Y0}`,
 };
 
+/* The road as SVG paths, computed rather than measured so they can render on
+   the server: `full` is one continuous path (the ink-reveal mask follows it),
+   `road` is the same route with each flight replaced by a move-to, and
+   `flights` are the dotted arcs. */
+export function roadPaths(): { full: string; road: string; flights: string[]; spurs: string } {
+  const moving = PIECES.filter((p) => p.kind === "road" || p.kind === "flight");
+  const start = (p: Piece) => `M ${f1(p.from!.x)} ${f1(p.from!.y)}`;
+  const endOf = (seg: string) => {
+    const n = seg.trim().split(/[\s,]+/).map(Number).filter((v) => !Number.isNaN(v));
+    return `M ${n[n.length - 2]} ${n[n.length - 1]}`;
+  };
+  return {
+    full: moving.map((p, i) => (i === 0 ? `${start(p)} ${p.seg}` : p.seg)).join(" "),
+    road: moving.map((p, i) => (i === 0 ? `${start(p)} ${p.seg}` : p.kind === "flight" ? endOf(p.seg!) : p.seg)).join(" "),
+    flights: moving.filter((p) => p.kind === "flight").map((p) => `${start(p)} ${p.seg}`),
+    spurs: `${SPURS.a} ${SPURS.b}`,
+  };
+}
+
 export const CUM: number[] = PIECES.reduce<number[]>((acc, p) => [...acc, acc[acc.length - 1] + p.w], [0]);
 export const TOTAL_W = CUM[CUM.length - 1];
 

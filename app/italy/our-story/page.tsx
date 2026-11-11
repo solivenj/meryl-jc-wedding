@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RoadTrip } from "@/components/italy/road/RoadTrip";
 import { StoryFallback } from "@/components/italy/road/StoryFallback";
 
 export const metadata: Metadata = { title: "Our Story" };
@@ -11,6 +12,7 @@ export default function OurStoryPage() {
   return (
     <>
       <h1 className="sr-only">Our story</h1>
+      <RoadTrip />
       <StoryFallback />
     </>
   );

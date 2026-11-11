@@ -11,6 +11,8 @@ import {
   chapterStart,
   odometerReading,
   pieceIndex,
+  roadPaths,
+  SPURS,
 } from "../../components/italy/road/route.ts";
 
 /* The last two numbers in an SVG segment are its end point. */
@@ -69,6 +71,18 @@ test("locate is monotonic and reversible", () => {
 test("chapter starts", () => {
   assert.equal(chapterStart(0), CUM[1] / TOTAL_W);
   for (let ch = 1; ch <= 9; ch++) assert.ok(chapterStart(ch) > chapterStart(ch - 1), `chapter ${ch}`);
+});
+
+test("road paths", () => {
+  const r = roadPaths();
+  // one continuous path for the reveal mask, starting where leg 1 starts
+  assert.ok(r.full.startsWith(`M ${legStart(1).x} ${legStart(1).y} `));
+  assert.equal((r.full.match(/M /g) || []).length, 1);
+  // the drivable road skips the three flights: a move-to for each
+  assert.equal((r.road.match(/M /g) || []).length, 1 + 3);
+  assert.equal(r.flights.length, 3);
+  for (const f of r.flights) assert.match(f, /^M [\d.-]+ [\d.-]+ C /);
+  assert.ok(r.spurs.includes(SPURS.a) && r.spurs.includes(SPURS.b));
 });
 
 test("odometer", () => {

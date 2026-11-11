@@ -1,7 +1,7 @@
 /* Boston, 2019: the sign, the polaroid pickets, the skyline over the Charles.
    Moved verbatim from the approved prototype; see components/italy/road/route.ts. */
 import { Y0, legY } from "../route.ts";
-import { f1, greenSign, olive, up } from "./kit.ts";
+import { f1, greenSign, up } from "./kit.ts";
 
 export function bostonArt(): { backdrop: string; scenery: string; fx: string } {
   const B: string[] = [], S: string[] = [], F: string[] = [];
