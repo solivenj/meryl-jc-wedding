@@ -17,9 +17,10 @@ export const MOTIF_ART: Partial<Record<MotifName, ArtImage>> = {
   olive: { src: "/italy/art/olive.webp", width: 86, height: 229 },
   pizza: { src: "/italy/art/pizza.webp", width: 120, height: 125 },
   gelato: { src: "/italy/art/gelato.webp", width: 82, height: 243 },
-  /* Trying the bolder pair. The old thin-line rings.webp is still in
-     public/italy/art if this reads too heavy next to the other motifs. */
-  rings: { src: "/italy/art/rings-a150.webp", width: 294, height: 218 },
+  /* Our own drawing (public/italy/art/wedding_rings.jpeg). Its baked-in
+     checkerboard is lighter than the line work, so the knock-out used a
+     higher threshold (70) to clear it. */
+  rings: { src: "/italy/art/rings.webp", width: 400, height: 293 },
   swallow: { src: "/italy/art/swallow.webp", width: 219, height: 187 },
   /* Round 3 */
   wineglass: { src: "/italy/art/wineglass.webp", width: 92, height: 92 },
@@ -29,6 +30,14 @@ export const MOTIF_ART: Partial<Record<MotifName, ArtImage>> = {
   /* Round 4 */
   espresso: { src: "/italy/art/espresso.webp", width: 95, height: 101 },
   hat: { src: "/italy/art/hat.webp", width: 219, height: 96 },
+  /* Our own drawing (public/italy/art/pizzaparty.png), put through the same
+     knock-out and ink tint as the others. */
+  cheers: { src: "/italy/art/cheers.webp", width: 300, height: 293 },
+  /* farewell.jpeg, same checkerboard and threshold as the rings. */
+  luggage: { src: "/italy/art/luggage.webp", width: 400, height: 416 },
+  /* doves.png, drawn on beige paper: threshold 62 clears the paper grain
+     and the corner sparkle, which is lighter than the paper. */
+  doves: { src: "/italy/art/doves.webp", width: 600, height: 459 },
 };
 
 export const SCENE_ART: Partial<Record<SceneName, ArtImage>> = {};

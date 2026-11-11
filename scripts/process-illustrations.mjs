@@ -24,7 +24,6 @@ const ICONS = [
   { name: "olive", sheet: "r2/packB.jpg", box: [280, 270, 96, 234] },
   { name: "pizza", sheet: "r2/packB.jpg", box: [798, 186, 128, 131], erase: [[92, 116, 36, 15]] },
   { name: "gelato", sheet: "r2/packB.jpg", box: [26, 6, 94, 278] },
-  { name: "rings", sheet: "r2/rings.jpg", box: [398, 88, 112, 70] },
   { name: "swallow", sheet: "r2/swallow.jpg", box: [1048, 490, 222, 200] },
   { name: "wineglass", sheet: "r2/packB.jpg", box: [978, 603, 100, 100], erase: [[78, 80, 22, 20]] },
   {

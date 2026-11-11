@@ -64,15 +64,14 @@ export const ITALY_HOME = {
     button: "RSVP here",
     registryLink: "See the registry, or write to us",
   },
-  /* Sits at the top of the reply band rather than in a band of its own: a
-     sixth band would break the cream/olive parity and land the reply olive
-     against the olive footer. Counts to the ceremony on the Thursday, in
-     Todi time (+02:00 is Italian summer time). */
+  /* Has the olive band before the reply to itself, in the slot the parked
+     Details band held. Counts to the start of the wedding days, Wednesday
+     the 21st, at midnight Todi time (+02:00 is Italian summer time). */
   countdown: {
     eyebrow: "Counting down",
     line: "Until we say I do",
-    dateLine: "Thursday, the 22nd of April, 2027",
-    targetISO: "2027-04-22T16:00:00+02:00",
+    dateLine: "Wednesday, the 21st of April, 2027",
+    targetISO: "2027-04-21T00:00:00+02:00",
     units: { days: "Days", hours: "Hours", minutes: "Minutes", seconds: "Seconds" },
     passed: "Sposati!",
     passedNote: "We’re married. Thank you for celebrating with us in Todi.",
@@ -422,7 +421,7 @@ export const ITALY_SCHEDULE = {
     {
       day: "Wednesday, April 21st",
       art: "villa",
-      motif: "coupe",
+      motif: "cheers",
       title: "Pizza Party",
       quote: "Come as you are, stay until the lamps go on",
       /* `start` rides on the date line. It is the only clock time a day
@@ -452,7 +451,7 @@ export const ITALY_SCHEDULE = {
     {
       day: "Friday, April 23rd",
       art: "loggia",
-      motif: "sun",
+      motif: "luggage",
       title: "Farewell",
       quote: "No schedule, no hurry",
       /* No start: nothing is scheduled, so the date line carries no clock. */

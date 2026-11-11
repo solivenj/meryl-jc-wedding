@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Motif } from "@/components/italy/Art";
 import { Band } from "@/components/italy/Band";
-import { DetailBlocks } from "@/components/italy/DetailBlocks";
 import { DetailCollage } from "@/components/italy/DetailCollage";
 import { ItalyCountdown } from "@/components/italy/ItalyCountdown";
 import { PhotoCarousel } from "@/components/italy/PhotoCarousel";
@@ -9,7 +8,7 @@ import { PhotoCarousel } from "@/components/italy/PhotoCarousel";
 import { Prose, ScriptTitle, SmallCaps, capsLinkClass } from "@/components/italy/Type";
 import { RsvpReply } from "@/components/italy/RsvpReply";
 import type { MotifName } from "@/components/italy/sketches";
-import { ITALY, ITALY_DETAILS, ITALY_HOME, ITALY_SCHEDULE } from "@/lib/italy-content";
+import { ITALY, ITALY_HOME, ITALY_SCHEDULE } from "@/lib/italy-content";
 
 /*
  * The home page carries the invitation. Everything a guest needs in order to
@@ -24,11 +23,9 @@ import { ITALY, ITALY_DETAILS, ITALY_HOME, ITALY_SCHEDULE } from "@/lib/italy-co
  * until the replies are in; see the three-day layouts before putting it back.
  */
 
-/* The three motifs are drawn at different scales inside their own boxes:
-   the rings are wide and shallow, the coupe is tall, and the sun is a sketch
-   that only fills about three quarters of its viewBox. Sized by eye so the
-   three read as the same weight rather than the same number. */
-const MOTIF_SIZE: Record<string, number> = { coupe: 64, rings: 80, sun: 74 };
+/* All three are our own drawings, trimmed to their ink, so one size reads
+   as one weight. Kept as a map so any one can be nudged by eye. */
+const MOTIF_SIZE: Record<string, number> = { cheers: 80, rings: 80, luggage: 80 };
 
 export default function ItalyHome() {
   return (
@@ -61,7 +58,7 @@ export default function ItalyHome() {
       </Band>
 
       {/* The three days. Cream: it follows the deep welcome band and leads
-          the deep Details band below it. */}
+          the deep countdown band below it. */}
       <Band tone="cream" width="wide">
         <ScriptTitle>{ITALY_HOME.days.title}</ScriptTitle>
         <div className="mt-12 grid w-full gap-12 min-[800px]:grid-cols-3 min-[800px]:gap-10">
@@ -109,28 +106,22 @@ export default function ItalyHome() {
         </div>
       </Band>
 
-      {/* Details. Prose width holds the column at roughly what it measured
-          as half of the old two-up grid, so the lines do not get longer now
-          that the program is no longer beside it. */}
-      <Band tone="band" width="prose">
-        {/* The heading matches every other section on the page — script face,
-            centred by the Band. The blocks below stay left: they are prose,
-            and centred body copy is far harder to read. */}
-        <ScriptTitle as="h3">{ITALY_DETAILS.title}</ScriptTitle>
-        <div className="w-full text-left">
-          <DetailBlocks className="mt-8" blocks={ITALY_DETAILS.blocks} />
-        </div>
+      {/* The countdown takes the olive slot the Details band held. Details
+          is parked until the date is closer: the copy is still in
+          ITALY_DETAILS, and putting it back is this band again with
+          <ScriptTitle as="h3">{ITALY_DETAILS.title}</ScriptTitle> over
+          <DetailBlocks blocks={ITALY_DETAILS.blocks} /> at width="prose".
+          Wide here so the four figures get room. */}
+      <Band tone="band" width="wide">
+        <ItalyCountdown />
       </Band>
 
-      {/* The countdown, then the reply, in one cream band: cream because the
-          footer below it is the deep ground, and shared because a band of
-          its own would break the alternation (see ITALY_HOME.countdown).
-          Wide rather than prose so the four figures get room; everything
-          in here is short and centred, so nothing else gets longer lines. */}
-      <Band tone="cream" width="wide" className="gap-6">
-        <ItalyCountdown />
+      {/* The reply. Cream because the footer below it is the deep ground.
+          Almost no top padding: the doves hang just under the countdown band.
+          The bottom keeps the normal Band padding above the footer. */}
+      <Band tone="cream" width="wide" pad="none" className="gap-6 pt-5 pb-[clamp(56px,8vw,96px)]">
+        <Motif name="doves" size={288} className="text-ink" />
         <ScriptTitle>{ITALY_HOME.rsvp.script}</ScriptTitle>
-        <Motif name="rings" size={92} className="text-ink" />
         <p className="font-caps text-[calc(10px*var(--fs-scale))] uppercase tracking-[0.24em] text-ink-soft">
           {ITALY_HOME.rsvp.replyBy}
         </p>
