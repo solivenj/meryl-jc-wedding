@@ -154,3 +154,17 @@
   .road-trip .wt, .road-trip .card, .road-trip .stops .lab, .road-trip .chip { transition: none; }
   .road-trip .odo .unit.flip { animation: none; }
 }
+
+/* ---------- drive or fallback (design doc §9) ----------
+   The fallback is the one copy of the story assistive tech reads. While the
+   drive shows it is visually hidden (Tailwind's sr-only, spelled out); with
+   reduced motion the drive goes and the fallback becomes the page. The
+   no-JavaScript case is the same swap, from a <noscript> style in page.tsx. */
+.road-fallback {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .road-trip { display: none; }
+  .road-fallback { position: static; width: auto; height: auto; margin: 0; overflow: visible; clip: auto; white-space: normal; }
+}

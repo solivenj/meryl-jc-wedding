@@ -74,9 +74,11 @@ export function RoadTrip() {
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    /* Reduced motion: road.css hides the drive and shows the fallback, so
+       there is nothing to animate. */
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const section = root.querySelector<HTMLElement>("#drive")!;
-    const engine = createDrive(root, ITALY_STORY, { reduceMotion });
+    const engine = createDrive(root, ITALY_STORY, { reduceMotion: false });
 
     let shown = progressOf(section);
     let last = -1;
