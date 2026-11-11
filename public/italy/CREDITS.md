@@ -5,7 +5,7 @@ All icons are processed by `scripts/process-illustrations.mjs`, which crops them
 | File | Source | License |
 |---|---|---|
 | art/vespa.webp, art/olive.webp, art/pizza.webp, art/gelato.webp, art/espresso.webp | "Italy monochrome doodles cartoon elements collection". https://www.vecteezy.com/vector-art/57512309-italy-monochrome-doodles-cartoon-elements-collection | Vecteezy Free License. Attribution required. |
-| art/rings.webp, art/cheers.webp, art/luggage.webp, art/doves.webp | Our own drawings (art/wedding_rings.jpeg, art/pizzaparty.png, art/farewell.jpeg, art/doves.png), put through the same knock-out and tint by hand rather than by the script. | Ours. |
+| art/rings.webp, art/cheers.webp, art/luggage.webp, art/doves.webp | Our own drawings (art/wedding_rings.jpeg, art/pizzaparty.png, art/luggage.jpeg, art/doves.png), put through the same knock-out and tint by hand rather than by the script. | Ours. |
 | art/wineglass.webp | Same Italy doodles pack as above (57512309). | Vecteezy Free License. Attribution required. |
 | art/coupe.webp, art/flowers.webp | "Vintage monochrome elements collection". https://www.vecteezy.com/vector-art/77893362 | Vecteezy Free License. Attribution required. |
 | art/boat.webp | "Summer monochrome doodles collection". https://www.vecteezy.com/vector-art/78680596 | Vecteezy Free License. Attribution required. |

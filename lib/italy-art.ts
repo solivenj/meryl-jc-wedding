@@ -33,8 +33,8 @@ export const MOTIF_ART: Partial<Record<MotifName, ArtImage>> = {
   /* Our own drawing (public/italy/art/pizzaparty.png), put through the same
      knock-out and ink tint as the others. */
   cheers: { src: "/italy/art/cheers.webp", width: 300, height: 293 },
-  /* farewell.jpeg, same checkerboard and threshold as the rings. */
-  luggage: { src: "/italy/art/luggage.webp", width: 400, height: 416 },
+  /* luggage.jpeg, on plain cream paper: threshold 24. */
+  luggage: { src: "/italy/art/luggage.webp", width: 400, height: 401 },
   /* doves.png, drawn on beige paper: threshold 62 clears the paper grain
      and the corner sparkle, which is lighter than the paper. */
   doves: { src: "/italy/art/doves.webp", width: 600, height: 459 },
