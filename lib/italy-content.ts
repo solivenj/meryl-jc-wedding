@@ -269,96 +269,143 @@ export const ITALY_DETAILS = {
 };
 
 /*
- * Our Story.
+ * Our Story — the road trip (docs/superpowers/specs/2026-11-11-our-story-road-trip-design.md).
  *
- * DRAFT, not placeholder. Written from the only account of the two of you
- * that exists in this repo — STORY.invitation in lib/content.ts, which John
- * wrote for the church site: college, study sessions, a first date of dinner
- * and a movie, long distance on opposite coasts, each other's #1 person.
- * Those are the facts. The shape and the wording are mine and are meant to be
- * overwritten.
+ * The page is a drive up a switchback road to Todi. Each stop below is one
+ * stretch of road, in drive order; its index is the route's chapter number
+ * (components/italy/road/route.ts), so do not reorder or add stops here
+ * without changing the route and drawings too. Copy is safe to rewrite.
  *
- * TBD(Meryl & John) — the specifics I had no way to know, and deliberately
- * wrote around rather than invent:
- *   - which college, and the year you met
- *   - which two coasts, and how long the distance lasted
- *   - the proposal: where, when, who asked, whether it was a surprise, and
- *     the first thing either of you said afterwards. Chapter three is the
- *     thinnest for exactly this reason.
- *   - why Todi specifically — a trip, somebody's family, a photograph
+ * ALL COPY IS PLACEHOLDER, written from the facts Meryl and John gave and
+ * meant to be rewritten by them. Keep each stop near its current length:
+ * the text sits in a fixed spot beside the drawings (the copy-fit check in
+ * scripts/road-shot.mjs catches overflow).
  *
- * Shape follows what real couples actually publish, not what the wedding
- * blogs recommend. Live pages on Zola and Joy run 50–150 words in total,
- * first-person plural, addressed to the guest; the long multi-chapter
- * timelines are what listicles pick out, not the norm. So: four short
- * chapters, roughly 45 to 65 words each, each one scene rather than a summary.
- * The `kicker` is a scene label, not a date — the dated-milestone convention
- * is strong on those sites, but we have no dates to put in it yet, and a
- * fabricated year is a worse lie than no year.
+ * Two rules for every string here:
+ *   - Never mention the New Jersey church wedding, "getting married twice",
+ *     or another ceremony anywhere on /italy. Some Italy guests were not
+ *     invited to it, and the site must not be how they find out. The reason
+ *     for Italy is the 2022 trip.
+ *   - Never say or hint whether Meryl and John live together or apart.
  *
- * Chapter four has no precedent in the sites surveyed: not one destination
- * wedding, including two other Todi weddings and one on Lake Garda, explains
- * its destination on the story page — that lands on the travel page, if
- * anywhere. It belongs here anyway, because "why are we flying to Umbria" is
- * the question this page is actually being read to answer. The answer is the
- * 2022 trip, never the other ceremony: see the note on chapter four's body.
+ * To confirm or cut: "By 2019 it was official: dinner, a movie" (Boston) and
+ * "on a hill above the Tiber valley" (Umbria).
  */
+export type StopChipStyle = "" | "olive" | "eu" | "it" | "brown" | "stamp";
+export type StoryStop = {
+  id: "boston" | "distance" | "italy-2022" | "chicago" | "bali" | "spain" | "thanksgiving" | "crossing" | "umbria";
+  kicker: string;
+  heading: string;
+  body: string;
+  /* The road sign in the corner while this stop is on screen. */
+  chip: { text: string; style: StopChipStyle };
+  half?: boolean;
+};
+
 export const ITALY_STORY: {
-  eyebrow: string;
-  /* Optional on purpose, so commenting the line out below is a supported way
-     to drop it rather than a type error. The page renders it only if it is
-     here. Same parking pattern as the day links on the home page. */
-  intro?: string;
-  chapters: { kicker: string; heading: string; body: string }[];
-  closing: string;
+  title: { kicker: string; tagline: string; cue: string };
+  stops: StoryStop[];
+  halfStops: { kicker: string; heading: string; body: string };
+  closing: { kicker: string; line: string; dates: string; chip: { text: string; style: StopChipStyle } };
 } = {
-  eyebrow: "How we got here",
-  /* One line under the eyebrow, before the first photograph. */
-  // intro: "The long version, for anyone with time for it.",
-  chapters: [
+  title: {
+    kicker: "Our story, by road",
+    tagline: "From New Jersey and California to a hill in Umbria.",
+    cue: "Scroll to start the car",
+  },
+  stops: [
     {
-      kicker: "Where it started",
-      heading: "We met over homework",
+      id: "boston",
+      kicker: "Boston · 2019",
+      heading: "Where it started",
       body:
-        "It started as study sessions, which were about as romantic as they sound. " +
-        "They ran long. Then they turned into meals, and then into most of our free " +
-        "time, without either of us deciding that was what was happening. By the time " +
-        "we went out properly, dinner and a movie, we were confirming something we had " +
-        "both already worked out.",
+        "We met at Northeastern, in study sessions that kept running long. They turned into " +
+        "meals, then into most of our free time. By 2019 it was official: dinner, a movie, and " +
+        "both of us already sure.",
+      chip: { text: "Boston, MA", style: "olive" },
     },
     {
-      /* Not a mileage: the two coasts are real, the number was not. */
-      kicker: "A country in between",
+      id: "distance",
+      kicker: "The long-distance years",
       heading: "Opposite coasts",
       body:
-        "Then came the years with the whole country in the middle, two time zones and a " +
-        "running list of flights we could just about afford. We would not choose it " +
-        "again. We would not give those years back either. What came out of them is " +
-        "that we are each other's first call now, about anything.",
+        "Then came the years with the whole country in the middle and a running list of flights " +
+        "we could just about afford. We would not choose it again. We would not give it back " +
+        "either. It made us each other’s first call, about anything.",
+      chip: { text: "I-80 · Westbound", style: "" },
     },
     {
-      kicker: "The question",
-      heading: "And then we asked",
+      id: "italy-2022",
+      kicker: "Italy · 2022",
+      heading: "Where we fell for it",
       body:
-        "One of us had been carrying the question around for a while. The other had " +
-        "worked it out and let it happen anyway. We remember the hours afterwards " +
-        "better than the words. There were a great many phone calls, and an afternoon " +
-        "where nothing else got done.",
+        "In 2022 we went to Italy together for the first time. A villa in Tuscany, the long " +
+        "drive south, Positano. We flew home already talking about coming back.",
+      chip: { text: "Italia · 2022", style: "eu" },
     },
     {
+      id: "chicago",
+      kicker: "Chicago",
+      heading: "Same city, finally",
+      body:
+        "Meryl moved to Chicago in 2022 to start medical school. John followed in 2023. Same " +
+        "city, same time zone, finally.",
+      chip: { text: "Chicago", style: "" },
+    },
+    {
+      id: "bali",
+      kicker: "Half stop",
+      heading: "Bali, 2024",
+      body: "One line about Bali goes here.",
+      chip: { text: "Bali · 2024", style: "stamp" },
+      half: true,
+    },
+    {
+      id: "spain",
+      kicker: "Half stop",
+      heading: "Spain, 2025",
+      body: "One line about Spain goes here.",
+      chip: { text: "España · 2025", style: "stamp" },
+      half: true,
+    },
+    {
+      id: "thanksgiving",
+      kicker: "Thanksgiving · 2025",
+      heading: "The question",
+      body:
+        "Thanksgiving 2025, in California, with both of our families at the table. Everyone we " +
+        "would have called afterwards was already in the room.",
+      chip: { text: "California", style: "" },
+    },
+    {
+      id: "crossing",
+      kicker: "Across the water",
+      heading: "Coming back",
+      body: "We knew in 2022 that we would come back. This time we are bringing all of you.",
+      chip: { text: "Italia · 2027", style: "eu" },
+    },
+    {
+      id: "umbria",
       kicker: "Why Umbria",
       heading: "And now, Todi",
       body:
-        /* Never mention the New Jersey church wedding anywhere on /italy. Some
-           Italy guests were not invited to it, and the site must not be how
-           they find out. */
-        "We fell for Italy on a trip in 2022, and when it came to choosing, we wanted " +
-        "to come back. So: a hill in Umbria, three unhurried days. Todi is small and " +
-        "walkable, and once you arrive you can put the car keys away until you leave.",
+        "Todi is small and walkable, on a hill above the Tiber valley, and once you arrive you " +
+        "can put the car keys away until you leave.",
+      chip: { text: "Todi", style: "it" },
     },
   ],
-  /* Sits alone on the last band, under the final chapter. */
-  closing: "We would rather tell you the rest of it in April, over a drink.",
+  /* One shared text block for the two half stops. */
+  halfStops: {
+    kicker: "Two half stops",
+    heading: "Bali & Spain",
+    body: "Bali in 2024, Spain in 2025. One line about each goes here.",
+  },
+  closing: {
+    kicker: "Benvenuti a Todi",
+    line: "We would rather tell you the rest of it in April, over a drink.",
+    dates: "21 · 22 · 23 April 2027",
+    chip: { text: "Monastero S. Margherita", style: "brown" },
+  },
 };
 /* TBD — the whole order of days is a placeholder built on real Todi places. */
 export const ITALY_SCHEDULE = {
