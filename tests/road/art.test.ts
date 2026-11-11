@@ -39,6 +39,11 @@ test("defs has the vehicles", () => {
   }
 });
 
+test("vehicle defs style themselves without classes", () => {
+  // <use> clones can't see .road-trip-scoped classes; a class here paints the car black
+  assert.ok(!/class=/.test(defsMarkup()));
+});
+
 test("no arrivals board or med school sign", () => {
   const s = sceneryMarkup();
   assert.ok(!s.includes("ARRIVALS"));

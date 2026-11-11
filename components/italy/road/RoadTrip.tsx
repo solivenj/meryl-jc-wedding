@@ -10,8 +10,10 @@
  * engine, never through React state.
  */
 import "./road.css";
+import { useEffect, useRef } from "react";
 import { overpass, titillium } from "./fonts";
-import { H, W, Y0, roadPaths } from "./route.ts";
+import { H, TOTAL_W, W, Y0, roadPaths } from "./route.ts";
+import { createDrive } from "./engine.ts";
 import { backdropMarkup, defsMarkup, fxMarkup, sceneryMarkup } from "./art/index.ts";
 import { ITALY, ITALY_STORY } from "@/lib/italy-content";
 
@@ -56,11 +58,62 @@ function Block({ i }: { i: number }) {
   );
 }
 
+/* How far along the drive the reader is, 0–1: how much of the section has
+   scrolled past the top of the viewport, as in the prototype. */
+function progressOf(section: HTMLElement): number {
+  const r = section.getBoundingClientRect();
+  return Math.max(0, Math.min(1, -r.top / (r.height - innerHeight)));
+}
+
+const SMOOTHING = 0.11; // per frame, from the prototype
+
 export function RoadTrip() {
   const { title, halfStops, closing } = ITALY_STORY;
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const section = root.querySelector<HTMLElement>("#drive")!;
+    const engine = createDrive(root, ITALY_STORY, { reduceMotion });
+
+    let shown = progressOf(section);
+    let last = -1;
+    let raf = 0;
+    const onResize = () => {
+      engine.layout();
+      last = -1;
+    };
+    const loop = () => {
+      const target = progressOf(section);
+      shown += (target - shown) * SMOOTHING;
+      if (Math.abs(target - shown) < 1e-5) shown = target;
+      if (shown !== last) {
+        engine.render(shown);
+        last = shown;
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    engine.render(shown);
+    last = shown;
+    addEventListener("resize", onResize);
+    raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      removeEventListener("resize", onResize);
+      engine.destroy();
+    };
+  }, []);
+
   return (
-    <div className={`road-trip ${overpass.variable} ${titillium.variable}`}>
-      <section className="drive" id="drive" aria-label="Our story, as a drive to Todi">
+    <div ref={rootRef} className={`road-trip ${overpass.variable} ${titillium.variable}`}>
+      <section
+        className="drive"
+        id="drive"
+        aria-label="Our story, as a drive to Todi"
+        style={{ height: `calc(${(TOTAL_W + 1).toFixed(2)} * 100vh)` }}
+      >
         <div className="stage" id="stage">
           <svg id="world" viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs dangerouslySetInnerHTML={{ __html: defsMarkup() }} />

@@ -112,6 +112,7 @@
 .road-trip .stops button {
   display: flex; align-items: center; justify-content: flex-end; gap: 8px; background: none; border: 0; padding: 4px 2px; cursor: pointer;
   font-family: var(--f-caps); font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); width: 100%;
+  line-height: normal; /* the site reset makes buttons inherit 1.5; the prototype had the browser default */
 }
 .road-trip .stops .lab { opacity: 0; transform: translateX(6px); transition: opacity .25s, transform .25s; white-space: nowrap; background: var(--ivory); padding: 2px 4px; }
 .road-trip .stops button:hover .lab, .road-trip .stops button:focus-visible .lab, .road-trip .stops button.on .lab { opacity: 1; transform: none; }

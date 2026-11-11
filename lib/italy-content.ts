@@ -306,7 +306,14 @@ export const ITALY_STORY: {
   title: { kicker: string; tagline: string; cue: string };
   stops: StoryStop[];
   halfStops: { kicker: string; heading: string; body: string };
-  closing: { kicker: string; line: string; dates: string; chip: { text: string; style: StopChipStyle } };
+  closing: {
+    kicker: string;
+    line: string;
+    dates: string;
+    chip: { text: string; style: StopChipStyle };
+    /* How the last stop is named in the stop list and the phone card. */
+    stop: { kicker: string; heading: string };
+  };
 } = {
   title: {
     kicker: "Our story, by road",
@@ -405,6 +412,7 @@ export const ITALY_STORY: {
     line: "We would rather tell you the rest of it in April, over a drink.",
     dates: "21 · 22 · 23 April 2027",
     chip: { text: "Monastero S. Margherita", style: "brown" },
+    stop: { kicker: "Arrived", heading: "Keys away" },
   },
 };
 /* TBD — the whole order of days is a placeholder built on real Todi places. */
