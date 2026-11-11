@@ -290,10 +290,18 @@ export const ITALY_DETAILS = {
  * weddings and "why are we flying to Umbria" is the question this page is
  * actually being read to answer.
  */
-export const ITALY_STORY = {
+export const ITALY_STORY: {
+  eyebrow: string;
+  /* Optional on purpose, so commenting the line out below is a supported way
+     to drop it rather than a type error. The page renders it only if it is
+     here. Same parking pattern as the day links on the home page. */
+  intro?: string;
+  chapters: { kicker: string; heading: string; body: string }[];
+  closing: string;
+} = {
   eyebrow: "How we got here",
   /* One line under the eyebrow, before the first photograph. */
-  intro: "The long version, for anyone with time for it.",
+  // intro: "The long version, for anyone with time for it.",
   chapters: [
     {
       kicker: "Where it started",

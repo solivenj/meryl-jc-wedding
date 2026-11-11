@@ -65,7 +65,9 @@ export default function OurStoryPage() {
               <>
                 <h1 className="sr-only">Our story</h1>
                 <Eyebrow>{ITALY_STORY.eyebrow}</Eyebrow>
-                <Prose align="center">{ITALY_STORY.intro}</Prose>
+                {/* Parked rather than removed: intro is optional, so the line
+                    in lib/italy-content.ts can be commented out and back. */}
+                {ITALY_STORY.intro && <Prose align="center">{ITALY_STORY.intro}</Prose>}
               </>
             )}
 
@@ -86,6 +88,15 @@ export default function OurStoryPage() {
                   src={PHOTOS[i % PHOTOS.length]}
                   alt=""
                   fill
+                  /* The first chapter photo is the LCP element on this page, and
+                     the dev server says so on every load. Eager only for that
+                     one; the rest stay lazy, which is the default.
+
+                     Not `preload`, and not `priority` - priority is deprecated
+                     in Next 16, and the docs for its replacement say to reach
+                     for loading="eager" first and keep preload for the case
+                     where the image has to be found in <head>. */
+                  loading={first ? "eager" : "lazy"}
                   sizes="(min-width: 800px) 50vw, 100vw"
                   className="object-cover"
                 />
