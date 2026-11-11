@@ -61,10 +61,11 @@ export type Piece = {
   car?: "us" | "it";
 };
 
-const fA3 = legPt(3, 0.13);
-const fB3 = legPt(3, 0.33);
-const fA7 = legPt(7, 0.22);
-const fB7 = legPt(7, 0.78);
+/* Where the flights leave and land: Italy 2022 (leg 3) and the crossing (leg 7). */
+export const fA3 = legPt(3, 0.13);
+export const fB3 = legPt(3, 0.33);
+export const fA7 = legPt(7, 0.22);
+export const fB7 = legPt(7, 0.78);
 
 const RAW: Piece[] = [
   { kind: "spur", w: 1.0, ch: -1 },
