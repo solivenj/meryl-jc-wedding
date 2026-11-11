@@ -718,7 +718,7 @@ export const ITALY_EXPLORE = {
     latitude: 42.78,
     longitude: 12.41,
     timeZone: "Europe/Rome",
-    hourlyLabel: "Every three hours",
+    hourlyLabel: "Forecast",
     unavailable: "The live weather isn’t loading just now. Late April’s usual range is beside it.",
   },
   /* The first band: the live tracker on the left, this beside it.

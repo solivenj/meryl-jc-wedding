@@ -451,7 +451,7 @@ export function TodiWeather() {
               <span className="relative font-body text-[calc(16px*var(--fs-scale))] leading-none tabular-nums lining-nums">
                 {d ? (
                   <>
-                    {f(d.high)}° <span className="text-ink-soft">{f(d.low)}°</span>
+                    {f(d.high)}° <span className="text-ink-soft">/ {f(d.low)}°</span>
                   </>
                 ) : (
                   " "
