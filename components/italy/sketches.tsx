@@ -7,6 +7,9 @@
 export type MotifName =
   | "vespa"
   | "coupe"
+  | "cheers"
+  | "luggage"
+  | "doves"
   | "espresso"
   | "lemon"
   | "olive"

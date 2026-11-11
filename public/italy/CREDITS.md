@@ -5,7 +5,7 @@ All icons are processed by `scripts/process-illustrations.mjs`, which crops them
 | File | Source | License |
 |---|---|---|
 | art/vespa.webp, art/olive.webp, art/pizza.webp, art/gelato.webp, art/espresso.webp | "Italy monochrome doodles cartoon elements collection". https://www.vecteezy.com/vector-art/57512309-italy-monochrome-doodles-cartoon-elements-collection | Vecteezy Free License. Attribution required. |
-| art/rings.webp | "Doodle wedding elements collection". https://www.vecteezy.com/vector-art/13651315-doodle-wedding-elements-collection | Vecteezy Free License. Attribution required. |
+| art/rings.webp, art/cheers.webp, art/luggage.webp, art/doves.webp | Our own drawings (art/wedding_rings.jpeg, art/pizzaparty.png, art/farewell.jpeg, art/doves.png), put through the same knock-out and tint by hand rather than by the script. | Ours. |
 | art/wineglass.webp | Same Italy doodles pack as above (57512309). | Vecteezy Free License. Attribution required. |
 | art/coupe.webp, art/flowers.webp | "Vintage monochrome elements collection". https://www.vecteezy.com/vector-art/77893362 | Vecteezy Free License. Attribution required. |
 | art/boat.webp | "Summer monochrome doodles collection". https://www.vecteezy.com/vector-art/78680596 | Vecteezy Free License. Attribution required. |
@@ -48,3 +48,22 @@ monogram have no business here regardless of licensing.
 The black-tie strips are intentionally unregistered — the reference set is a
 garden wedding in pastels with nothing formal in it, so those slots stay on
 gradients until the right images are chosen.
+
+## Home collage (components/italy/DetailCollage.tsx)
+
+Built by `scripts/process-collage.mjs`. Nothing here is third-party.
+
+| File | Source | Treatment |
+|---|---|---|
+| collage/envelope-cream.webp | `public/envelope.webp` — John's own, already used on the church save-the-date | Hue rotated +185 and desaturated, taking the dusty-blue satin to a warm cream that sits on the olive band. Hue rotation rather than a flat tint, so the satin keeps its own highlights and still reads as fabric. |
+| collage/envelope-blush.webp | same | The same pass at +167, a warmer pink-champagne. **Not currently used** — it is the alternative to `envelope-cream.webp`, and swapping is one line in `ITALY_COLLAGE`. |
+
+The polaroids and the photograph set in the doily are referenced straight out
+of `public/italy/photos`, not copied, so they are the same files the hero
+carousel is already showing. Two or three photographs therefore appear twice
+on the first screen; in a scrapbook that reads as intent, but it is the first
+thing to change if the band ever feels repetitive.
+
+The doily itself is drawn in SVG inside the component rather than
+photographed — there is no lace in the repo. A real photographed paper doily
+would be richer, and would drop straight into the same slot.

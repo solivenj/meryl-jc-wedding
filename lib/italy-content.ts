@@ -38,6 +38,7 @@ export const ITALY_NAV = [
   { href: "/italy/our-story", label: "Our Story" },
   { href: "/italy/dress-code", label: "Dress Code" },
   { href: "/italy/travel", label: "Travel" },
+  { href: "/italy/explore", label: "Italy" },
   { href: "/italy/faq", label: "FAQ" },
 ] as const;
 
@@ -56,12 +57,164 @@ export const ITALY_HOME = {
     button: "RSVP here",
   },
   days: { title: "The three days" },
+  collageAlt: "Photographs, an envelope and a card laid out on a table",
   rsvp: {
     script: "Will you join us?",
     replyBy: "Kindly reply by the first of February, 2027",
     button: "RSVP here",
     registryLink: "See the registry, or write to us",
   },
+  /* Has the olive band before the reply to itself, in the slot the parked
+     Details band held. Counts to the start of the wedding days, Wednesday
+     the 21st, at midnight Todi time (+02:00 is Italian summer time). */
+  countdown: {
+    eyebrow: "Counting down",
+    line: "Until we say I do",
+    dateLine: "Wednesday, the 21st of April, 2027",
+    targetISO: "2027-04-21T00:00:00+02:00",
+    units: { days: "Days", hours: "Hours", minutes: "Minutes", seconds: "Seconds" },
+    passed: "Sposati!",
+    passedNote: "We’re married. Thank you for celebrating with us in Todi.",
+  },
+};
+
+/*
+ * The collage under the carousel.
+ *
+ * It exists because the first screen of /italy never said when or where the
+ * wedding was. The card carries those facts; the props around it carry the
+ * feeling. Modelled on a scrapbook reference John supplied.
+ *
+ * Coordinates live here, not in the component, so the arrangement is tuned by
+ * editing numbers. Every piece has two packs, both in percentages of the
+ * stage: the wide one (l/t/w/r) and a tall one (pl/pt/pw/pr) used below 640px.
+ * See .collage-* in app/globals.css for why there are two.
+ *
+ * The photographs are referenced straight out of public/italy/photos rather
+ * than copied, so they are the same files the carousel above is already
+ * showing. A guest will see two or three of them twice on one screen; in a
+ * scrapbook that reads as intent rather than as a mistake, but it is the one
+ * thing to look at first if the band feels repetitive.
+ */
+export type CollagePiece = {
+  kind: "card" | "photo" | "doily" | "prop";
+  src?: string;
+  alt?: string;
+  /* Intrinsic pixels — only needed so next/image can reserve the box. */
+  w?: number;
+  h?: number;
+  landscape?: boolean;
+  /* object-position, for a crop that would otherwise cut faces. */
+  focus?: string;
+  /* Wide pack. */
+  l: number;
+  t: number;
+  width: number;
+  r?: number;
+  z: number;
+  /* Tall pack, under 640px. Omitted keys fall back to the wide value. */
+  pl?: number;
+  pt?: number;
+  pwidth?: number;
+  pr?: number;
+};
+
+export const ITALY_COLLAGE: {
+  card: {
+    dates: string;
+    year: string;
+    venue: string;
+    place: string;
+  };
+  pieces: readonly CollagePiece[];
+} = {
+  card: {
+    dates: "April 21 – 23",
+    year: "2027",
+    venue: ITALY.venue.name,
+    /* The place, not the postal address. The full street address is still on
+       the Travel tab, which is where someone actually navigating from it will
+       be; on the card it was four lines of detail nobody reads at a glance. */
+    place: "Todi, Umbria, Italy",
+  },
+  pieces: [
+    {
+      /* John's own envelope, hue-rotated from dusty blue to cream by
+         scripts/process-collage.mjs. It carries the ribbon and the embossed
+         M&J, so it is the bow and the envelope in one object. */
+      kind: "prop",
+      src: "/italy/collage/envelope-cream.webp",
+      alt: "",
+      w: 900,
+      h: 643,
+      l: 8,
+      t: 12,
+      width: 30,
+      r: -7,
+      z: 1,
+      pl: -2,
+      pt: 70,
+      pwidth: 52,
+      pr: -6,
+    },
+    {
+      /* A tight two-shot, because the circle is the smallest frame here and a
+         wide one loses its subjects entirely. The faces sit about a third of
+         the way down the original, so a square crop has to be pulled up or it
+         cuts them off at the top. */
+      kind: "doily",
+      src: "/italy/photos/IMG_7089.JPG",
+      alt: "",
+      focus: "50% 15%",
+      l: 16,
+      t: 40,
+      width: 25,
+      r: 5,
+      z: 2,
+      pl: 48,
+      pt: 62,
+      pwidth: 42,
+    },
+    {
+      kind: "photo",
+      src: "/italy/photos/IMG_7083.JPG",
+      alt: "",
+      l: 68,
+      t: 3,
+      width: 21,
+      r: 5,
+      z: 3,
+      pl: 1,
+      pt: 44,
+      pwidth: 38,
+      pr: -5,
+    },
+    {
+      kind: "photo",
+      src: "/italy/photos/0U1A5834.jpg",
+      alt: "",
+      landscape: true,
+      l: 64,
+      t: 44,
+      width: 24,
+      r: -6,
+      z: 4,
+      pl: 45,
+      pt: 42,
+      pwidth: 43,
+      pr: 4,
+    },
+    {
+      /* Last, and highest: the card sits proud of everything else. */
+      kind: "card",
+      l: 34,
+      t: 2,
+      width: 38,
+      z: 5,
+      pt: 0,
+      pwidth: 84,
+    },
+  ],
 };
 
 /*
@@ -115,18 +268,152 @@ export const ITALY_DETAILS = {
 };
 
 /*
- * TBD — PLACEHOLDER. Meryl & John to replace entirely. Structure only: three
- * chapters, each a passage beside a photograph.
+ * Our Story — the road trip (docs/superpowers/specs/2026-11-11-our-story-road-trip-design.md).
+ *
+ * The page is a drive up a switchback road to Todi. Each stop below is one
+ * stretch of road, in drive order; its index is the route's chapter number
+ * (components/italy/road/route.ts), so do not reorder or add stops here
+ * without changing the route and drawings too. Copy is safe to rewrite.
+ *
+ * ALL COPY IS PLACEHOLDER, written from the facts Meryl and John gave and
+ * meant to be rewritten by them. Keep each stop near its current length:
+ * the text sits in a fixed spot beside the drawings (the copy-fit check in
+ * scripts/road-shot.mjs catches overflow).
+ *
+ * Two rules for every string here:
+ *   - Never mention the New Jersey church wedding, "getting married twice",
+ *     or another ceremony anywhere on /italy. Some Italy guests were not
+ *     invited to it, and the site must not be how they find out. The reason
+ *     for Italy is the 2022 trip.
+ *   - Never say or hint whether Meryl and John live together or apart.
+ *
+ * To confirm or cut: "By 2019 it was official: dinner, a movie" (Boston) and
+ * "on a hill above the Tiber valley" (Umbria).
  */
-export const ITALY_STORY = {
-  eyebrow: "How we got here",
-  chapters: [
-    { heading: "How we met", body: "A placeholder for the beginning — where you were, who introduced you, and the detail you both still disagree about." },
-    { heading: "The proposal", body: "A placeholder for the question — where it happened, whether it was a surprise, and what was said immediately afterwards." },
-    { heading: "And now, Todi", body: "A placeholder for why Umbria — the trip that started it, the hill town you kept going back to, and why you wanted everyone there for it." },
-  ],
+export type StopChipStyle = "" | "olive" | "eu" | "it" | "brown" | "stamp";
+export type StoryStop = {
+  id: "boston" | "distance" | "italy-2022" | "chicago" | "bali" | "spain" | "thanksgiving" | "crossing" | "umbria";
+  kicker: string;
+  heading: string;
+  body: string;
+  /* The road sign in the corner while this stop is on screen. */
+  chip: { text: string; style: StopChipStyle };
+  half?: boolean;
 };
 
+export const ITALY_STORY: {
+  title: { kicker: string; tagline: string; cue: string };
+  stops: StoryStop[];
+  halfStops: { kicker: string; heading: string; body: string };
+  closing: {
+    kicker: string;
+    line: string;
+    dates: string;
+    chip: { text: string; style: StopChipStyle };
+    /* How the last stop is named in the stop list and the phone card. */
+    stop: { kicker: string; heading: string };
+  };
+} = {
+  title: {
+    kicker: "Our story, by road",
+    tagline: "From New Jersey and California to a hill in Umbria.",
+    cue: "Scroll to start the car",
+  },
+  stops: [
+    {
+      id: "boston",
+      kicker: "Boston · 2019",
+      heading: "Where it started",
+      body:
+        "We met at Northeastern, in study sessions that kept running long. They turned into " +
+        "meals, then into most of our free time. By 2019 it was official: dinner, a movie, and " +
+        "both of us already sure.",
+      chip: { text: "Boston, MA", style: "olive" },
+    },
+    {
+      id: "distance",
+      kicker: "The long-distance years",
+      heading: "Opposite coasts",
+      body:
+        "Then came the years with the whole country in the middle and a running list of flights " +
+        "we could just about afford. We would not choose it again. We would not give it back " +
+        "either. It made us each other’s first call, about anything.",
+      chip: { text: "I-80 · Westbound", style: "" },
+    },
+    {
+      id: "italy-2022",
+      kicker: "Italy · 2022",
+      heading: "Where we fell for it",
+      body:
+        "In 2022 we went to Italy together for the first time. A villa in Tuscany, the long " +
+        "drive south, Positano. We flew home already talking about coming back.",
+      chip: { text: "Italia · 2022", style: "eu" },
+    },
+    {
+      id: "chicago",
+      kicker: "Chicago",
+      heading: "Same city, finally",
+      body:
+        "Meryl moved to Chicago in 2022 to start medical school. John followed in 2023. Same " +
+        "city, same time zone, finally.",
+      chip: { text: "Chicago", style: "" },
+    },
+    {
+      id: "bali",
+      kicker: "Half stop",
+      heading: "Bali, 2024",
+      body: "One line about Bali goes here.",
+      chip: { text: "Bali · 2024", style: "stamp" },
+      half: true,
+    },
+    {
+      id: "spain",
+      kicker: "Half stop",
+      heading: "Spain, 2025",
+      body: "One line about Spain goes here.",
+      chip: { text: "España · 2025", style: "stamp" },
+      half: true,
+    },
+    {
+      id: "thanksgiving",
+      kicker: "Thanksgiving · 2025",
+      heading: "The question",
+      body:
+        "Thanksgiving 2025, in California, with both of our families at the table. Everyone we " +
+        "would have called afterwards was already in the room.",
+      chip: { text: "California", style: "" },
+    },
+    {
+      id: "crossing",
+      kicker: "Across the water",
+      heading: "Coming back",
+      body: "We knew in 2022 that we would come back. This time we are bringing all of you.",
+      chip: { text: "Italia · 2027", style: "eu" },
+    },
+    {
+      id: "umbria",
+      kicker: "Why Umbria",
+      heading: "And now, Todi",
+      body:
+        "Todi is small and walkable, on a hill above the Tiber valley, and once you arrive you " +
+        "can put the car keys away until you leave.",
+      chip: { text: "Todi", style: "it" },
+    },
+  ],
+  /* One shared text block for the two half stops. */
+  halfStops: {
+    kicker: "Two half stops",
+    heading: "Bali & Spain",
+    body: "Bali in 2024, Spain in 2025. One line about each goes here.",
+  },
+  closing: {
+    kicker: "Benvenuti a Todi",
+    line: "We would rather tell you the rest of it in April, over a drink.",
+    dates: "21 · 22 · 23 April 2027",
+    chip: { text: "Monastero S. Margherita", style: "brown" },
+    stop: { kicker: "Arrived", heading: "Keys away" },
+  },
+};
 /* TBD — the whole order of days is a placeholder built on real Todi places. */
 export const ITALY_SCHEDULE = {
   eyebrow: "The order of the days",
@@ -134,33 +421,41 @@ export const ITALY_SCHEDULE = {
     {
       day: "Wednesday, April 21st",
       art: "villa",
-      motif: "coupe",
+      motif: "cheers",
       title: "Pizza Party",
       quote: "Come as you are, stay until the lamps go on",
-      time: "Seven in the evening",
+      /* `start` rides on the date line. It is the only clock time a day
+         carries — Friday has none, and nothing sits below the title. */
+      start: "7PM",
       // place: "Piazza del Popolo · Todi",
-      dress: "Summer Cocktail",
+      /* Each day closes on one link to the tab that answers it. The first two
+         deep-link to their own code on the dress page (ids are the `key`
+         below); Friday has no code, so it points at the tab a guest leaving
+         that morning actually wants. */
+      link: { label: "Dress code", href: "/italy/dress-code#cocktail" },
     },
     {
       day: "Thursday, April 22nd",
       art: "chapel",
       motif: "rings",
-      title: "The Ceremony & Reception",
+      /* No leading "The": it is the longest of the three day titles and has
+         to hold one line in the home grid. */
+      title: "Ceremony & Reception",
       quote: "Four o’clock, and the bells across the valley",
-      time: "Four in the afternoon, dinner at eight",
+      start: "4PM",
       place: "Monastero Santa Margherita · Todi",
-      dress: "Black Tie",
+      link: { label: "Dress code", href: "/italy/dress-code#blacktie" },
     },
     /* No farewell lunch — Friday is an open day, with people leaving at their
        own pace. Nothing is scheduled, so there is no `place` or fixed time. */
     {
       day: "Friday, April 23rd",
       art: "loggia",
-      motif: "sun",
-      title: "A farewell day",
+      motif: "luggage",
+      title: "Farewell",
       quote: "No schedule, no hurry",
-      time: "Leave when you like",
-      dress: "Whatever you travel in",
+      /* No start: nothing is scheduled, so the date line carries no clock. */
+      link: { label: "Travelling home", href: "/italy/travel" },
     },
   ],
 } as const;
@@ -343,14 +638,26 @@ export const ITALY_TRAVEL = {
             "Please keep your passports up to date! They need to have been issued within the last ten years and still be valid three months after you leave Europe",
           ],
         },
-        // {
-        //   label: "At the border",
-        //   /* VERIFIED Oct 2026 — EES became fully operational 10 April 2026. */
-        //   lines: [
-        //     "Since April 2026 the EU records arrivals electronically instead of stamping passports. Nothing to apply for, nothing to pay, nothing to do before you fly",
-        //     "The first time, you have a photograph and fingerprints taken when you land. It takes a few minutes, and you are then in the system for three years",
-        //   ],
-        // },
+        {
+          label: "At the border",
+          /* VERIFIED Nov 2026 — EES became fully operational 10 April 2026
+             (eu-LISA press release, linked below). The links are the EU's
+             own pages; the poster is the official campaign artwork, hosted
+             by Austria's interior ministry because the EU's materials
+             repository is not public. */
+          lines: [
+            "Since April 2026 the EU records arrivals electronically instead of stamping passports. Nothing to apply for, nothing to pay, nothing to do before you fly",
+            "The first time, you have a photograph and fingerprints taken when you land, at a desk or a self-service kiosk. It takes a few minutes, and you are then in the system for three years",
+            "The EU’s own pages are below, along with the poster it put up at border crossings, so you will recognise the queue when you see it",
+          ],
+          links: [
+            { label: "The EU’s guide to the EES", href: "https://travel-europe.europa.eu/en/ees" },
+            { label: "Official questions & answers", href: "https://travel-europe.europa.eu/ees/faq" },
+            { label: "The poster at the border (PDF)", href: "https://www.bmi.gv.at/202/Fremdenpolizei_und_Grenzkontrolle/Entry_Exit_System/files/EN/EES_poster_A4_EN_print.pdf" },
+            { label: "Travel to Europe app", href: "https://travel-europe.europa.eu/ees/Travel-to-Europe-mobile-app" },
+            { label: "Announcement: EES fully live, April 2026", href: "https://www.eulisa.europa.eu/news-and-events/news/entryexit-system-fully-deployed-across-eu" },
+          ],
+        },
         {
           label: "If you are connecting",
           /* VERIFIED Oct 2026 — you are enrolled at the first Schengen entry,
@@ -373,7 +680,7 @@ export const ITALY_TRAVEL = {
           ],
         },
       ],
-      note: "Checked 18 October 2026. The rules are still changing, so travel-europe.europa.eu is the page to trust over this one.",
+      note: "Checked 10 November 2026. The rules are still changing, so travel-europe.europa.eu is the page to trust over this one.",
     },
     {
       id: "arriving",
@@ -444,6 +751,51 @@ export const ITALY_TRAVEL = {
       body: "We are arranging rooms for our guests, and what we can offer depends on who is coming, so please send your reply first. The details will be here once your RSVP is in.",
       cta: { label: "Go to the RSVP", href: "/italy/rsvp" },
     },
+  ],
+};
+
+/*
+ * /italy/explore — the "Italy" tab. Everything about being there that is
+ * not logistics: the weather, and the places worth the trip. It split off
+ * from Travel so that page can stay the one a guest reads before booking.
+ */
+export const ITALY_EXPLORE = {
+  eyebrow: "Around Todi",
+  closing: {
+    body: "For flights, trains, the car and the border, see the Travel page.",
+    cta: { label: "Getting to Todi", href: "/italy/travel" },
+  },
+  /* The live tracker at the top of the weather section
+     (components/italy/TodiWeather). Todi's coordinates; Open-Meteo answers
+     in Todi local time because the request asks for Europe/Rome. */
+  live: {
+    label: "Todi right now",
+    latitude: 42.78,
+    longitude: 12.41,
+    timeZone: "Europe/Rome",
+    hourlyLabel: "Forecast",
+    unavailable: "The live weather isn’t loading just now. Late April’s usual range is beside it.",
+  },
+  /* The first band: the live tracker on the left, this beside it.
+     VERIFIED Nov 2026 — Open-Meteo historical archive for Todi
+     (42.78N 12.41E, 343m), every 17–27 April from 2001 to 2025: mean high
+     17.8°C, mean low 7.2°C, highs 14–21°C on four days in five. */
+  weather: {
+    title: "The weather in Todi",
+    april: {
+      label: "In late April",
+      body: "Days run from about 57 to 70°F (14 to 21°C), and nights drop to around 45°F (7°C).",
+    },
+    pack: {
+      label: "What to pack",
+      lines: [
+        "Layers for the day, and a proper coat or wrap for the evenings",
+        "A small umbrella, just in case",
+        "Shoes that can manage cobbles and hills. The old town is steep",
+      ],
+    },
+  },
+  sections: [
     {
       /* =====================================================================
        * TBD — GENERATED PLACEHOLDER. Meryl & John to rewrite entirely.
@@ -565,7 +917,7 @@ export const ITALY_FAQ = {
     },
     {
       q: "What will the weather be?",
-      a: "Mild and bright by day, around seventeen or eighteen degrees, and properly cool once the sun sets at about eight. A coat for the evening is the only thing anyone regrets forgetting.",
+      a: "Mild and bright by day, around seventeen or eighteen degrees, and properly cool once the sun sets at about eight. A coat for the evening is the only thing anyone regrets forgetting. The Italy page has the April averages and the live weather in Todi.",
     },
     /* TBD — confirm the policy. */
     {

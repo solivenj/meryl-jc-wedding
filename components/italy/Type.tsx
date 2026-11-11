@@ -31,24 +31,52 @@ export function SmallCaps({ children, className = "" }: { children: React.ReactN
   );
 }
 
+/* Two sizes, not a className override: both would be arbitrary text-[…]
+   utilities, so which one won would come down to the order Tailwind emitted
+   them in rather than the order they are written. */
+const SCRIPT_SIZE = {
+  default: "text-[calc(clamp(26px,3.4vw,38px)*var(--fs-scale))]",
+  /* The one line a guest reads first on a page. Scales on the same curve. */
+  lead: "text-[calc(clamp(34px,4.6vw,52px)*var(--fs-scale))]",
+  /* For titles sharing a narrow column, where the longest of the set has to
+     stay on one line. Measured against "Ceremony & Reception" in a 236px
+     column at 820px, which is the tightest the three-up grid ever gets. */
+  compact: "text-[calc(clamp(24px,2.9vw,34px)*var(--fs-scale))]",
+} as const;
+
 export function ScriptTitle({
   as: Tag = "h2",
+  size = "default",
   children,
 }: {
   as?: "h1" | "h2" | "h3";
+  size?: keyof typeof SCRIPT_SIZE;
   children: React.ReactNode;
 }) {
   return (
-    <Tag className="font-display text-[calc(clamp(26px,3.4vw,38px)*var(--fs-scale))] leading-[1.25] font-normal text-ink">
+    <Tag className={`font-display ${SCRIPT_SIZE[size]} leading-[1.25] font-normal text-ink`}>
       {children}
     </Tag>
   );
 }
 
-export function Prose({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+/* Same reasoning as SCRIPT_SIZE: picking the whole utility beats passing
+   `text-center` in className, where the winner would be decided by the order
+   Tailwind emitted the two alignment rules in. */
+const PROSE_ALIGN = { left: "text-left", center: "text-center" } as const;
+
+export function Prose({
+  children,
+  align = "left",
+  className = "",
+}: {
+  children: React.ReactNode;
+  align?: keyof typeof PROSE_ALIGN;
+  className?: string;
+}) {
   return (
     <p
-      className={`max-w-[62ch] text-left font-body text-[calc(17px*var(--fs-scale))] leading-[1.65] font-light text-ink-soft ${className}`}
+      className={`max-w-[62ch] ${PROSE_ALIGN[align]} font-body text-[calc(17px*var(--fs-scale))] leading-[1.65] font-light text-ink-soft ${className}`}
     >
       {children}
     </p>
