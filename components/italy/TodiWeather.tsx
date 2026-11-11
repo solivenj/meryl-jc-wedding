@@ -442,7 +442,7 @@ export function TodiWeather() {
                   transition={{ duration: reduced ? 0 : 0.35, ease: EASE_OUT }}
                 />
               )}
-              <span className="relative font-caps text-[calc(9px*var(--fs-scale))] uppercase tracking-[0.16em]">
+              <span className="relative font-caps text-[calc(9px*var(--fs-scale))] font-bold uppercase tracking-[0.16em]">
                 {d ? dayTabLabel(d.date, i) : " "}
               </span>
               <span className="relative h-[30px]">
