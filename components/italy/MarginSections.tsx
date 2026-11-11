@@ -72,16 +72,17 @@ export function MarginSections({
   eyebrow,
   sections,
   motifs,
-  extras = {},
+  leads = {},
 }: {
   /* Screen-reader page title; the visible lead is the eyebrow. */
   heading: string;
   eyebrow: string;
   sections: readonly MarginSection[];
   motifs: Record<string, MarginMotif[]>;
-  /* Anything a section needs beyond copy, keyed by section id and rendered
-     after its blocks. */
-  extras?: Record<string, ReactNode>;
+  /* Anything a section needs beyond copy, keyed by section id and set
+     straight under its title. A little wider than the text column, and no
+     wider: at 901px the margin sketches start about 200px in from the edge. */
+  leads?: Record<string, ReactNode>;
 }) {
   /* width="full" matters here: MarginArt positions its motifs at
      calc(25% - ...) against their own relative section, so capping the
@@ -112,6 +113,8 @@ export function MarginSections({
 
         <ScriptTitle>{s.title}</ScriptTitle>
 
+        {leads[s.id] && <div className="mb-4 w-full max-w-[32rem]">{leads[s.id]}</div>}
+
         {/* One measure for the whole section so the intro and the lists
             share a left edge. Everything here is left-aligned inside a
             centred column: the entries run to two and three lines, and
@@ -140,8 +143,6 @@ export function MarginSections({
               )}
             </div>
           ))}
-
-          {extras[s.id]}
 
           {/* The section note: where a block of copy has a shelf life,
               the date it was last checked travels with it. */}

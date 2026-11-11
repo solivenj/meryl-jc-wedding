@@ -64,6 +64,19 @@ export const ITALY_HOME = {
     button: "RSVP here",
     registryLink: "See the registry, or write to us",
   },
+  /* Sits at the top of the reply band rather than in a band of its own: a
+     sixth band would break the cream/olive parity and land the reply olive
+     against the olive footer. Counts to the ceremony on the Thursday, in
+     Todi time (+02:00 is Italian summer time). */
+  countdown: {
+    eyebrow: "Counting down",
+    line: "Until we say I do",
+    dateLine: "Thursday, the 22nd of April, 2027",
+    targetISO: "2027-04-22T16:00:00+02:00",
+    units: { days: "Days", hours: "Hours", minutes: "Minutes", seconds: "Seconds" },
+    passed: "Sposati!",
+    passedNote: "We’re married. Thank you for celebrating with us in Todi.",
+  },
 };
 
 /*
@@ -697,16 +710,16 @@ export const ITALY_EXPLORE = {
     body: "For flights, trains, the car and the border, see the Travel page.",
     cta: { label: "Getting to Todi", href: "/italy/travel" },
   },
-  /* The live block under the averages (components/italy/TodiForecast).
-     Coordinates are Todi's; the window is the three wedding days plus the
-     arrival day before. */
-  forecast: {
-    label: "The forecast",
+  /* The live tracker at the top of the weather section
+     (components/italy/TodiWeather). Todi's coordinates; Open-Meteo answers
+     in Todi local time because the request asks for Europe/Rome. */
+  live: {
+    label: "Todi right now",
     latitude: 42.78,
     longitude: 12.41,
-    from: "2027-04-20",
-    to: "2027-04-23",
-    showFromDays: 14,
+    timeZone: "Europe/Rome",
+    hourlyLabel: "Every three hours",
+    unavailable: "The live weather isn’t loading just now. The April averages below still hold.",
   },
   sections: [
     {
@@ -720,7 +733,7 @@ export const ITALY_EXPLORE = {
       body: "Late April in Umbria is spring proper: green hills, long light, and evenings that turn cool the moment the sun goes.",
       blocks: [
         {
-          label: "What to expect",
+          label: "In late April",
           lines: [
             "Days around 18°C (64°F), and anywhere from 14 to 21°C (57 to 70°F)",
             "Nights around 7°C (45°F). Todi sits on a hill, and it feels it after dark",
@@ -737,7 +750,7 @@ export const ITALY_EXPLORE = {
           ],
         },
       ],
-      note: "Averages for 17 to 27 April over the last twenty-five years. Two weeks before the wedding, the live forecast for our days appears here.",
+      note: "Averages for 17 to 27 April over the last twenty-five years. The live weather above always covers the next three days.",
     },
     {
       /* =====================================================================
@@ -860,7 +873,7 @@ export const ITALY_FAQ = {
     },
     {
       q: "What will the weather be?",
-      a: "Mild and bright by day, around seventeen or eighteen degrees, and properly cool once the sun sets at about eight. A coat for the evening is the only thing anyone regrets forgetting. The Italy page has the averages and, two weeks out, the forecast for our days.",
+      a: "Mild and bright by day, around seventeen or eighteen degrees, and properly cool once the sun sets at about eight. A coat for the evening is the only thing anyone regrets forgetting. The Italy page has the April averages and the live weather in Todi.",
     },
     /* TBD — confirm the policy. */
     {

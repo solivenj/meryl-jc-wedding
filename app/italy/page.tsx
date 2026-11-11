@@ -3,6 +3,7 @@ import { Motif } from "@/components/italy/Art";
 import { Band } from "@/components/italy/Band";
 import { DetailBlocks } from "@/components/italy/DetailBlocks";
 import { DetailCollage } from "@/components/italy/DetailCollage";
+import { ItalyCountdown } from "@/components/italy/ItalyCountdown";
 import { PhotoCarousel } from "@/components/italy/PhotoCarousel";
 /* `Rule` goes back in the import when the parked day links below return. */
 import { Prose, ScriptTitle, SmallCaps, capsLinkClass } from "@/components/italy/Type";
@@ -121,8 +122,13 @@ export default function ItalyHome() {
         </div>
       </Band>
 
-      {/* The reply. Cream, because the footer below it is the deep ground. */}
-      <Band tone="cream" width="prose" className="gap-6">
+      {/* The countdown, then the reply, in one cream band: cream because the
+          footer below it is the deep ground, and shared because a band of
+          its own would break the alternation (see ITALY_HOME.countdown).
+          Wide rather than prose so the four figures get room; everything
+          in here is short and centred, so nothing else gets longer lines. */}
+      <Band tone="cream" width="wide" className="gap-6">
+        <ItalyCountdown />
         <ScriptTitle>{ITALY_HOME.rsvp.script}</ScriptTitle>
         <Motif name="rings" size={92} className="text-ink" />
         <p className="font-caps text-[calc(10px*var(--fs-scale))] uppercase tracking-[0.24em] text-ink-soft">

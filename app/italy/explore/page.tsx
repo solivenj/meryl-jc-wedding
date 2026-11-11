@@ -4,7 +4,7 @@ import { Motif } from "@/components/italy/Art";
 import type { MotifName } from "@/components/italy/sketches";
 import { Band } from "@/components/italy/Band";
 import { MarginSections, type MarginMotif } from "@/components/italy/MarginSections";
-import { TodiForecast } from "@/components/italy/TodiForecast";
+import { TodiWeather } from "@/components/italy/TodiWeather";
 import { capsLinkClass } from "@/components/italy/Type";
 import { ITALY_EXPLORE } from "@/lib/italy-content";
 
@@ -35,7 +35,7 @@ export default function ExplorePage() {
         eyebrow={ITALY_EXPLORE.eyebrow}
         sections={ITALY_EXPLORE.sections}
         motifs={SECTION_MOTIFS}
-        extras={{ weather: <TodiForecast /> }}
+        leads={{ weather: <TodiWeather /> }}
       />
 
       {/* Same closing band as Travel, for the same reason: cream so it does
