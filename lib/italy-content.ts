@@ -299,9 +299,9 @@ export const ITALY_DETAILS = {
  * Chapter four has no precedent in the sites surveyed: not one destination
  * wedding, including two other Todi weddings and one on Lake Garda, explains
  * its destination on the story page — that lands on the travel page, if
- * anywhere. It belongs here anyway, because this is the second of two
- * weddings and "why are we flying to Umbria" is the question this page is
- * actually being read to answer.
+ * anywhere. It belongs here anyway, because "why are we flying to Umbria" is
+ * the question this page is actually being read to answer. The answer is the
+ * 2022 trip, never the other ceremony: see the note on chapter four's body.
  */
 export const ITALY_STORY: {
   eyebrow: string;
@@ -349,11 +349,12 @@ export const ITALY_STORY: {
       kicker: "Why Umbria",
       heading: "And now, Todi",
       body:
-        "We are getting married twice. Once at home in New Jersey, in the church, with " +
-        "everyone who can get there. And once here, on a hill in Umbria, over three " +
-        "unhurried days, because we wanted one of the two to last longer than an " +
-        "afternoon. Todi is small and walkable, and once you arrive you can put the car " +
-        "keys away until you leave.",
+        /* Never mention the New Jersey church wedding anywhere on /italy. Some
+           Italy guests were not invited to it, and the site must not be how
+           they find out. */
+        "We fell for Italy on a trip in 2022, and when it came to choosing, we wanted " +
+        "to come back. So: a hill in Umbria, three unhurried days. Todi is small and " +
+        "walkable, and once you arrive you can put the car keys away until you leave.",
     },
   ],
   /* Sits alone on the last band, under the final chapter. */
