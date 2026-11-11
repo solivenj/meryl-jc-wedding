@@ -193,10 +193,11 @@ function Celsius({ value, className = "" }: { value: number; className?: string 
 function Stat({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex min-w-0 flex-col gap-1">
-      <span className="font-caps text-[calc(9px*var(--fs-scale))] uppercase tracking-[0.22em] text-ink-soft">
+      {/* Baskerville 700 is loaded by the Italy layout, so this bold is real. */}
+      <span className="font-caps text-[calc(9px*var(--fs-scale))] font-bold uppercase tracking-[0.22em] text-ink">
         {label}
       </span>
-      <span className="font-body text-[calc(17px*var(--fs-scale))] leading-[1.35] font-semibold text-ink tabular-nums lining-nums">
+      <span className="font-body text-[calc(17px*var(--fs-scale))] leading-[1.35] text-ink tabular-nums lining-nums">
         {children}
       </span>
     </div>
