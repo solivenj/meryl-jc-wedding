@@ -38,6 +38,7 @@ export const ITALY_NAV = [
   { href: "/italy/our-story", label: "Our Story" },
   { href: "/italy/dress-code", label: "Dress Code" },
   { href: "/italy/travel", label: "Travel" },
+  { href: "/italy/explore", label: "Italy" },
   { href: "/italy/faq", label: "FAQ" },
 ] as const;
 
@@ -561,14 +562,26 @@ export const ITALY_TRAVEL = {
             "Please keep your passports up to date! They need to have been issued within the last ten years and still be valid three months after you leave Europe",
           ],
         },
-        // {
-        //   label: "At the border",
-        //   /* VERIFIED Oct 2026 — EES became fully operational 10 April 2026. */
-        //   lines: [
-        //     "Since April 2026 the EU records arrivals electronically instead of stamping passports. Nothing to apply for, nothing to pay, nothing to do before you fly",
-        //     "The first time, you have a photograph and fingerprints taken when you land. It takes a few minutes, and you are then in the system for three years",
-        //   ],
-        // },
+        {
+          label: "At the border",
+          /* VERIFIED Nov 2026 — EES became fully operational 10 April 2026
+             (eu-LISA press release, linked below). The links are the EU's
+             own pages; the poster is the official campaign artwork, hosted
+             by Austria's interior ministry because the EU's materials
+             repository is not public. */
+          lines: [
+            "Since April 2026 the EU records arrivals electronically instead of stamping passports. Nothing to apply for, nothing to pay, nothing to do before you fly",
+            "The first time, you have a photograph and fingerprints taken when you land, at a desk or a self-service kiosk. It takes a few minutes, and you are then in the system for three years",
+            "The EU’s own pages are below, along with the poster it put up at border crossings, so you will recognise the queue when you see it",
+          ],
+          links: [
+            { label: "The EU’s guide to the EES", href: "https://travel-europe.europa.eu/en/ees" },
+            { label: "Official questions & answers", href: "https://travel-europe.europa.eu/ees/faq" },
+            { label: "The poster at the border (PDF)", href: "https://www.bmi.gv.at/202/Fremdenpolizei_und_Grenzkontrolle/Entry_Exit_System/files/EN/EES_poster_A4_EN_print.pdf" },
+            { label: "Travel to Europe app", href: "https://travel-europe.europa.eu/ees/Travel-to-Europe-mobile-app" },
+            { label: "Announcement: EES fully live, April 2026", href: "https://www.eulisa.europa.eu/news-and-events/news/entryexit-system-fully-deployed-across-eu" },
+          ],
+        },
         {
           label: "If you are connecting",
           /* VERIFIED Oct 2026 — you are enrolled at the first Schengen entry,
@@ -591,7 +604,7 @@ export const ITALY_TRAVEL = {
           ],
         },
       ],
-      note: "Checked 18 October 2026. The rules are still changing, so travel-europe.europa.eu is the page to trust over this one.",
+      note: "Checked 10 November 2026. The rules are still changing, so travel-europe.europa.eu is the page to trust over this one.",
     },
     {
       id: "arriving",
@@ -661,6 +674,62 @@ export const ITALY_TRAVEL = {
       /* Deliberately names nothing. See app/italy/accommodations. */
       body: "We are arranging rooms for our guests, and what we can offer depends on who is coming, so please send your reply first. The details will be here once your RSVP is in.",
       cta: { label: "Go to the RSVP", href: "/italy/rsvp" },
+    },
+  ],
+};
+
+/*
+ * /italy/explore — the "Italy" tab. Everything about being there that is
+ * not logistics: the weather, and the places worth the trip. It split off
+ * from Travel so that page can stay the one a guest reads before booking.
+ */
+export const ITALY_EXPLORE = {
+  eyebrow: "Around Todi",
+  closing: {
+    body: "For flights, trains, the car and the border, see the Travel page.",
+    cta: { label: "Getting to Todi", href: "/italy/travel" },
+  },
+  /* The live block under the averages (components/italy/TodiForecast).
+     Coordinates are Todi's; the window is the three wedding days plus the
+     arrival day before. */
+  forecast: {
+    label: "The forecast",
+    latitude: 42.78,
+    longitude: 12.41,
+    from: "2027-04-20",
+    to: "2027-04-23",
+    showFromDays: 14,
+  },
+  sections: [
+    {
+      /* VERIFIED Nov 2026 — Open-Meteo historical archive for Todi
+         (42.78N 12.41E, 343m), every 17–27 April from 2001 to 2025:
+         mean high 17.8°C, mean low 7.2°C, highs 14–21°C on four days in
+         five, at least 1mm of rain on 37% of days. Sunset in Todi on
+         21 April is a few minutes before eight. */
+      id: "weather",
+      title: "The weather in Todi",
+      body: "Late April in Umbria is spring proper: green hills, long light, and evenings that turn cool the moment the sun goes.",
+      blocks: [
+        {
+          label: "What to expect",
+          lines: [
+            "Days around 18°C (64°F), and anywhere from 14 to 21°C (57 to 70°F)",
+            "Nights around 7°C (45°F). Todi sits on a hill, and it feels it after dark",
+            "Rain on about one day in three, usually showers rather than a washout",
+            "Sunset a little before eight, and it cools quickly after",
+          ],
+        },
+        {
+          label: "What to pack",
+          lines: [
+            "Layers for the day, and a proper coat or wrap for the evenings",
+            "A small umbrella, just in case",
+            "Shoes that can manage cobbles and hills. The old town is steep",
+          ],
+        },
+      ],
+      note: "Averages for 17 to 27 April over the last twenty-five years. Two weeks before the wedding, the live forecast for our days appears here.",
     },
     {
       /* =====================================================================
@@ -783,7 +852,7 @@ export const ITALY_FAQ = {
     },
     {
       q: "What will the weather be?",
-      a: "Mild and bright by day, around seventeen or eighteen degrees, and properly cool once the sun sets at about eight. A coat for the evening is the only thing anyone regrets forgetting.",
+      a: "Mild and bright by day, around seventeen or eighteen degrees, and properly cool once the sun sets at about eight. A coat for the evening is the only thing anyone regrets forgetting. The Italy page has the averages and, two weeks out, the forecast for our days.",
     },
     /* TBD — confirm the policy. */
     {
