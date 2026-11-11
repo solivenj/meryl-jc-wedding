@@ -719,39 +719,28 @@ export const ITALY_EXPLORE = {
     longitude: 12.41,
     timeZone: "Europe/Rome",
     hourlyLabel: "Every three hours",
-    unavailable: "The live weather isn’t loading just now. The April averages below still hold.",
+    unavailable: "The live weather isn’t loading just now. Late April’s usual range is beside it.",
+  },
+  /* The first band: the live tracker on the left, this beside it.
+     VERIFIED Nov 2026 — Open-Meteo historical archive for Todi
+     (42.78N 12.41E, 343m), every 17–27 April from 2001 to 2025: mean high
+     17.8°C, mean low 7.2°C, highs 14–21°C on four days in five. */
+  weather: {
+    title: "The weather in Todi",
+    april: {
+      label: "In late April",
+      body: "Days run from about 57 to 70°F (14 to 21°C), and nights drop to around 45°F (7°C).",
+    },
+    pack: {
+      label: "What to pack",
+      lines: [
+        "Layers for the day, and a proper coat or wrap for the evenings",
+        "A small umbrella, just in case",
+        "Shoes that can manage cobbles and hills. The old town is steep",
+      ],
+    },
   },
   sections: [
-    {
-      /* VERIFIED Nov 2026 — Open-Meteo historical archive for Todi
-         (42.78N 12.41E, 343m), every 17–27 April from 2001 to 2025:
-         mean high 17.8°C, mean low 7.2°C, highs 14–21°C on four days in
-         five, at least 1mm of rain on 37% of days. Sunset in Todi on
-         21 April is a few minutes before eight. */
-      id: "weather",
-      title: "The weather in Todi",
-      body: "Late April in Umbria is spring proper: green hills, long light, and evenings that turn cool the moment the sun goes.",
-      blocks: [
-        {
-          label: "In late April",
-          lines: [
-            "Days around 18°C (64°F), and anywhere from 14 to 21°C (57 to 70°F)",
-            "Nights around 7°C (45°F). Todi sits on a hill, and it feels it after dark",
-            "Rain on about one day in three, usually showers rather than a washout",
-            "Sunset a little before eight, and it cools quickly after",
-          ],
-        },
-        {
-          label: "What to pack",
-          lines: [
-            "Layers for the day, and a proper coat or wrap for the evenings",
-            "A small umbrella, just in case",
-            "Shoes that can manage cobbles and hills. The old town is steep",
-          ],
-        },
-      ],
-      note: "Averages for 17 to 27 April over the last twenty-five years. The live weather above always covers the next three days.",
-    },
     {
       /* =====================================================================
        * TBD — GENERATED PLACEHOLDER. Meryl & John to rewrite entirely.

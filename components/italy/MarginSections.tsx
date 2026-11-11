@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import Link from "next/link";
 import { Motif } from "@/components/italy/Art";
 import type { MotifName } from "@/components/italy/sketches";
@@ -72,17 +71,18 @@ export function MarginSections({
   eyebrow,
   sections,
   motifs,
-  leads = {},
+  startIndex = 0,
 }: {
-  /* Screen-reader page title; the visible lead is the eyebrow. */
-  heading: string;
-  eyebrow: string;
+  /* Screen-reader page title; the visible lead is the eyebrow. Both belong
+     to the page's first band, so leave them off when a page opens with a
+     band of its own and these sections follow it. */
+  heading?: string;
+  eyebrow?: string;
   sections: readonly MarginSection[];
   motifs: Record<string, MarginMotif[]>;
-  /* Anything a section needs beyond copy, keyed by section id and set
-     straight under its title. A little wider than the text column, and no
-     wider: at 901px the margin sketches start about 200px in from the edge. */
-  leads?: Record<string, ReactNode>;
+  /* How many bands the page has already set above these, so the
+     cream/olive alternation carries on instead of restarting at cream. */
+  startIndex?: number;
 }) {
   /* width="full" matters here: MarginArt positions its motifs at
      calc(25% - ...) against their own relative section, so capping the
@@ -95,16 +95,16 @@ export function MarginSections({
     <Band
       key={s.id}
       id={s.id}
-      tone={i % 2 === 0 ? "cream" : "band"}
+      tone={(i + startIndex) % 2 === 0 ? "cream" : "band"}
       width="full"
-      className={i === 0 ? "gap-5" : ""}
+      className={i === 0 && eyebrow ? "gap-5" : ""}
     >
       {/* The page heading and eyebrow ride inside the first section rather
           than in a band of their own: two stacked bands put their padding
           end to end and left a void between the label and the first word. */}
-      {i === 0 && (
+      {i === 0 && eyebrow && (
         <>
-          <h1 className="sr-only">{heading}</h1>
+          {heading && <h1 className="sr-only">{heading}</h1>}
           <Eyebrow>{eyebrow}</Eyebrow>
         </>
       )}
@@ -112,8 +112,6 @@ export function MarginSections({
         <MarginArt motifs={motifs[s.id]} />
 
         <ScriptTitle>{s.title}</ScriptTitle>
-
-        {leads[s.id] && <div className="mb-4 w-full max-w-[32rem]">{leads[s.id]}</div>}
 
         {/* One measure for the whole section so the intro and the lists
             share a left edge. Everything here is left-aligned inside a

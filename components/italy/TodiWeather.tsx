@@ -345,7 +345,7 @@ export function TodiWeather() {
 
   return (
     <div
-      className="flex w-full flex-col gap-6 border border-[var(--color-rule)] bg-[var(--color-ivory-deep)]/55 px-[clamp(16px,4vw,28px)] py-[clamp(20px,4vw,28px)] text-left"
+      className="@container flex w-full flex-col gap-6 border border-[var(--color-rule)] bg-[var(--color-ivory-deep)]/55 px-[clamp(16px,4vw,28px)] py-[clamp(20px,4vw,28px)] text-left"
       aria-busy={!data}
     >
       {/* Now */}
@@ -356,33 +356,38 @@ export function TodiWeather() {
         </span>
       </div>
 
-      <div className="flex items-center gap-[clamp(14px,4vw,24px)]">
-        <span className="flex size-[72px] shrink-0 items-center justify-center text-ink">
-          {data ? <WeatherGlyph kind={glyphFor(data.now.code, data.now.isDay)} size={68} /> : null}
-        </span>
-        <div className="flex min-w-0 flex-col gap-1">
-          <div className="flex items-baseline gap-2.5">
-            <span className="font-body leading-none font-light text-ink tabular-nums lining-nums [font-size:calc(clamp(46px,9vw,60px)*var(--fs-scale))]">
-              {data ? `${f(data.now.temp)}°F` : "–"}
+      {/* Container queries, not viewport ones: the card's width depends on
+          the column it is in. Once it has room, the day's stats move beside
+          the current conditions, which takes a whole row out of its height. */}
+      <div className="grid gap-6 @min-[34rem]:grid-cols-[minmax(0,1fr)_minmax(0,16rem)] @min-[34rem]:items-center">
+        <div className="flex items-center gap-[clamp(14px,4vw,24px)]">
+          <span className="flex size-[72px] shrink-0 items-center justify-center text-ink">
+            {data ? <WeatherGlyph kind={glyphFor(data.now.code, data.now.isDay)} size={68} /> : null}
+          </span>
+          <div className="flex min-w-0 flex-col gap-1">
+            <div className="flex items-baseline gap-2.5">
+              <span className="font-body leading-none font-light text-ink tabular-nums lining-nums [font-size:calc(clamp(46px,9vw,60px)*var(--fs-scale))]">
+                {data ? `${f(data.now.temp)}°F` : "–"}
+              </span>
+              <span className="font-body text-[calc(18px*var(--fs-scale))] text-ink-soft tabular-nums lining-nums">
+                {data ? `${c(data.now.temp)}°C` : ""}
+              </span>
+            </div>
+            <span className="font-body text-[calc(18px*var(--fs-scale))] leading-snug text-ink">
+              {data ? describe(data.now.code, data.now.isDay) : "Loading the sky over Todi…"}
             </span>
-            <span className="font-body text-[calc(18px*var(--fs-scale))] text-ink-soft tabular-nums lining-nums">
-              {data ? `${c(data.now.temp)}°C` : ""}
+            <span className="font-body text-[calc(15px*var(--fs-scale))] leading-snug font-light text-ink-soft">
+              {data ? `Feels like ${f(data.now.feels)}°F` : " "}
             </span>
           </div>
-          <span className="font-body text-[calc(18px*var(--fs-scale))] leading-snug text-ink">
-            {data ? describe(data.now.code, data.now.isDay) : "Loading the sky over Todi…"}
-          </span>
-          <span className="font-body text-[calc(15px*var(--fs-scale))] leading-snug font-light text-ink-soft">
-            {data ? `Feels like ${f(data.now.feels)}°F` : " "}
-          </span>
         </div>
-      </div>
 
-      <div className="grid grid-cols-2 gap-x-6 gap-y-4 border-y border-[var(--color-rule)] py-4 min-[520px]:grid-cols-4">
-        <Stat label="High">{today ? `${f(today.high)}° / ${c(today.high)}°C` : "–"}</Stat>
-        <Stat label="Low">{today ? `${f(today.low)}° / ${c(today.low)}°C` : "–"}</Stat>
-        <Stat label="Rain">{today ? `${today.rain ?? 0}% chance` : "–"}</Stat>
-        <Stat label="Sky">{data ? `${skyWords(data.now.cloud)} · ${data.now.cloud}%` : "–"}</Stat>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4 border-y border-[var(--color-rule)] py-4 @min-[28rem]:grid-cols-4 @min-[34rem]:grid-cols-2 @min-[34rem]:border-y-0 @min-[34rem]:border-l @min-[34rem]:py-1 @min-[34rem]:pl-6">
+          <Stat label="High">{today ? `${f(today.high)}° / ${c(today.high)}°C` : "–"}</Stat>
+          <Stat label="Low">{today ? `${f(today.low)}° / ${c(today.low)}°C` : "–"}</Stat>
+          <Stat label="Rain">{today ? `${today.rain ?? 0}% chance` : "–"}</Stat>
+          <Stat label="Sky">{data ? `${skyWords(data.now.cloud)} · ${data.now.cloud}%` : "–"}</Stat>
+        </div>
       </div>
 
       {/* Three days */}
