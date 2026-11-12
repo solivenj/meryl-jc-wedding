@@ -130,6 +130,7 @@ Each heading names the matching part of the prototype's script.
 - **Narrow screens (< 900px):** `S = clamp(stageWidth / 700, .5, .8)`. The camera also follows the car sideways. The car is held 36% of the way down, because the text card covers the bottom.
 - The camera is always clamped to the world's edges.
 - During the prologue the horizontal camera eases from x=290 (so the title shows on phones) toward the merge point.
+- **Phones only:** as the two cars merge (the last 30% of the prologue), the camera may lift the world past its bottom edge by up to 40% of the stage height, so the car rides above the docked card at the start of Boston. The opening frame is unchanged. The couple chose this on 2026-11-12, over leaving it as the prototype had it and over lifting from the very start.
 - While parked, the camera eases up to the very top so the closing line and dates are in view.
 
 ### 6.4 Road rendering (`road layers`)

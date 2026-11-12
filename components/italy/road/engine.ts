@@ -430,7 +430,13 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
 
     /* camera */
     const ay = SH * (narrow ? 0.36 : 0.58);
-    let oy = clamp(ay - y * S, SH - H * S, 0);
+    /* On phones the docked card covers the bottom of the stage, and near the
+       bottom of the world the camera can't follow the car up. So as the two
+       cars merge, let it lift the world past its bottom edge by up to 40% of
+       the stage; the opening frame is untouched (the couple chose this,
+       2026-11-12). */
+    const lift = narrow ? SH * 0.4 * clamp((s - PIECES[0].w * 0.7) / (PIECES[0].w * 0.3), 0, 1) : 0;
+    let oy = clamp(ay - y * S, SH - H * S - lift, 0);
     if (pc.tag === "park") oy = lerp(oy, 0, easeIO(clamp((t - 0.35) / 0.45, 0, 1)));
     const ox = W * S <= SW ? (SW - W * S) / 2 : clamp(SW / 2 - x * S, SW - W * S, 0);
     world.style.transform = `translate3d(${ox.toFixed(1)}px, ${oy.toFixed(1)}px, 0)`;

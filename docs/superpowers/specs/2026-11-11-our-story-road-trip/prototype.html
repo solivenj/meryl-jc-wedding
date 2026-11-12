@@ -1161,7 +1161,9 @@ a { color: inherit; }
     setChapter(pc.ch);
 
     const ay = SH * (narrow ? .36 : .58);
-    let oy = clamp(ay - y * S, SH - H * S, 0);
+    /* phones: lift past the bottom edge as the cars merge, so the car clears the docked card (couple's choice, 2026-11-12) */
+    const lift = narrow ? SH * 0.4 * clamp((s - pcs[0].w * .7) / (pcs[0].w * .3), 0, 1) : 0;
+    let oy = clamp(ay - y * S, SH - H * S - lift, 0);
     if (pc.tag === 'park') oy = lerp(oy, 0, easeIO(clamp((t - .35) / .45, 0, 1)));
     let ox;
     if (W * S <= SW) ox = (SW - W * S) / 2;
