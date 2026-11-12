@@ -5,7 +5,7 @@ import type { MotifName } from "@/components/italy/sketches";
 import { Band } from "@/components/italy/Band";
 import { MarginSections, type MarginMotif } from "@/components/italy/MarginSections";
 import { TodiWeather } from "@/components/italy/TodiWeather";
-import { Eyebrow, Prose, ScriptTitle, SmallCaps, capsLinkClass } from "@/components/italy/Type";
+import { Prose, ScriptTitle, SmallCaps, capsLinkClass } from "@/components/italy/Type";
 import { ITALY_EXPLORE } from "@/lib/italy-content";
 
 export const metadata: Metadata = { title: "Italy" };
@@ -35,7 +35,6 @@ export default function ExplorePage() {
           below that the notes stack under it. */}
       <Band tone="cream" width="wide" id="weather" className="gap-5">
         <h1 className="sr-only">Italy: the weather and the places we love</h1>
-        <Eyebrow>{ITALY_EXPLORE.eyebrow}</Eyebrow>
         <ScriptTitle>{weather.title}</ScriptTitle>
         <div className="mt-6 grid w-full gap-10 text-left min-[960px]:grid-cols-[minmax(0,38rem)_minmax(0,1fr)] min-[960px]:gap-14">
           <TodiWeather />

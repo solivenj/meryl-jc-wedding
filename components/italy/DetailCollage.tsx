@@ -1,9 +1,11 @@
 import Image from "next/image";
+import { CollageInkClip } from "@/components/italy/CollageInkClip";
 import { ITALY_COLLAGE, type CollagePiece } from "@/lib/italy-content";
 
 /*
- * The scrapbook band under the home carousel: a cream card of facts, tipped
- * a little, with two polaroids dropped to its right.
+ * The scrapbook band under the home carousel: a cream card of facts in a
+ * calla-lily frame with a cupid at its corner, two polaroids to its right,
+ * and a map of Italy behind them.
  *
  * It exists because the first screen of /italy never said when or where the
  * wedding was.
@@ -120,34 +122,78 @@ function Polaroid({ piece }: { piece: CollagePiece }) {
   return (
     <figure className={`bg-[#fdfbf6] p-[4cqw] pb-[13cqw] ${SHADOW}`}>
       <div className={`relative w-full ${piece.landscape ? "aspect-[5/4]" : "aspect-[4/5]"}`}>
-        <Image
-          src={piece.src!}
-          alt=""
-          aria-hidden="true"
-          fill
-          sizes={sizesFor(piece)}
-          {...LOAD}
-          className="object-cover"
-        />
+        {/* No src is a placeholder slot: plain black until a photo is set. */}
+        {piece.src ? (
+          <Image
+            src={piece.src}
+            alt=""
+            aria-hidden="true"
+            fill
+            sizes={sizesFor(piece)}
+            {...LOAD}
+            className="object-cover"
+          />
+        ) : (
+          <div aria-hidden="true" className="absolute inset-0 bg-[#141414]" />
+        )}
       </div>
     </figure>
+  );
+}
+
+/* Cream line art straight on the olive: no frame, no shadow. Art in front of
+   the card also stacks its dark-ink copy over itself, clipped to the card's
+   outline by CollageInkClip so the lines stay legible on the cream. */
+function Art({ piece }: { piece: CollagePiece }) {
+  const img = (src: string) => (
+    <Image
+      src={src}
+      alt=""
+      aria-hidden="true"
+      width={piece.w}
+      height={piece.h}
+      sizes={sizesFor(piece)}
+      {...LOAD}
+      className="h-auto w-full"
+    />
+  );
+  return (
+    <div className="relative">
+      {img(piece.src!)}
+      {piece.ink && (
+        <div data-ink-copy className="absolute inset-0 [clip-path:polygon(0_0,0_0,0_0)]">
+          {img(piece.ink)}
+        </div>
+      )}
+    </div>
   );
 }
 
 export function DetailCollage() {
   return (
     <div className="collage-stage">
-      <div className="collage-inner">
+      <div
+        className="collage-inner"
+        style={
+          {
+            "--collage-ratio": ITALY_COLLAGE.ratio,
+            "--collage-ratio-tall": ITALY_COLLAGE.ratioTall,
+          } as React.CSSProperties
+        }
+      >
         {ITALY_COLLAGE.pieces.map((p, i) => (
           <div
             key={p.src ?? `${p.kind}-${i}`}
             className={`collage-piece ${p.kind === "card" ? "collage-piece-card" : ""}`}
             style={pieceVars(p)}
+            data-collage-card={p.kind === "card" ? "" : undefined}
           >
             {p.kind === "card" && <Card />}
             {p.kind === "photo" && <Polaroid piece={p} />}
+            {p.kind === "art" && <Art piece={p} />}
           </div>
         ))}
+        <CollageInkClip />
       </div>
     </div>
   );

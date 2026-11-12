@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Band } from "@/components/italy/Band";
-import { Motif } from "@/components/italy/Art";
 import { PhotoPanel } from "@/components/italy/PhotoPanel";
 import { RsvpReply } from "@/components/italy/RsvpReply";
-import { Prose, Rule, ScriptTitle, capsLinkClass } from "@/components/italy/Type";
+import { Prose, ScriptTitle, capsLinkClass } from "@/components/italy/Type";
 import { ITALY_RSVP, ITALY_RSVP_PAGE } from "@/lib/italy-content";
 
 export const metadata: Metadata = { title: "RSVP" };
@@ -33,24 +32,9 @@ export default function RsvpPage() {
             {ITALY_RSVP_PAGE.emailLink}
           </a>
         </div>
-
-        <Rule className="my-[22px]" />
-
-        <ScriptTitle>{ITALY_RSVP_PAGE.registryTitle}</ScriptTitle>
-        <Motif name="rings" size={112} className="text-ink" />
-        <Prose>{ITALY_RSVP_PAGE.registryBody}</Prose>
-        {ITALY_RSVP_PAGE.registryLinks.length > 0 && (
-          <>
-            <Rule />
-            <div className="flex flex-wrap justify-center gap-[34px]">
-              {ITALY_RSVP_PAGE.registryLinks.map((l) => (
-                <a key={l.href} href={l.href} className={capsLinkClass}>
-                  {l.label}
-                </a>
-              ))}
-            </div>
-          </>
-        )}
+        {/* The registry section is parked: it moves to a page of its own
+            closer to the date (docs/closer-to-the-date.md). Its copy is
+            still in ITALY_RSVP_PAGE. */}
       </Band>
     </>
   );

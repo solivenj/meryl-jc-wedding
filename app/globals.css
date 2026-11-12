@@ -315,6 +315,7 @@ body {
 .collage-inner {
   position: relative;
   width: 100%;
+  /* Set from ITALY_COLLAGE.ratio / ratioTall, next to the coordinates. */
   aspect-ratio: var(--collage-ratio, 16 / 7);
 }
 
@@ -359,8 +360,7 @@ body {
    the card at its floor width plus props either side without them colliding. */
 @container (max-width: 720px) {
   .collage-inner {
-    /* Card on top, the two polaroids under it; nothing below them now. */
-    aspect-ratio: var(--collage-ratio-tall, 10 / 11.2);
+    aspect-ratio: var(--collage-ratio-tall, 10 / 13);
   }
 
   .collage-piece {
