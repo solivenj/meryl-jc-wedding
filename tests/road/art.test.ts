@@ -46,6 +46,19 @@ test("Meryl's CA sign is on the long road, John's NJ sign on the short one", () 
   assert.ok(x("NJ") < 200, `NJ sign at x=${x("NJ")}`);
 });
 
+test("Chicago has no Bean and no city flag", () => {
+  const s = sceneryMarkup();
+  assert.ok(!s.includes('id="bean"') && !s.includes("rgb(120 180 220"), "Bean or flag still drawn");
+});
+
+test("Thanksgiving: lights run from the house to a pole past the table, eight people at it", () => {
+  const s = sceneryMarkup();
+  assert.ok(s.includes('id="lights"'), "no string of lights");
+  const fam = s.slice(s.indexOf('id="family"'));
+  assert.equal((fam.match(/class="fam"/g) || []).length, 8);
+  assert.ok(!s.includes("M 26 -96 Q 60 -76 96 -92"), "old floating bunting still drawn");
+});
+
 test("vehicle defs style themselves without classes", () => {
   // <use> clones can't see .road-trip-scoped classes; a class here paints the car black
   assert.ok(!/class=/.test(defsMarkup()));
