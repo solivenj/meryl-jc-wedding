@@ -124,9 +124,7 @@ export const ITALY_COLLAGE: {
   pieces: readonly CollagePiece[];
 } = {
   card: {
-    /* A hyphen, not an en dash: the card sets this in Le Jour, which has
-       no en dash glyph, so "–" would drop to a fallback face. */
-    dates: "April 21 - 23",
+    dates: "April 21 – 23",
     year: "2027",
     venue: ITALY.venue.name,
     /* The place, not the postal address. The full street address is still on

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Libre_Baskerville, Cormorant_Garamond } from "next/font/google";
 import localFont from "next/font/local";
@@ -83,11 +84,16 @@ export default function ItalyLayout({ children }: { children: React.ReactNode })
           vertical rhythm, and a margin here shows as a cream stripe above the
           footer whenever the last Band is the deep one. */}
       <footer id="site-footer" className="linen linen-dark flex flex-col items-center gap-2.5 bg-[var(--color-band)] px-4 pt-[70px] pb-[52px]">
-        {/* pb clears the script's descender — Pinyon's is shallower than the
-            Monsieur this was tuned for, so it needs about half the old 0.3em. */}
-        <p className="pb-[0.14em] font-flourish text-[calc(clamp(54px,7.4vw,96px)*var(--fs-scale))] leading-none text-[var(--color-band-ink)]">
-          {ITALY.monogram}
-        </p>
+        {/* The couple's emblem: public/italy/art/emblem.jpeg with its
+            baked-in checkerboard keyed out (neutral greys dropped, the green
+            and cream kept), trimmed, and saved as emblem.webp. */}
+        <Image
+          src="/italy/art/emblem.webp"
+          width={499}
+          height={640}
+          alt={ITALY.monogram}
+          className="mb-2 h-[clamp(120px,14vw,170px)] w-auto"
+        />
         <p className="font-caps text-[calc(10px*var(--fs-scale))] uppercase tracking-[0.24em] text-[var(--color-band-ink-soft)]">
           {ITALY.footerLine}
         </p>
