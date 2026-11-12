@@ -216,6 +216,25 @@ if (flags.has("--checks")) {
     if (chip !== "Chicago") return `drive not running: chip reads ${chip}`;
   });
 
+  await check("only the current stop's words show", async () => {
+    const { ctx, page } = await open(1440, 900);
+    const wrong = [];
+    for (const ch of [0, 2, 6]) {
+      await drive(page, chapterStart(ch) + 0.002);
+      const seen = await page.evaluate(() =>
+        [...document.querySelectorAll("#texts .wt")]
+          .filter((w) => !w.classList.contains("title"))
+          .map((w) => ({ ch: w.dataset.ch, shown: getComputedStyle(w.firstElementChild).opacity === "1" })),
+      );
+      for (const s of seen) {
+        const mine = s.ch.split(",").includes(String(ch));
+        if (mine !== s.shown) wrong.push(`at stop ${ch}, slot ${s.ch} ${s.shown ? "shown" : "hidden"}`);
+      }
+    }
+    await ctx.close();
+    if (wrong.length) return wrong.join("; ");
+  });
+
   await check("content", async () => {
     const { ctx, page } = await open(1440, 900);
     const body = await page.evaluate(() => document.body.innerText.toLowerCase());
