@@ -104,13 +104,12 @@ function Card() {
       <span className="text-[10cqw] leading-[1.15] text-ink [font-family:var(--font-amoresa,var(--font-pinyon))]">
         {card.venue}
       </span>
-      <span className="font-body text-[3.9cqw] leading-[1.5] font-light text-ink-soft">
+      <span className="font-body text-[4.6cqw] leading-[1.5] font-light text-ink-soft">
         {card.place}
       </span>
       <Flourish />
-      {/* The dates in Le Jour Serif, falling back to the section script if
-          it ever fails to load. */}
-      <span className="text-[8.4cqw] leading-none whitespace-nowrap text-ink [font-family:var(--font-le-jour,var(--font-pinyon))]">
+      {/* The dates in Amoresa too, to match the venue. */}
+      <span className="mt-[2.4cqw] text-[6.8cqw] leading-none whitespace-nowrap text-ink [font-family:var(--font-amoresa,var(--font-pinyon))]">
         {card.dates}, {card.year}
       </span>
     </div>
