@@ -10,6 +10,7 @@ import { chromium } from "playwright";
 import { mkdirSync, readFileSync, existsSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { resolve } from "node:path";
+import { chapterStart } from "../components/italy/road/route.ts";
 
 const args = process.argv.slice(2);
 const flags = new Set(args.filter((a) => a.startsWith("--")));
@@ -159,7 +160,8 @@ if (flags.has("--checks")) {
   await check("card clears car", async () => {
     const { ctx, page } = await open(390, 600);
     const hits = [];
-    for (const p of [0.06, 0.33, 0.42, 0.677, 0.87]) {
+    /* every stop dot lands at chapterStart + .002; plus a few mid-stretch moments */
+    for (const p of [...Array.from({ length: 10 }, (_, c) => chapterStart(c) + 0.002), 0.06, 0.33, 0.42, 0.677, 0.87]) {
       await drive(page, p);
       const car = await carRect(page);
       const card = await page.evaluate(() => {
@@ -171,7 +173,7 @@ if (flags.has("--checks")) {
       if (car && card && car.left < card.right && car.right > card.left && car.top < card.bottom && car.bottom > card.top) hits.push(p);
     }
     await ctx.close();
-    if (hits.length) return `card covers the car at ${hits.join(", ")}`;
+    if (hits.length) return `card covers the car at ${hits.map((h) => h.toFixed(3)).join(", ")}`;
   });
 
   await check("no ending flash before the script runs", async () => {

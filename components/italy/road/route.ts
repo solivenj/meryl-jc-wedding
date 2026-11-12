@@ -113,7 +113,8 @@ export const PIECES: readonly Piece[] = RAW.map((p, i) => {
   return { ...p, w: p.w * SCALE_W, ...(car ? { car } : {}) };
 });
 
-/* Meryl from California (left edge), John from New Jersey (right edge). */
+/* John from New Jersey: the short road, from the left edge. Meryl from
+   California: the long road, from the right edge. */
 export const SPURS = {
   a: `M -60 ${Y0 + 90} C 20 ${Y0 + 90} 63 ${Y0 + 24} ${XL} ${Y0}`,
   b: `M 1240 ${Y0 + 260} C 700 ${Y0 + 260} 63 ${Y0 + 24} ${XL} ${Y0}`,

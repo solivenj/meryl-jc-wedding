@@ -72,7 +72,7 @@ These come from the couple and apply to every string on the page, including alt 
 
 | Fact | Used where |
 |---|---|
-| John is from New Jersey, Meryl from California | NJ and CA signs on the merging roads |
+| John is from New Jersey, Meryl from California | NJ sign on the short merging road, CA sign on the long one |
 | They met at Northeastern University in Boston, and dating began in 2019 | Boston stop, NEU polaroid, husky |
 | John was on the East Coast, Meryl on the West Coast | Long-distance pins |
 | First trip to Italy together, 2022 | Italy 2022 stop |
@@ -91,14 +91,14 @@ The world is one SVG, 1200 units wide and 4880 tall. Y grows downward, so the dr
 
 | # | Stop | Road | What happens | HUD chip | Text slot |
 |---|---|---|---|---|---|
-| – | **Two roads** (prologue) | Two short spur roads | Meryl's car comes in from the left edge past a green **CA** sign, John's from the right edge past a green **NJ** sign. Each car has one person in it. They merge at the start of leg 1. A small red heart rises at the merge, and from there it is one car with two people. The spur roads ink in as the cars arrive. | `NJ · CA` (green) | Title block, under the merge point, bottom left |
+| – | **Two roads** (prologue) | Two spur roads | John's car comes in on the short road from the left edge past a green **NJ** sign; Meryl's comes in on the long road from the right edge past a green **CA** sign (California is the longer drive to Boston; the couple asked for this on 2026-11-11). Each car has one person in it. They merge at the start of leg 1. A small red heart rises at the merge, and from there it is one car with two people. The spur roads ink in as the cars arrive. | `NJ · CA` (green) | Title block, under the merge point, bottom left |
 | 1 | **Boston, 2019** | Leg 1 (→) | Olive **BOSTON, MA** sign. "Polaroid pickets": a fence of six overlapping polaroids on stakes along two rails, each tilted a little. The first is larger, with a husky face and **NEU** in red; the second is captioned 2019. Beyond them, the Boston skyline drawn in the prototype's line over a "CHARLES RIVER" waterline: State House with a gold dome, the Zakim Bridge, the Custom House clock tower, towers, the Old State House. | `Boston, MA` (olive) | Below leg 1, right (where the title used to be) |
 | 2 | **The long-distance years** | Leg 2 (←), the long one | Takes about 3× a normal leg's scrolling, on purpose. The car drives westbound past four green time-zone signs (Leaving Eastern, Entering Central, Mountain, Pacific), an I-80 shield, a red **JOHN · EAST COAST** pin at the east end and **MERYL · WEST COAST** at the west end. Overhead a small plane flies back and forth five times along a faint dotted arc, and a yellow sticky note headed "flights" gains one tally stroke per pass, ending in a full five-bar gate. | `I-80 · Westbound` (green) | Above leg 1, left |
 | 3 | **Italy, 2022** | Leg 3 (→) | The road runs out at a coast. The car becomes a plane and flies a dotted arc over "ATLANTIC" waves, then lands as the **Italian car**. An **ITALIA 2022** passport stamp pops in, and the odometer switches to KM. Tuscany: three cypresses, vineyard rows below the road, a **Tuscan villa** (low terracotta hipped roofs, square tower, arched loggia, cypresses) on a gentle mound. Then **Positano**: house blocks stepping up a cliff, the church with a tiled majolica dome low on the left, beach umbrellas and waves below the road, a small "POSITANO" label. The hairpin after leg 3 **is the flight home**: the plane flies the bend, and the odometer goes back to MI. | `Italia · 2022` (EU blue) | Above leg 2, right |
-| 4 | **Chicago** | Leg 4 (←) | Chicago city flag (two light-blue stripes, four red six-pointed stars). **The Bean** on a plaza line. A **white coat with a stethoscope** on a coat stand. The skyline (Willis-style stepped tower with antennas, Hancock-style tapered tower with X-bracing, others) with the **elevated "L" track** and a train in front, its posts reaching down to the road. No arrivals board and no "med school" sign: the couple asked for both to be removed. | `Chicago` (green) | Above leg 3, left |
+| 4 | **Chicago** | Leg 4 (←) | A **white coat with a stethoscope** on a coat stand. The skyline (Willis-style stepped tower with antennas, Hancock-style tapered tower with X-bracing, others) with the **elevated "L" track** and a train in front, its posts reaching down to the road. No arrivals board, no "med school" sign, no Bean and no city flag: the couple asked for all four to be removed. | `Chicago` (green) | Above leg 3, left |
 | 5a | **Bali, 2024** (half stop) | Leg 5 (→), first quarter | Palms and a split temple gate (candi bentar). The car pauses, and a **BALI 2024** stamp pops in. Bali sits a full bend above Chicago, at the couple's request. | `Bali · 2024` (stamp style) | Shared slot "Bali & Spain", above leg 4, right |
 | 5b | **Spain, 2025** (half stop) | Leg 5, last quarter | White house with a tiled roof and an orange tree. The car pauses, and an **ESPAÑA 2025** stamp pops in. | `España · 2025` (stamp style) | Shared slot |
-| 6 | **Thanksgiving, 2025** | Leg 6 (←) | Green California route shield "CA 1", two palms, then a long Thanksgiving table with ten heads (both families, two tones), a pie, and a house with a terracotta roof and bunting. The car stops in front of the table, a ring rises above it with sparkles, and the heads bob as if everyone jumped up. | `California` (green) | Above leg 5, left |
+| 6 | **Thanksgiving, 2025** | Leg 6 (←) | Green California route shield "CA 1", two palms, then a house with a terracotta roof and a long Thanksgiving table: eight people (both families, two tones) around a scalloped tablecloth with a turkey, a pie and two candles. String lights run from the house's right eave, sag over the table and end at a pole past its far end, so house and table read as one scene (the couple asked for this on 2026-11-11). The car stops in front of the table, a ring rises above it with sparkles, and the heads bob as if everyone jumped up. | `California` (green) | Above leg 5, left |
 | 7 | **Across the water** | Leg 7 (→) | The road reaches a coast and the car becomes a plane over "ATLANTIC" waves. It lands at a blue EU **ITALIA** border sign as the Italian car, now with a suitcase on the roof. An **ITALIA 2027** stamp pops in. The odometer is in KM from here on. | `Italia · 2027` (EU blue) | Above leg 6, right |
 | 8 | **Umbria** | Leg 8 (←) | A white Italian arrow sign **TODI 3**, a brown **MONASTERO S. MARGHERITA** sign, cypresses, olive trees, the big hill behind. | `Todi` (Italian white arrow) | Above leg 7, left |
 | – | **Arrived** | Final climb to the piazza | Exactly the version 1 ending: the road curves up the hill into Todi's skyline (walls, crenellated tower, campanile, the Duomo with its rose window, rooftops, cypresses). The car parks in the piazza. The keys arc from the car onto a key board on the wall and swing to rest, and "keys away" appears. The camera lifts to show the closing line, "Benvenuti a Todi", and the dates **21 · 22 · 23 April 2027**. | `Monastero S. Margherita` (brown) | Top of the world, centred |
@@ -114,7 +114,7 @@ Each heading names the matching part of the prototype's script.
 - `hairpin(i)` is one cubic Bézier whose control points continue the leg's direction (offsets 184 and 46), so the joins are smooth.
 - Flights are cubic arcs: `fly1` is on leg 3 from f .13 to .33, the flight home is hairpin 3 itself, and `fly3` is on leg 7 from f .22 to .78.
 - The final climb is `C 50 932 300 600 560 580`, from the end of leg 8 to the piazza `PZ = (560, 580)`.
-- The spur roads run from `(-60, Y0+90)` and `(1240, Y0+260)` and both end tangent to leg 1 at `(160, Y0)`.
+- The spur roads run from `(-60, Y0+90)` (short: John, NJ) and `(1240, Y0+260)` (long: Meryl, CA) and both end tangent to leg 1 at `(160, Y0)`.
 
 ### 6.2 Scroll mapping (`Pieces of the drive`)
 
@@ -130,6 +130,7 @@ Each heading names the matching part of the prototype's script.
 - **Narrow screens (< 900px):** `S = clamp(stageWidth / 700, .5, .8)`. The camera also follows the car sideways. The car is held 36% of the way down, because the text card covers the bottom.
 - The camera is always clamped to the world's edges.
 - During the prologue the horizontal camera eases from x=290 (so the title shows on phones) toward the merge point.
+- **Phones only:** as the two cars merge (the last 30% of the prologue), the camera may lift the world past its bottom edge by up to 40% of the stage height, so the car rides above the docked card at the start of Boston. The opening frame is unchanged. The couple chose this on 2026-11-12, over leaving it as the prototype had it and over lifting from the very start.
 - While parked, the camera eases up to the very top so the closing line and dates are in view.
 
 ### 6.4 Road rendering (`road layers`)
@@ -158,7 +159,7 @@ Each heading names the matching part of the prototype's script.
 
 ### 6.7 HUD
 
-- **Road-sign chip** (top right) shows the current stop's sign in its real-world style: green US guide sign, olive, EU blue with a gold rule, white Italian arrow (pointing left), brown tourist sign, or a red passport-stamp style for half stops. A small caps subtitle sits underneath (hidden on narrow screens).
+- **Road-sign chip** (top right) shows the current stop's sign in its real-world style: green US guide sign, olive, EU blue with a gold rule, white Italian arrow (pointing left), brown tourist sign, or a red passport-stamp style for half stops. No subtitle sits under the sign: the couple asked for it removed (2026-11-11).
 - **Odometer** (bottom left): five rolling digits, the last one paper-coloured. It counts **road distance only**, so it freezes during flights. It reads KM while in Italy (2022 and from 2027 on) and MI otherwise, flipping its unit label when it switches. The long-distance leg adds up to 2,100 miles on top of the road distance. **The numbers are decorative placeholders, not facts.**
 - **Stop dots** (right edge, bottom to top): one per chapter, half stops smaller, labels on hover, focus or when active. Clicking one smooth-scrolls to that stop (instant under reduced motion).
 - **"Skip the drive"** link at top left jumps past the drive. In the site, it targets the end of the page or the footer.
@@ -296,7 +297,7 @@ Geometry, drawings and sign art stay in code, keyed by `id`, never in content. T
 - The prototype's drawing style, not the Vecteezy style.
 - No sound.
 - The built page matches the prototype as closely as possible.
-- The stop list and order in §5, including NJ/CA, Boston details, Italy 2022 (villa and Positano), Chicago (Bean, white coat and stethoscope, no arrivals board, no med school sign), the Bali and Spain half stops, Thanksgiving with both families, and the version 1 ending.
+- The stop list and order in §5, including NJ/CA, Boston details, Italy 2022 (villa and Positano), Chicago (white coat and stethoscope; no arrivals board, med school sign, Bean or flag), the Bali and Spain half stops, Thanksgiving with both families, and the version 1 ending.
 - The title sits under the merge point, and each stop's text sits one slot before its road.
 - Never mention the church wedding or living arrangements.
 

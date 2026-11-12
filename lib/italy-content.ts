@@ -56,7 +56,7 @@ export const ITALY_HOME = {
     body2: "Join us for three days at Monastero Santa Margherita in the beautiful region of Umbria, Italy.",
     button: "RSVP here",
   },
-  days: { title: "The three days" },
+  days: { title: "The Wedding Week" },
   collageAlt: "Photographs, an envelope and a card laid out on a table",
   rsvp: {
     script: "Will you join us?",
@@ -82,8 +82,8 @@ export const ITALY_HOME = {
  * The collage under the carousel.
  *
  * It exists because the first screen of /italy never said when or where the
- * wedding was. The card carries those facts; the props around it carry the
- * feeling. Modelled on a scrapbook reference John supplied.
+ * wedding was. The card carries those facts; the polaroids beside it carry
+ * the feeling. Modelled on a scrapbook reference John supplied.
  *
  * Coordinates live here, not in the component, so the arrangement is tuned by
  * editing numbers. Every piece has two packs, both in percentages of the
@@ -97,15 +97,10 @@ export const ITALY_HOME = {
  * thing to look at first if the band feels repetitive.
  */
 export type CollagePiece = {
-  kind: "card" | "photo" | "doily" | "prop";
+  kind: "card" | "photo";
   src?: string;
   alt?: string;
-  /* Intrinsic pixels — only needed so next/image can reserve the box. */
-  w?: number;
-  h?: number;
   landscape?: boolean;
-  /* object-position, for a crop that would otherwise cut faces. */
-  focus?: string;
   /* Wide pack. */
   l: number;
   t: number;
@@ -129,7 +124,9 @@ export const ITALY_COLLAGE: {
   pieces: readonly CollagePiece[];
 } = {
   card: {
-    dates: "April 21 – 23",
+    /* A hyphen, not an en dash: the card sets this in Le Jour, which has
+       no en dash glyph, so "–" would drop to a fallback face. */
+    dates: "April 21 - 23",
     year: "2027",
     venue: ITALY.venue.name,
     /* The place, not the postal address. The full street address is still on
@@ -137,55 +134,21 @@ export const ITALY_COLLAGE: {
        be; on the card it was four lines of detail nobody reads at a glance. */
     place: "Todi, Umbria, Italy",
   },
+  /* Just the card and two polaroids. The envelope and the doily came out;
+     with nothing on the left, the card sits a little left of centre so the
+     card-plus-polaroids group is what reads as centred. */
   pieces: [
     {
-      /* John's own envelope, hue-rotated from dusty blue to cream by
-         scripts/process-collage.mjs. It carries the ribbon and the embossed
-         M&J, so it is the bow and the envelope in one object. */
-      kind: "prop",
-      src: "/italy/collage/envelope-cream.webp",
-      alt: "",
-      w: 900,
-      h: 643,
-      l: 8,
-      t: 12,
-      width: 30,
-      r: -7,
-      z: 1,
-      pl: -2,
-      pt: 70,
-      pwidth: 52,
-      pr: -6,
-    },
-    {
-      /* A tight two-shot, because the circle is the smallest frame here and a
-         wide one loses its subjects entirely. The faces sit about a third of
-         the way down the original, so a square crop has to be pulled up or it
-         cuts them off at the top. */
-      kind: "doily",
-      src: "/italy/photos/IMG_7089.JPG",
-      alt: "",
-      focus: "50% 15%",
-      l: 16,
-      t: 40,
-      width: 25,
-      r: 5,
-      z: 2,
-      pl: 48,
-      pt: 62,
-      pwidth: 42,
-    },
-    {
       kind: "photo",
-      src: "/italy/photos/IMG_7083.JPG",
+      src: "/italy/photos/old.JPG",
       alt: "",
-      l: 68,
+      l: 65,
       t: 3,
       width: 21,
       r: 5,
       z: 3,
       pl: 1,
-      pt: 44,
+      pt: 49,
       pwidth: 38,
       pr: -5,
     },
@@ -194,25 +157,31 @@ export const ITALY_COLLAGE: {
       src: "/italy/photos/0U1A5834.jpg",
       alt: "",
       landscape: true,
-      l: 64,
+      l: 61,
       t: 44,
       width: 24,
       r: -6,
       z: 4,
       pl: 45,
-      pt: 42,
+      pt: 47,
       pwidth: 43,
       pr: 4,
     },
     {
-      /* Last, and highest: the card sits proud of everything else. */
+      /* Last, and highest: the card sits proud of everything else. For the
+         card, `l` is where its CENTRE goes in the wide pack; the tall pack
+         always centres it. Tipped a few degrees counterclockwise. */
       kind: "card",
-      l: 34,
-      t: 2,
-      width: 38,
+      l: 38,
+      t: 3,
+      width: 44,
+      r: -6,
       z: 5,
-      pt: 0,
-      pwidth: 84,
+      pt: 1,
+      /* The CSS caps the card at 92% of the stage so it never touches the
+         edges, so this is effectively 92 on a phone. */
+      pwidth: 96,
+      pr: -4,
     },
   ],
 };
@@ -422,7 +391,7 @@ export const ITALY_SCHEDULE = {
       day: "Wednesday, April 21st",
       art: "villa",
       motif: "cheers",
-      title: "Pizza Party",
+      title: "Welcome Dinner",
       quote: "Come as you are, stay until the lamps go on",
       /* `start` rides on the date line. It is the only clock time a day
          carries — Friday has none, and nothing sits below the title. */
@@ -452,7 +421,7 @@ export const ITALY_SCHEDULE = {
       day: "Friday, April 23rd",
       art: "loggia",
       motif: "luggage",
-      title: "Farewell",
+      title: "Morning Farewell",
       quote: "No schedule, no hurry",
       /* No start: nothing is scheduled, so the date line carries no clock. */
       link: { label: "Travelling home", href: "/italy/travel" },

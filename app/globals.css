@@ -269,7 +269,7 @@ body {
     transform: translateX(0);
   }
   to {
-    transform: translateX(calc(-50% - 0.5px));
+    transform: translateX(-50%);
   }
 }
 
@@ -351,7 +351,7 @@ body {
  */
 .collage-piece-card {
   --tx: -50%;
-  left: 50%;
+  left: var(--card-left, 50%);
   width: min(92%, max(var(--card-share, 31%), 282px));
 }
 
@@ -359,7 +359,8 @@ body {
    the card at its floor width plus props either side without them colliding. */
 @container (max-width: 720px) {
   .collage-inner {
-    aspect-ratio: var(--collage-ratio-tall, 10 / 13);
+    /* Card on top, the two polaroids under it; nothing below them now. */
+    aspect-ratio: var(--collage-ratio-tall, 10 / 11.2);
   }
 
   .collage-piece {

@@ -1,4 +1,4 @@
-/* Chicago: the flag, the Bean, the white coat and stethoscope, the skyline and the L.
+/* Chicago: the white coat and stethoscope, the skyline and the L.
    Moved verbatim from the approved prototype; see components/italy/road/route.ts. */
 import { Y0, legY } from "../route.ts";
 import { f1, up } from "./kit.ts";
@@ -6,20 +6,6 @@ import { f1, up } from "./kit.ts";
 export function chicagoArt(): { backdrop: string; scenery: string; fx: string } {
   const B: string[] = [], S: string[] = [], F: string[] = [];
   { const yL4 = (x: number) => legY(4, x);
-    // city flag
-    const f = up(4, .05, 20);
-    S.push(`<g transform="translate(${f.x} ${f.y})"><line class="post" x1="-26" y1="0" x2="-26" y2="-74"/>
-      <rect x="-26" y="-74" width="56" height="36" class="paper" stroke="var(--ink)" stroke-width="1.4"/>
-      <rect x="-26" y="-67" width="56" height="5" fill="rgb(120 180 220 / .9)"/><rect x="-26" y="-50" width="56" height="5" fill="rgb(120 180 220 / .9)"/>
-      ${[-17, -6, 5, 16].map((x) => `<path d="M ${x} -60 l 1.6 2.6 l 3 0 l -1.5 2.6 l 1.5 2.6 l -3 0 l -1.6 2.6 l -1.6 -2.6 l -3 0 l 1.5 -2.6 l -1.5 -2.6 l 3 0 Z" fill="var(--red)"/>`).join('')}</g>`);
-    // the Bean, on its plaza
-    const bn = up(4, .2, 20);
-    S.push(`<g transform="translate(${f1(bn.x)} ${f1(bn.y)})">
-      <path class="ln" d="M -52 0 L 52 0"/>
-      <path class="pf" d="M -40 0 C -48 -6 -46 -30 -30 -36 C -14 -42 14 -42 30 -36 C 46 -30 48 -6 40 0 C 30 -8 12 -12 0 -12 C -12 -12 -30 -8 -40 0 Z" style="stroke-width:1.8"/>
-      <path class="ln-thin" d="M -30 -30 C -14 -36 14 -36 30 -30 M -36 -20 C -16 -26 16 -26 36 -20 M -24 -6 C -10 -9 10 -9 24 -6" opacity=".55"/>
-      <path d="M -20 -32 C -12 -35 -6 -35 0 -34" stroke="var(--paper)" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-    </g>`);
     // white coat and stethoscope on a stand
     const wc = up(4, .36, 20);
     S.push(`<g transform="translate(${f1(wc.x)} ${f1(wc.y)})">

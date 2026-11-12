@@ -50,10 +50,9 @@ export default function ItalyHome() {
         <div className="mt-[clamp(36px,5vw,64px)] flex flex-col items-center gap-6">
           <ScriptTitle size="lead">{ITALY_HOME.welcome.script}</ScriptTitle>
           <Prose align="center">{ITALY_HOME.welcome.body}</Prose>
+          {/* No reply button here: the RSVP band at the foot of the page
+              is the one place to answer. */}
           <Prose align="center">{ITALY_HOME.welcome.body2}</Prose>
-          <div className="mt-2">
-            <RsvpReply label={ITALY_HOME.welcome.button} />
-          </div>
         </div>
       </Band>
 
@@ -73,10 +72,9 @@ export default function ItalyHome() {
               <span className="flex h-[76px] items-end justify-center">
                 <Motif name={d.motif as MotifName} size={MOTIF_SIZE[d.motif]} className="text-ink" />
               </span>
-              <SmallCaps>
-                {d.day}
-                {"start" in d && ` · ${d.start}`}
-              </SmallCaps>
+              {/* The start times are off for now; each day still carries
+                  `start` in ITALY_SCHEDULE for when they come back. */}
+              <SmallCaps>{d.day}</SmallCaps>
               <ScriptTitle as="h3" size="compact">
                 {d.title}
               </ScriptTitle>

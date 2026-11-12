@@ -43,3 +43,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Trial fonts are licensed for testing only; never commit or deploy them.
+app/fonts/*Trial*
+app/fonts/*trl*
+app/fonts/*Trl*
+app/fonts/Le Jour Serif.ttf

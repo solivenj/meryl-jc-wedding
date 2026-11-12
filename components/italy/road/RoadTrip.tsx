@@ -188,7 +188,6 @@ export function RoadTrip() {
           <a className="skip" href="#site-footer">Skip the drive</a>
           <div className="hud-sign" aria-hidden="true">
             <span className="chip" id="chip">NJ · CA</span>
-            <span className="chip-sub" id="chipSub">Two roads</span>
           </div>
           <ul className="stops" id="stops" aria-label="Jump to a stop" />
           <div className="odo" aria-hidden="true">
