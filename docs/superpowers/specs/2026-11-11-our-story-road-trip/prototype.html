@@ -309,7 +309,6 @@ a { color: inherit; }
     <a class="skip" href="#gameplan">Skip the drive</a>
     <div class="hud-sign" aria-live="polite">
       <span class="chip" id="chip">Two roads</span>
-      <span class="chip-sub" id="chipSub">Before</span>
     </div>
     <ul class="stops" id="stops" aria-label="Jump to a stop"></ul>
     <div class="odo" aria-hidden="true">
@@ -991,7 +990,7 @@ a { color: inherit; }
       strips[k].style.transform = `translateY(${(-pos * 22).toFixed(1)}px)`;
     }
   };
-  const unit = $('unit'), chip = $('chip'), chipSub = $('chipSub'), card = $('card'), stopsUl = $('stops');
+  const unit = $('unit'), chip = $('chip'), card = $('card'), stopsUl = $('stops');
   const chStart = CH.map((_, c) => cum[pcs.findIndex((p) => p.ch === c)] / WT);
   const stopBtns = CH.map((c, i) => {
     const li = document.createElement('li');
@@ -1014,7 +1013,6 @@ a { color: inherit; }
     if (c === curCh) return; curCh = c;
     const meta = c < 0 ? { chip: 'NJ · CA', style: '', k: 'Two roads' } : CH[c];
     chip.textContent = meta.chip; chip.className = 'chip ' + (meta.style || '');
-    chipSub.textContent = c < 0 ? 'Two roads' : (meta.sub ?? meta.k);
     wts.forEach((w) => w.classList.toggle('on', w.dataset.ch.split(',').includes(String(c))));
     stopBtns.forEach((b, i) => { b.classList.toggle('on', i === c); b.classList.toggle('done', i < c); });
     if (c >= 0) {

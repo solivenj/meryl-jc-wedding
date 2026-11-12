@@ -158,7 +158,7 @@ Each heading names the matching part of the prototype's script.
 
 ### 6.7 HUD
 
-- **Road-sign chip** (top right) shows the current stop's sign in its real-world style: green US guide sign, olive, EU blue with a gold rule, white Italian arrow (pointing left), brown tourist sign, or a red passport-stamp style for half stops. A small caps subtitle sits underneath (hidden on narrow screens). The subtitle is hidden for the 2027 crossing and Todi (`chip.note: ""` in the content), at the couple's request.
+- **Road-sign chip** (top right) shows the current stop's sign in its real-world style: green US guide sign, olive, EU blue with a gold rule, white Italian arrow (pointing left), brown tourist sign, or a red passport-stamp style for half stops. No subtitle sits under the sign: the couple asked for it removed (2026-11-11).
 - **Odometer** (bottom left): five rolling digits, the last one paper-coloured. It counts **road distance only**, so it freezes during flights. It reads KM while in Italy (2022 and from 2027 on) and MI otherwise, flipping its unit label when it switches. The long-distance leg adds up to 2,100 miles on top of the road distance. **The numbers are decorative placeholders, not facts.**
 - **Stop dots** (right edge, bottom to top): one per chapter, half stops smaller, labels on hover, focus or when active. Clicking one smooth-scrolls to that stop (instant under reduced motion).
 - **"Skip the drive"** link at top left jumps past the drive. In the site, it targets the end of the page or the footer.

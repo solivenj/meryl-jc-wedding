@@ -174,7 +174,6 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
   ];
   const unit = $<HTMLElement>("unit");
   const chip = $<HTMLElement>("chip");
-  const chipSub = $<HTMLElement>("chipSub");
   const card = $<HTMLElement>("card");
   const stopsUl = $<HTMLElement>("stops");
   const drive = $<HTMLElement>("drive");
@@ -205,11 +204,9 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
   const setChapter = (c: number) => {
     if (c === curCh) return;
     curCh = c;
-    const meta: { chip: { text: string; style: string; note?: string }; k: string } =
-      c < 0 ? { chip: { text: "NJ · CA", style: "" }, k: "Two roads" } : CH[c];
+    const meta: { chip: { text: string; style: string } } = c < 0 ? { chip: { text: "NJ · CA", style: "" } } : CH[c];
     chip.textContent = meta.chip.text;
     chip.className = "chip " + (meta.chip.style || "");
-    chipSub.textContent = meta.chip.note ?? meta.k;
     wts.forEach((w) => w.classList.toggle("on", (w.dataset.ch || "").split(",").includes(String(c))));
     stopBtns.forEach((b, i) => {
       b.classList.toggle("on", i === c);

@@ -296,9 +296,8 @@ export type StoryStop = {
   kicker: string;
   heading: string;
   body: string;
-  /* The road sign in the corner while this stop is on screen. Its small
-     subtitle is the kicker unless note says otherwise ("" hides it). */
-  chip: { text: string; style: StopChipStyle; note?: string };
+  /* The road sign in the corner while this stop is on screen. */
+  chip: { text: string; style: StopChipStyle };
   half?: boolean;
 };
 
@@ -389,7 +388,7 @@ export const ITALY_STORY: {
       kicker: "Across the water",
       heading: "Coming back",
       body: "We knew in 2022 that we would come back. This time we are bringing all of you.",
-      chip: { text: "Italia · 2027", style: "eu", note: "" },
+      chip: { text: "Italia · 2027", style: "eu" },
     },
     {
       id: "umbria",
@@ -398,7 +397,7 @@ export const ITALY_STORY: {
       body:
         "Todi is small and walkable, on a hill above the Tiber valley, and once you arrive you " +
         "can put the car keys away until you leave.",
-      chip: { text: "Todi", style: "it", note: "" },
+      chip: { text: "Todi", style: "it" },
     },
   ],
   /* One shared text block for the two half stops. */
