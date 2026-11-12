@@ -70,9 +70,14 @@ export function PhotoCarousel() {
         ));
 
   return (
-    <section aria-label="Photographs" className="italy-marquee relative overflow-hidden bg-ivory">
+    /* No gap between slides, and an olive ground rather than ivory: the
+       header above and the collage band below are both olive, so a hairline
+       left by sub-pixel drift (the slide widths are fractional, and the
+       track moves in fractions of a pixel) shows as olive, never as a white
+       seam. */
+    <section aria-label="Photographs" className="italy-marquee relative overflow-hidden bg-[var(--color-band)]">
       <div
-        className="italy-marquee-track flex w-max gap-px"
+        className="italy-marquee-track flex w-max"
         style={{ "--marquee-duration": `${count * SECONDS_PER_SLIDE}s` } as React.CSSProperties}
       >
         {slides(0)}

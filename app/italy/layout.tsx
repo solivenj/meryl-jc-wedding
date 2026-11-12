@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Libre_Baskerville, Cormorant_Garamond } from "next/font/google";
+import localFont from "next/font/local";
 import { ItalyNav } from "@/components/italy/ItalyNav";
 import { ITALY } from "@/lib/italy-content";
 import "../italy-entrance.css";
@@ -39,6 +40,15 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
+/* The venue on the home collage card. Licensed webfont from MyFonts; see
+   app/fonts/README.md. */
+const amoresa = localFont({
+  src: "../fonts/Amoresa.woff2",
+  variable: "--font-amoresa",
+  display: "swap",
+});
+
+
 export const metadata: Metadata = {
   title: {
     default: "Meryl & John · Todi, Umbria",
@@ -51,7 +61,7 @@ export const metadata: Metadata = {
 export default function ItalyLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className={`${baskerville.variable} ${cormorant.variable} theme-italy linen flex min-h-screen flex-1 flex-col overflow-x-clip bg-ivory font-body text-ink`}
+      className={`${baskerville.variable} ${cormorant.variable} ${amoresa.variable} theme-italy linen flex min-h-screen flex-1 flex-col overflow-x-clip bg-ivory font-body text-ink`}
     >
       <script dangerouslySetInnerHTML={{ __html: ENTERING_SCRIPT }} />
       {/* Header and footer are the deep half of the two-tone ground — the same

@@ -2,9 +2,8 @@ import Image from "next/image";
 import { ITALY_COLLAGE, type CollagePiece } from "@/lib/italy-content";
 
 /*
- * The scrapbook band under the home carousel: a cream card of facts, two
- * polaroids, an oval of lace, and John's own ribboned envelope, scattered as
- * if dropped on a table.
+ * The scrapbook band under the home carousel: a cream card of facts, tipped
+ * a little, with two polaroids dropped to its right.
  *
  * It exists because the first screen of /italy never said when or where the
  * wedding was.
@@ -26,35 +25,6 @@ import { ITALY_COLLAGE, type CollagePiece } from "@/lib/italy-content";
  *     photograph is aria-hidden, so a screen reader gets the details once
  *     rather than a list of unnamed images.
  */
-
-/* One ring of scallops, two rings of lace holes. Built from a few numbers
-   rather than hand-written path data so the lace can be retuned in one place.
-   Deterministic, so it renders identically on the server and the client. */
-function doilySvg() {
-  const S = 200;
-  const c = S / 2;
-  const ring = (count: number, radius: number, draw: (x: number, y: number, a: number) => string) =>
-    Array.from({ length: count }, (_, i) => {
-      const a = (i / count) * Math.PI * 2;
-      return draw(c + Math.cos(a) * radius, c + Math.sin(a) * radius, a);
-    }).join("");
-
-  const scallops = ring(30, 92, (x, y) => `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="10.4"/>`);
-  const holesOuter = ring(22, 80, (x, y, a) => {
-    const deg = (a * 180) / Math.PI + 90;
-    return `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="3.6" ry="6.4" transform="rotate(${deg.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)})" fill="var(--color-band)"/>`;
-  });
-  const holesInner = ring(16, 64, (x, y) => `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.6" fill="var(--color-band)"/>`);
-
-  return `<svg viewBox="0 0 ${S} ${S}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" style="display:block;width:100%;height:auto">
-    <g fill="#f6f1e8"><circle cx="${c}" cy="${c}" r="92"/>${scallops}</g>
-    ${holesOuter}${holesInner}
-    <circle cx="${c}" cy="${c}" r="70" fill="none" stroke="rgb(30 35 30 / .18)" stroke-width="0.8"/>
-    <circle cx="${c}" cy="${c}" r="56" fill="none" stroke="rgb(30 35 30 / .14)" stroke-width="0.8"/>
-  </svg>`;
-}
-
-const DOILY = doilySvg();
 
 /* A hairline with a diamond on it — the card's two dividers. Sized in cqw so
    it tracks the card rather than the stage. */
@@ -88,6 +58,7 @@ function pieceVars(p: CollagePiece): React.CSSProperties {
   /* The card sets its own left and width in CSS (it is centred and has a
      floor width), so it passes its share rather than a flat percentage. */
   if (p.kind === "card") {
+    vars["--card-left"] = `${p.l}%`;
     vars["--card-share"] = `${p.width}%`;
     if (p.pwidth !== undefined) vars["--card-share-tall"] = `${p.pwidth}%`;
   } else {
@@ -128,14 +99,19 @@ function Card() {
     >
       {/* The inner keyline, the way an engraved card has one. */}
       <span aria-hidden="true" className="pointer-events-none absolute inset-[2.2cqw] border border-rule" />
-      <span className="font-display text-[13cqw] leading-none text-ink">{card.dates}</span>
-      <span className="font-display text-[7.4cqw] leading-none text-ink">{card.year}</span>
-      <Flourish />
-      <span className="font-caps text-[3.9cqw] leading-[1.4] tracking-[0.12em] text-ink uppercase">
+      {/* Venue first, in script; the dates under the flourish. Amoresa once
+          a licensed webfont is loaded as --font-amoresa; Pinyon until then. */}
+      <span className="text-[10cqw] leading-[1.15] text-ink [font-family:var(--font-amoresa,var(--font-pinyon))]">
         {card.venue}
       </span>
       <span className="font-body text-[3.9cqw] leading-[1.5] font-light text-ink-soft">
         {card.place}
+      </span>
+      <Flourish />
+      {/* The dates in Le Jour Serif, falling back to the section script if
+          it ever fails to load. */}
+      <span className="text-[8.4cqw] leading-none whitespace-nowrap text-ink [font-family:var(--font-le-jour,var(--font-pinyon))]">
+        {card.dates}, {card.year}
       </span>
     </div>
   );
@@ -159,42 +135,6 @@ function Polaroid({ piece }: { piece: CollagePiece }) {
   );
 }
 
-function Doily({ piece }: { piece: CollagePiece }) {
-  return (
-    <div className="relative">
-      <div dangerouslySetInnerHTML={{ __html: DOILY }} />
-      {/* The photograph sits in the lace, not on it. */}
-      <div className="absolute top-1/2 left-1/2 aspect-square w-[54%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full shadow-[0_1cqw_2.4cqw_rgba(20,18,8,0.3)]">
-        <Image
-          src={piece.src!}
-          alt=""
-          aria-hidden="true"
-          fill
-          sizes={sizesFor(piece)}
-          {...LOAD}
-          style={piece.focus ? { objectPosition: piece.focus } : undefined}
-          className="object-cover"
-        />
-      </div>
-    </div>
-  );
-}
-
-function Prop({ piece }: { piece: CollagePiece }) {
-  return (
-    <Image
-      src={piece.src!}
-      alt=""
-      aria-hidden="true"
-      width={piece.w}
-      height={piece.h}
-      sizes={sizesFor(piece)}
-          {...LOAD}
-      className="h-auto w-full drop-shadow-[0_1.4cqw_2.6cqw_rgba(20,18,8,0.3)]"
-    />
-  );
-}
-
 export function DetailCollage() {
   return (
     <div className="collage-stage">
@@ -207,8 +147,6 @@ export function DetailCollage() {
           >
             {p.kind === "card" && <Card />}
             {p.kind === "photo" && <Polaroid piece={p} />}
-            {p.kind === "doily" && <Doily piece={p} />}
-            {p.kind === "prop" && <Prop piece={p} />}
           </div>
         ))}
       </div>

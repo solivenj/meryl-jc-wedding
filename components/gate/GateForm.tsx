@@ -89,6 +89,10 @@ export function GateForm({ next }: { next?: string }) {
         {error}
       </p>
 
+      <p className="font-body text-[15.5px] leading-[1.6] text-ink-soft">
+        For the best experience, please view this website on a desktop!
+      </p>
+
       <p className="mt-6 font-body text-[15.5px] leading-[1.6] text-ink-soft">
         Lost the card? Write to us at{" "}
         <a
