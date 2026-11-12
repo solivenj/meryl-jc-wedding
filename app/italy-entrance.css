@@ -1,0 +1,70 @@
+/*
+ * "Names carry over": the entrance into the Italy site after the password.
+ *
+ * The gate already does a full page load into /italy when the word is right
+ * (GateForm explains why). Both pages opt into the browser's cross-document
+ * view transitions, and both mark "Meryl & John" with the same
+ * view-transition-name, so the browser glides the names from the middle of
+ * the gate up into the Italy header — ink turning to cream — while the gate
+ * fades away and the site fades in around them.
+ *
+ * Imported only by app/page.tsx (the gate) and app/italy/layout.tsx, and a
+ * transition needs both pages to opt in, so the church site never gets one.
+ * A refresh is not a navigation that transitions. Chrome, Edge and Safari
+ * 18.2+ play it; other browsers just load the page.
+ *
+ * Timings match the approved comparison (artifact "Italy Entrance Compared"):
+ * gate out 0–450ms, site in 450–1300ms, names 300–1350ms.
+ */
+@view-transition {
+  navigation: auto;
+}
+
+.couple-names {
+  view-transition-name: couple-names;
+}
+
+::view-transition-old(root) {
+  animation: 450ms cubic-bezier(0.65, 0, 0.35, 1) both italy-entrance-out;
+}
+::view-transition-new(root) {
+  animation: 850ms cubic-bezier(0.65, 0, 0.35, 1) 450ms both italy-entrance-in;
+}
+::view-transition-group(couple-names),
+::view-transition-old(couple-names),
+::view-transition-new(couple-names) {
+  animation-duration: 1050ms;
+  animation-delay: 300ms;
+  animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  animation-fill-mode: both;
+}
+
+@keyframes italy-entrance-out {
+  to { opacity: 0; }
+}
+@keyframes italy-entrance-in {
+  from { opacity: 0; }
+}
+
+/* The Italy pages rise in on load (.italy-rise). Arriving through the
+   transition, the fade is the entrance, so the rise is skipped for this one
+   load: duration 0 finishes it instantly, and restoring the duration
+   afterwards does not replay it. The class is set by the script in
+   app/italy/layout.tsx. */
+html.italy-entering .italy-rise {
+  animation-duration: 0s;
+}
+
+/* Reduced motion: no glide, just a short cross-fade. */
+@media (prefers-reduced-motion: reduce) {
+  .couple-names {
+    view-transition-name: none;
+  }
+  ::view-transition-old(root) {
+    animation-duration: 200ms;
+  }
+  ::view-transition-new(root) {
+    animation-duration: 300ms;
+    animation-delay: 0ms;
+  }
+}

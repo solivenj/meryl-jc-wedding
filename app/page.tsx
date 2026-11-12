@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { GateForm } from "@/components/gate/GateForm";
 import { COUPLE } from "@/lib/content";
+import "./italy-entrance.css";
 
 export const metadata: Metadata = {
   title: "Meryl & John",
@@ -33,7 +34,9 @@ export default async function GatePage({
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-ivory px-6 py-16 text-center">
-      <h1 className="font-display leading-[1.15] text-ink text-[clamp(50px,10vw,92px)]">
+      {/* couple-names: the Italy entrance carries these names into the Italy
+          header (app/italy-entrance.css). */}
+      <h1 className="couple-names font-display leading-[1.15] text-ink text-[clamp(50px,10vw,92px)]">
         {COUPLE.first}
         <span aria-hidden className="mx-1.5 inline-block align-middle text-[1.25em] leading-none">
           &amp;
