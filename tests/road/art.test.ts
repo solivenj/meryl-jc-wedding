@@ -39,6 +39,13 @@ test("defs has the vehicles", () => {
   }
 });
 
+test("Meryl's CA sign is on the long road, John's NJ sign on the short one", () => {
+  // The long spur road comes in from the right edge, the short one from the left.
+  const x = (label: string) => Number(sceneryMarkup().match(new RegExp(`<text class="hwy" x="([\\d.]+)"[^>]*>${label}</text>`))![1]);
+  assert.ok(x("CA") > 600, `CA sign at x=${x("CA")}`);
+  assert.ok(x("NJ") < 200, `NJ sign at x=${x("NJ")}`);
+});
+
 test("vehicle defs style themselves without classes", () => {
   // <use> clones can't see .road-trip-scoped classes; a class here paints the car black
   assert.ok(!/class=/.test(defsMarkup()));

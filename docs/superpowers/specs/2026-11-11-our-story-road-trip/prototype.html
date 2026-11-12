@@ -337,7 +337,7 @@ a { color: inherit; }
       <p class="note">All copy on the road is placeholder for you to rewrite. Nothing on this page mentions the church wedding or where either of you lives.</p>
       <div class="stoplist">
         <div class="stop"><div><span class="chip">NJ · CA</span><h3>Two roads</h3></div>
-          <div><p>John's car comes in past an NJ sign, Meryl's past a CA sign. The two roads merge into one, and from there it is one car with both of you in it.</p></div></div>
+          <div><p>John's car comes in on the short road past an NJ sign, Meryl's on the long road past a CA sign. The two roads merge into one, and from there it is one car with both of you in it.</p></div></div>
         <div class="stop"><div><span class="chip olive">Boston, MA</span><h3>Boston, 2019</h3></div>
           <div><p>An olive “Boston, MA” sign, a fence of overlapping polaroid pickets (the first one has NEU and a husky), and the Boston skyline over the Charles: the State House, the Zakim Bridge, the Custom House clock tower and the towers behind.</p></div></div>
         <div class="stop"><div><span class="chip">I-80 · Westbound</span><h3>The long-distance years</h3></div>
@@ -528,7 +528,7 @@ a { color: inherit; }
   const TOTAL = dist;
   pcs.forEach((p, i) => { if (p.kind === 'pause' && !p.car) p.car = (pcs.slice(0, i).reverse().find((q) => q.d) || {}).car; });
 
-  // spurs: Meryl from California (left edge), John from New Jersey (right edge)
+  // spurs: John from New Jersey (short, left edge), Meryl from California (long, right edge)
   const spurA = el('path', { d: `M -60 ${Y0 + 90} C 20 ${Y0 + 90} 63 ${Y0 + 24} ${XL} ${Y0}` }, measure);
   const spurB = el('path', { d: `M 1240 ${Y0 + 260} C 700 ${Y0 + 260} 63 ${Y0 + 24} ${XL} ${Y0}` }, measure);
   const spurLen = [spurA.getTotalLength(), spurB.getTotalLength()];
@@ -604,8 +604,8 @@ a { color: inherit; }
   `);
 
   /* ---------- prologue: CA and NJ ---------- */
-  html(sc, greenSign(34, Y0 + 72, ['CA'], 'var(--hwy)', 52));
-  html(sc, greenSign(1090, Y0 + 360, ['NJ'], 'var(--hwy)', 52));
+  html(sc, greenSign(34, Y0 + 72, ['NJ'], 'var(--hwy)', 52));
+  html(sc, greenSign(1090, Y0 + 360, ['CA'], 'var(--hwy)', 52));
 
   /* ---------- 1. Boston ---------- */
   { const s = up(1, .045);

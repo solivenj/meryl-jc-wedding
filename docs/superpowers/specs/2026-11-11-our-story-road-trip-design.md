@@ -72,7 +72,7 @@ These come from the couple and apply to every string on the page, including alt 
 
 | Fact | Used where |
 |---|---|
-| John is from New Jersey, Meryl from California | NJ and CA signs on the merging roads |
+| John is from New Jersey, Meryl from California | NJ sign on the short merging road, CA sign on the long one |
 | They met at Northeastern University in Boston, and dating began in 2019 | Boston stop, NEU polaroid, husky |
 | John was on the East Coast, Meryl on the West Coast | Long-distance pins |
 | First trip to Italy together, 2022 | Italy 2022 stop |
@@ -91,7 +91,7 @@ The world is one SVG, 1200 units wide and 4880 tall. Y grows downward, so the dr
 
 | # | Stop | Road | What happens | HUD chip | Text slot |
 |---|---|---|---|---|---|
-| – | **Two roads** (prologue) | Two short spur roads | Meryl's car comes in from the left edge past a green **CA** sign, John's from the right edge past a green **NJ** sign. Each car has one person in it. They merge at the start of leg 1. A small red heart rises at the merge, and from there it is one car with two people. The spur roads ink in as the cars arrive. | `NJ · CA` (green) | Title block, under the merge point, bottom left |
+| – | **Two roads** (prologue) | Two spur roads | John's car comes in on the short road from the left edge past a green **NJ** sign; Meryl's comes in on the long road from the right edge past a green **CA** sign (California is the longer drive to Boston; the couple asked for this on 2026-11-11). Each car has one person in it. They merge at the start of leg 1. A small red heart rises at the merge, and from there it is one car with two people. The spur roads ink in as the cars arrive. | `NJ · CA` (green) | Title block, under the merge point, bottom left |
 | 1 | **Boston, 2019** | Leg 1 (→) | Olive **BOSTON, MA** sign. "Polaroid pickets": a fence of six overlapping polaroids on stakes along two rails, each tilted a little. The first is larger, with a husky face and **NEU** in red; the second is captioned 2019. Beyond them, the Boston skyline drawn in the prototype's line over a "CHARLES RIVER" waterline: State House with a gold dome, the Zakim Bridge, the Custom House clock tower, towers, the Old State House. | `Boston, MA` (olive) | Below leg 1, right (where the title used to be) |
 | 2 | **The long-distance years** | Leg 2 (←), the long one | Takes about 3× a normal leg's scrolling, on purpose. The car drives westbound past four green time-zone signs (Leaving Eastern, Entering Central, Mountain, Pacific), an I-80 shield, a red **JOHN · EAST COAST** pin at the east end and **MERYL · WEST COAST** at the west end. Overhead a small plane flies back and forth five times along a faint dotted arc, and a yellow sticky note headed "flights" gains one tally stroke per pass, ending in a full five-bar gate. | `I-80 · Westbound` (green) | Above leg 1, left |
 | 3 | **Italy, 2022** | Leg 3 (→) | The road runs out at a coast. The car becomes a plane and flies a dotted arc over "ATLANTIC" waves, then lands as the **Italian car**. An **ITALIA 2022** passport stamp pops in, and the odometer switches to KM. Tuscany: three cypresses, vineyard rows below the road, a **Tuscan villa** (low terracotta hipped roofs, square tower, arched loggia, cypresses) on a gentle mound. Then **Positano**: house blocks stepping up a cliff, the church with a tiled majolica dome low on the left, beach umbrellas and waves below the road, a small "POSITANO" label. The hairpin after leg 3 **is the flight home**: the plane flies the bend, and the odometer goes back to MI. | `Italia · 2022` (EU blue) | Above leg 2, right |
@@ -114,7 +114,7 @@ Each heading names the matching part of the prototype's script.
 - `hairpin(i)` is one cubic Bézier whose control points continue the leg's direction (offsets 184 and 46), so the joins are smooth.
 - Flights are cubic arcs: `fly1` is on leg 3 from f .13 to .33, the flight home is hairpin 3 itself, and `fly3` is on leg 7 from f .22 to .78.
 - The final climb is `C 50 932 300 600 560 580`, from the end of leg 8 to the piazza `PZ = (560, 580)`.
-- The spur roads run from `(-60, Y0+90)` and `(1240, Y0+260)` and both end tangent to leg 1 at `(160, Y0)`.
+- The spur roads run from `(-60, Y0+90)` (short: John, NJ) and `(1240, Y0+260)` (long: Meryl, CA) and both end tangent to leg 1 at `(160, Y0)`.
 
 ### 6.2 Scroll mapping (`Pieces of the drive`)
 
