@@ -20,6 +20,7 @@ import {
   odometerReading,
   pieceIndex,
   roadPaths,
+  textChapter,
 } from "./route.ts";
 import type { ITALY_STORY } from "@/lib/italy-content";
 
@@ -198,6 +199,16 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
   });
   const wts = [...root.querySelectorAll<HTMLElement>("#texts .wt[data-ch]")].filter((w) => w.dataset.ch !== "");
 
+  /* Stop text runs on its own clock: it comes in TEXT_LEAD ahead of the
+     stop (route.ts), but only once its whole block is on screen, so a reader
+     never gets words that are already cut off. */
+  const slots = wts.map((w) => ({ w, chs: (w.dataset.ch || "").split(",").map(Number), y: Number(w.parentElement!.getAttribute("y")) }));
+  let curText = -2;
+  const setText = (c: number) => {
+    if (c === curText) return;
+    curText = c;
+    slots.forEach((s) => s.w.classList.toggle("on", s.chs.includes(c)));
+  };
   let curCh = -2;
   let curUnit = "MI";
   let swapTimer = 0;
@@ -207,7 +218,6 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     const meta: { chip: { text: string; style: string } } = c < 0 ? { chip: { text: "NJ · CA", style: "" } } : CH[c];
     chip.textContent = meta.chip.text;
     chip.className = "chip " + (meta.chip.style || "");
-    wts.forEach((w) => w.classList.toggle("on", (w.dataset.ch || "").split(",").includes(String(c))));
     stopBtns.forEach((b, i) => {
       b.classList.toggle("on", i === c);
       b.classList.toggle("done", i < c);
@@ -224,7 +234,6 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
       card.hidden = false;
     } else {
       card.hidden = true;
-      wts.forEach((w) => w.classList.remove("on"));
     }
   };
 
@@ -440,6 +449,17 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     if (pc.tag === "park") oy = lerp(oy, 0, easeIO(clamp((t - 0.35) / 0.45, 0, 1)));
     const ox = W * S <= SW ? (SW - W * S) / 2 : clamp(SW / 2 - x * S, SW - W * S, 0);
     world.style.transform = `translate3d(${ox.toFixed(1)}px, ${oy.toFixed(1)}px, 0)`;
+
+    {
+      let tc = textChapter(p);
+      const slot = slots.find((s) => s.chs.includes(tc));
+      if (slot) {
+        const top = oy + slot.y * S;
+        const bottom = top + slot.w.offsetHeight * S;
+        if (top < 0 || bottom > SH) tc = -1;
+      }
+      setText(tc);
+    }
 
     /* light: late afternoon as you near Todi */
     const k = Math.pow(p, 2.2);

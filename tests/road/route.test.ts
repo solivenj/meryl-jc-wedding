@@ -12,6 +12,8 @@ import {
   odometerReading,
   pieceIndex,
   roadPaths,
+  TEXT_LEAD,
+  textChapter,
   SPURS,
 } from "../../components/italy/road/route.ts";
 
@@ -83,6 +85,17 @@ test("road paths", () => {
   assert.equal(r.flights.length, 3);
   for (const f of r.flights) assert.match(f, /^M [\d.-]+ [\d.-]+ C /);
   assert.ok(r.spurs.includes(SPURS.a) && r.spurs.includes(SPURS.b));
+});
+
+test("stop text comes in ahead of the stop", () => {
+  const lead = TEXT_LEAD / TOTAL_W;
+  assert.ok(TEXT_LEAD > 0);
+  assert.equal(textChapter(0), -1);
+  for (const ch of [0, 2, 6, 9]) {
+    assert.equal(textChapter(chapterStart(ch) - lead + 1e-6), ch, `stop ${ch} shows at its lead`);
+    assert.notEqual(textChapter(chapterStart(ch) - lead - 1e-3), ch, `stop ${ch} not before its lead`);
+  }
+  assert.equal(textChapter(1), 9);
 });
 
 test("odometer", () => {

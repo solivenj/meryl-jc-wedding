@@ -59,7 +59,9 @@
 .road-trip .lf { fill: rgb(75 75 48 / .22); stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; }
 .road-trip .cap { font-family: var(--f-body); font-style: italic; font-size: 13px; fill: var(--ink); }
 
-/* chapter text living in the world */
+/* chapter text living in the world. The boxes must not clip: Pinyon's swashes
+   (the f in "fell") reach past the left edge. */
+.road-trip #texts foreignObject { overflow: visible; }
 .road-trip .wt { font-family: var(--f-body); color: var(--ink); }
 /* Line by line (the couple's pick, 2026-11-12): a stop's words stay hidden
    until the car reaches that stop, arrive kicker, then title, then text, and

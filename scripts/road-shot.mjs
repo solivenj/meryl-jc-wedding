@@ -10,7 +10,7 @@ import { chromium } from "playwright";
 import { mkdirSync, readFileSync, existsSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { resolve } from "node:path";
-import { chapterStart } from "../components/italy/road/route.ts";
+import { chapterStart, textOnAt } from "../components/italy/road/route.ts";
 
 const args = process.argv.slice(2);
 const flags = new Set(args.filter((a) => a.startsWith("--")));
@@ -233,6 +233,40 @@ if (flags.has("--checks")) {
     }
     await ctx.close();
     if (wrong.length) return wrong.join("; ");
+  });
+
+  await check("stop text is fully on screen whenever it shows", async () => {
+    // Sample each stop from just before its words are due until just after
+    // the stop begins, on short and tall windows. Shown text must never be
+    // cut off at the top or bottom of the screen.
+    const bad = [];
+    for (const [w, h] of [[1440, 640], [1600, 700], [1920, 950]]) {
+      const { ctx, page } = await open(w, h);
+      for (const ch of [1, 2, 3, 6, 7, 8]) {
+        for (const p of [textOnAt(ch) + 0.002, textOnAt(ch) + 0.01, chapterStart(ch) + 0.004, chapterStart(ch) + 0.015]) {
+          await drive(page, p);
+          const r = await page.evaluate(() => {
+            const w = document.querySelector("#texts .wt.on:not(.title)");
+            if (!w) return null;
+            /* Measure the SVG box (its rect includes the camera), and scale the
+               text's own height into screen pixels. */
+            const fo = w.parentNode, b = fo.getBoundingClientRect(), s = document.getElementById("stage").getBoundingClientRect();
+            const k = b.height / fo.height.baseVal.value;
+            return { ch: w.dataset.ch, top: b.top - s.top, bottom: b.top - s.top + w.offsetHeight * k, h: s.height };
+          });
+          if (r && (r.top < 0 || r.bottom > r.h)) bad.push(`${w}x${h} at ${p.toFixed(3)} stop ${r.ch}: ${Math.round(r.top)}-${Math.round(r.bottom)} of ${Math.round(r.h)}`);
+        }
+      }
+      await ctx.close();
+    }
+    if (bad.length) return bad.join("; ");
+  });
+
+  await check("script swashes are not clipped", async () => {
+    const { ctx, page } = await open(1440, 900);
+    const clipped = await page.evaluate(() => [...document.querySelectorAll("#texts foreignObject")].filter((fo) => getComputedStyle(fo).overflow !== "visible").length);
+    await ctx.close();
+    if (clipped) return `${clipped} text boxes clip their contents`;
   });
 
   await check("content", async () => {

@@ -92,7 +92,8 @@ a { color: inherit; }
 .lf { fill: rgb(75 75 48 / .22); stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; }
 .cap { font-family: var(--f-body); font-style: italic; font-size: 13px; fill: var(--ink); }
 
-/* chapter text living in the world */
+/* chapter text living in the world (boxes must not clip the script swashes) */
+#texts foreignObject { overflow: visible; }
 .wt { font-family: var(--f-body); color: var(--ink); }
 /* Line by line (the couple's pick, 2026-11-12): a stop's words stay hidden
    until the car reaches that stop, arrive kicker, then title, then text, and
@@ -1022,7 +1023,6 @@ a { color: inherit; }
     if (c === curCh) return; curCh = c;
     const meta = c < 0 ? { chip: 'NJ · CA', style: '', k: 'Two roads' } : CH[c];
     chip.textContent = meta.chip; chip.className = 'chip ' + (meta.style || '');
-    wts.forEach((w) => w.classList.toggle('on', w.dataset.ch.split(',').includes(String(c))));
     stopBtns.forEach((b, i) => { b.classList.toggle('on', i === c); b.classList.toggle('done', i < c); });
     if (c >= 0) {
       card.classList.add('swap');
@@ -1031,7 +1031,7 @@ a { color: inherit; }
         card.classList.remove('swap');
       }, reduce ? 0 : 180);
       card.hidden = false;
-    } else { card.hidden = true; wts.forEach((w) => w.classList.remove('on')); }
+    } else { card.hidden = true; }
   };
 
   /* ---------- camera + layout ---------- */
@@ -1178,6 +1178,13 @@ a { color: inherit; }
     if (W * S <= SW) ox = (SW - W * S) / 2;
     else ox = clamp(SW / 2 - x * S, SW - W * S, 0);
     world.style.transform = `translate3d(${ox.toFixed(1)}px, ${oy.toFixed(1)}px, 0)`;
+
+    /* stop text comes in 0.4 ahead of its stop, but only once its whole block is on screen */
+    { let j = 0; const sl = s + 0.4; while (j < pcs.length - 1 && sl >= cum[j + 1]) j++;
+      let tc = pcs[j].ch;
+      const w = wts.find((x) => x.dataset.ch.split(',').includes(String(tc)));
+      if (w) { const top = oy + Number(w.parentNode.getAttribute('y')) * S; if (top < 0 || top + w.offsetHeight * S > SH) tc = -1; }
+      wts.forEach((x) => x.classList.toggle('on', x.dataset.ch.split(',').includes(String(tc)))); }
 
     const k = Math.pow(p, 2.2);
     stage.style.backgroundColor = `rgb(${iv.map((c, n) => Math.round(lerp(c, warm[n], k))).join(' ')})`;
