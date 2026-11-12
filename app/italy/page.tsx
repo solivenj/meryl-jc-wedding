@@ -1,11 +1,11 @@
-import Link from "next/link";
 import { Motif } from "@/components/italy/Art";
 import { Band } from "@/components/italy/Band";
 import { DetailCollage } from "@/components/italy/DetailCollage";
 import { ItalyCountdown } from "@/components/italy/ItalyCountdown";
 import { PhotoCarousel } from "@/components/italy/PhotoCarousel";
-/* `Rule` goes back in the import when the parked day links below return. */
-import { Prose, ScriptTitle, SmallCaps, capsLinkClass } from "@/components/italy/Type";
+/* `Rule`, `capsLinkClass` and next/link's `Link` go back in the imports when
+   the parked day links below return. */
+import { Prose, ScriptTitle, SmallCaps } from "@/components/italy/Type";
 import { RsvpReply } from "@/components/italy/RsvpReply";
 import type { MotifName } from "@/components/italy/sketches";
 import { ITALY, ITALY_HOME, ITALY_SCHEDULE } from "@/lib/italy-content";
@@ -124,10 +124,8 @@ export default function ItalyHome() {
           {ITALY_HOME.rsvp.replyBy}
         </p>
         <RsvpReply label={ITALY_HOME.rsvp.button} />
-        {/* RSVP has no nav tab, so this is the only route to the registry. */}
-        <Link href="/italy/rsvp" className={capsLinkClass}>
-          {ITALY_HOME.rsvp.registryLink}
-        </Link>
+        {/* No registry link for now: the registry gets its own page closer
+            to the date (docs/closer-to-the-date.md). */}
       </Band>
     </>
   );

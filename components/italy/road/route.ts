@@ -158,6 +158,15 @@ export function locate(p: number): { i: number; t: number } {
 
 export const chapterStart = (ch: number): number => CUM[PIECES.findIndex((p) => p.ch === ch)] / TOTAL_W;
 
+/* A stop's words come in this far (in scroll weight) ahead of the stop
+   itself. At the stop the text block already sits low on screen and keeps
+   sliding down as the car climbs, so arriving early gives the reader time
+   to finish it while it is still in view. Only the words lead; the road
+   sign, stop dots and phone card stay with the car. */
+export const TEXT_LEAD = 0.4;
+export const textChapter = (p: number): number => PIECES[locate(p + TEXT_LEAD / TOTAL_W).i].ch;
+export const textOnAt = (ch: number): number => chapterStart(ch) - TEXT_LEAD / TOTAL_W;
+
 export function ease(kind: Piece["ease"], t: number): number {
   if (kind === "out") return 1 - Math.pow(1 - t, 2.2);
   if (kind === "in") return Math.pow(t, 1.8);

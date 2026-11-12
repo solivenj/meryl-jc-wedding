@@ -50,10 +50,10 @@ export const ITALY_NAV = [
 export const ITALY_HOME = {
   hero: { script: "Il nostro giorno", tagline: "Three days in Umbria" },
   welcome: {
-    script: "We’re getting married!",
+    script: "We’re Getting Married!",
     /* TBD — rewrite freely. */
-    body: "And we couldn’t imagine doing it without you. However long you have been part of our lives, we are so grateful to share this special moment with you.",
-    body2: "Join us for three days at Monastero Santa Margherita in the beautiful region of Umbria, Italy.",
+    body: "From sharing life's daily rhythms in Chicago to supporting each other's biggest dreams, every step has led to this excited new chapter. We have built a foundation on shared laughter, endless curiosity and a deep love that keeps growing every day.",
+    body2: "We are overjoyed to bring together our favorite people across the United States and the globe to celebrate the official beginning of our forever. Thank you for being a part of our journey and shaping the people we are today.",
     button: "RSVP here",
   },
   days: { title: "The Wedding Week" },
@@ -62,7 +62,6 @@ export const ITALY_HOME = {
     script: "Will you join us?",
     replyBy: "Kindly reply by the first of February, 2027",
     button: "RSVP here",
-    registryLink: "See the registry, or write to us",
   },
   /* Has the olive band before the reply to itself, in the slot the parked
      Details band held. Counts to the start of the wedding days, Wednesday
@@ -90,16 +89,25 @@ export const ITALY_HOME = {
  * stage: the wide one (l/t/w/r) and a tall one (pl/pt/pw/pr) used below 640px.
  * See .collage-* in app/globals.css for why there are two.
  *
- * The photographs are referenced straight out of public/italy/photos rather
- * than copied, so they are the same files the carousel above is already
- * showing. A guest will see two or three of them twice on one screen; in a
- * scrapbook that reads as intent rather than as a mistake, but it is the one
- * thing to look at first if the band feels repetitive.
+ * Laid out from John's mockup: the card wrapped by a calla-lily frame, a
+ * cupid at its corner, the rings polaroid with a second polaroid tilted over
+ * it, and a map of Italy behind them. The three drawings are line art tinted
+ * to the band ink (#f4efe2) with the paper knocked out; the files live in
+ * public/italy/collage/, made from the .jpeg originals in public/italy/art/.
  */
 export type CollagePiece = {
-  kind: "card" | "photo";
+  /* "art" is a cream line drawing laid straight on the olive; a "photo"
+     with no src is a black placeholder in a polaroid frame. */
+  kind: "card" | "photo" | "art";
   src?: string;
   alt?: string;
+  /* Intrinsic pixels of an "art" file, so next/image can reserve the box. */
+  w?: number;
+  h?: number;
+  /* A dark-ink copy of an "art" file. Set it for art that sits in front of
+     the card: that copy shows wherever the art crosses the card, so the
+     lines read as ink there and stay cream on the olive. */
+  ink?: string;
   landscape?: boolean;
   /* Wide pack. */
   l: number;
@@ -121,8 +129,13 @@ export const ITALY_COLLAGE: {
     venue: string;
     place: string;
   };
+  /* Stage proportions for the wide and tall packs (CSS aspect-ratio). */
+  ratio: string;
+  ratioTall: string;
   pieces: readonly CollagePiece[];
 } = {
+  ratio: "1230 / 633",
+  ratioTall: "10 / 15.8",
   card: {
     dates: "April 21 – 23",
     year: "2027",
@@ -132,54 +145,101 @@ export const ITALY_COLLAGE: {
        be; on the card it was four lines of detail nobody reads at a glance. */
     place: "Todi, Umbria, Italy",
   },
-  /* Just the card and two polaroids. The envelope and the doily came out;
-     with nothing on the left, the card sits a little left of centre so the
-     card-plus-polaroids group is what reads as centred. */
+  /* Wide-pack numbers were measured off the mockup (a 1230 × 633 stage). */
   pieces: [
     {
-      kind: "photo",
-      src: "/italy/photos/old.JPG",
-      alt: "",
-      l: 65,
-      t: 3,
-      width: 21,
-      r: 5,
-      z: 3,
-      pl: 1,
-      pt: 49,
-      pwidth: 38,
-      pr: -5,
+      /* Wraps the card's top-left corner, in front of it. */
+      kind: "art",
+      src: "/italy/collage/cala_frame.webp",
+      ink: "/italy/collage/cala_frame-ink.webp",
+      w: 700,
+      h: 1015,
+      l: 8,
+      t: 13,
+      width: 20,
+      r: -8,
+      z: 8,
+      pl: -4,
+      pt: 0,
+      pwidth: 36,
+      pr: -8,
     },
     {
       kind: "photo",
-      src: "/italy/photos/0U1A5834.jpg",
+      src: "/italy/collage/rings.webp",
       alt: "",
       landscape: true,
-      l: 61,
-      t: 44,
-      width: 24,
-      r: -6,
-      z: 4,
-      pl: 45,
-      pt: 47,
-      pwidth: 43,
-      pr: 4,
+      l: 48,
+      t: 12,
+      width: 21,
+      r: 1,
+      z: 3,
+      pl: 2,
+      pt: 54,
+      pwidth: 52,
+      pr: 2,
     },
     {
-      /* Last, and highest: the card sits proud of everything else. For the
-         card, `l` is where its CENTRE goes in the wide pack; the tall pack
-         always centres it. Tipped a few degrees counterclockwise. */
-      kind: "card",
-      l: 38,
-      t: 3,
-      width: 44,
-      r: -6,
-      z: 5,
-      pt: 1,
-      /* The CSS caps the card at 92% of the stage so it never touches the
-         edges, so this is effectively 92 on a phone. */
-      pwidth: 96,
+      /* Placeholder until a photograph is chosen: black, in a polaroid
+         frame, tipped counterclockwise over the rings. */
+      kind: "photo",
+      landscape: true,
+      l: 47,
+      t: 42,
+      width: 26,
+      r: -4,
+      z: 4,
+      pl: 40,
+      pt: 64.5,
+      pwidth: 56,
       pr: -4,
+    },
+    {
+      /* Over the polaroids' right edges, as in the mockup, tipped
+         clockwise. */
+      kind: "art",
+      src: "/italy/collage/italy.webp",
+      w: 700,
+      h: 835,
+      l: 65,
+      t: 11,
+      width: 23,
+      r: 8,
+      z: 6,
+      pl: 56,
+      pt: 47,
+      pwidth: 42,
+      pr: 8,
+    },
+    {
+      /* For the card, `l` is where its CENTRE goes in the wide pack; the
+         tall pack always centres it. The CSS caps it at 92% of the stage,
+         so pwidth 96 is effectively 92 on a phone. */
+      kind: "card",
+      l: 31,
+      t: 23,
+      width: 35,
+      r: -9,
+      z: 5,
+      pt: 8.2,
+      pwidth: 96,
+      pr: -6,
+    },
+    {
+      /* Over the card's bottom-right corner, in front of it; on a phone it
+         takes the bottom-left corner instead, clear of the map. */
+      kind: "art",
+      src: "/italy/collage/cupid.webp",
+      ink: "/italy/collage/cupid-ink.webp",
+      w: 700,
+      h: 779,
+      l: 35,
+      t: 59,
+      width: 14,
+      z: 7,
+      pl: -2,
+      pt: 39,
+      pwidth: 24,
     },
   ],
 };
@@ -468,22 +528,15 @@ export type DressCode = {
 };
 
 export const ITALY_DRESS: {
-  eyebrow: string;
   title: string;
   intro: string;
-  explainer: { heading: string; body: string };
   paletteNote: string;
   codes: DressCode[];
   notToWear: { heading: string; body: string };
 } = {
-  eyebrow: "What to wear",
-  title: "The Dress Code",
+  title: "What To Wear",
   intro:
-    "Two evenings, two registers. Nothing here is a rule so much as a temperature — April in Umbria is bright at noon and genuinely cold after nine, and most floors you will stand on are stone.",
-  explainer: {
-    heading: "So what does that mean?",
-    body: "It means dress for a garden in spring and a frescoed room after dark. Think elegant silhouettes and fabrics that move — and shoes that will forgive fifteen minutes on cobbles.",
-  },
+    "Two days means to ",
   paletteNote: "Use these as inspiration — no need to match exactly.",
   codes: [
     {
@@ -577,148 +630,131 @@ export const ITALY_DRESS: {
  * still needs confirming closer to the date.
  */
 export const ITALY_TRAVEL = {
+  /* Laid out "at a glance" (design A on the Travel Tab Redesigns canvas):
+     four cards up top with the answers most guests want, then three
+     numbered sections. Copy is deliberately short; each card or block
+     should stay a sentence or two. */
   eyebrow: "Getting to Todi",
-  /* The closing band. It has to stay cream — the footer is the deep ground,
-     and two deep surfaces meeting read as one slab — and it used to hold
-     nothing but a row of motifs that are hidden above 900px. */
-  closing: {
-    body: "If there is something we have not covered here, please ask.",
-    cta: "Write to us",
-  },
-  sections: [
+  title: "Travel",
+  intro:
+    "Todi sits on a hill above the Tiber valley, an hour or two from three airports. Here is everything you need, in the order you will need it.",
+  glance: [
+    /* VERIFIED Sept 2026 — drive times, not flight times. */
     {
-      /* Border rules — the only thing on this site with an expiry date on it.
-         EES is live and settled. ETIAS is neither, and its start has moved
-         more than once, so the last block is written as a warning rather than
-         an instruction and the section carries the date it was last checked.
-         Re-check travel-europe.europa.eu before the formal invitations go
-         out; if ETIAS is running by then, rewrite that block. */
-      id: "entering",
-      title: "Before you book",
-      // body: "The European border works differently than it used to, and one more change is still on its way. None of it is hard, but the passport part has a lead time — so this is the part to read now, and the rest whenever.",
-      blocks: [
-        {
-          label: "Passports",
-          /* VERIFIED Oct 2026 — the Schengen rule is issued within ten years
-             and valid three months past departure. The dates are ours. */
-          lines: [
-            "Please keep your passports up to date! They need to have been issued within the last ten years and still be valid three months after you leave Europe",
-          ],
-        },
-        {
-          label: "At the border",
-          /* VERIFIED Nov 2026 — EES became fully operational 10 April 2026
-             (eu-LISA press release, linked below). The links are the EU's
-             own pages; the poster is the official campaign artwork, hosted
-             by Austria's interior ministry because the EU's materials
-             repository is not public. */
-          lines: [
-            "Since April 2026 the EU records arrivals electronically instead of stamping passports. Nothing to apply for, nothing to pay, nothing to do before you fly",
-            "The first time, you have a photograph and fingerprints taken when you land, at a desk or a self-service kiosk. It takes a few minutes, and you are then in the system for three years",
-            "The EU’s own pages are below, along with the poster it put up at border crossings, so you will recognise the queue when you see it",
-          ],
-          links: [
-            { label: "The EU’s guide to the EES", href: "https://travel-europe.europa.eu/en/ees" },
-            { label: "Official questions & answers", href: "https://travel-europe.europa.eu/ees/faq" },
-            { label: "The poster at the border (PDF)", href: "https://www.bmi.gv.at/202/Fremdenpolizei_und_Grenzkontrolle/Entry_Exit_System/files/EN/EES_poster_A4_EN_print.pdf" },
-            { label: "Travel to Europe app", href: "https://travel-europe.europa.eu/ees/Travel-to-Europe-mobile-app" },
-            { label: "Announcement: EES fully live, April 2026", href: "https://www.eulisa.europa.eu/news-and-events/news/entryexit-system-fully-deployed-across-eu" },
-          ],
-        },
-        {
-          label: "If you are connecting",
-          /* VERIFIED Oct 2026 — you are enrolled at the first Schengen entry,
-             not at the final destination. Ireland is outside EES and the UK
-             is outside the EU, so neither Dublin nor London enrols you. */
-          lines: [
-            "Please allow extra time for any layovers, especially in countries within the EES. You will be processed at the first European airport you land in.",
-            "Dublin and London are outside the zone, so connecting through either means you are processed on arrival in Italy instead",
-          ],
-        },
-        {
-          /* TBD — ETIAS. The Q4 2026 target was dropped from the official
-             page in July 2026 and 2027 is the current expectation, which is
-             our year. Do not write this as settled until it is. */
-          label: "ETIAS",
-          lines: [
-            "ETIAS is a separate online authorisation the EU plans to introduce. Twenty euros for adults, free under eighteen and over seventy, and it lasts three years",
-            "It is not running yet, and the start date has already moved several times. The current expectation is sometime in 2027, which could fall around our dates",
-            "There is nothing to do about it now. We will add the details once there is a firm date",
-          ],
-        },
-      ],
-      note: "Checked 10 November 2026. The rules are still changing, so travel-europe.europa.eu is the page to trust over this one.",
+      kicker: "Fly into",
+      title: "Rome",
+      body: "Fiumicino (FCO) has the most international flights. About two hours to Todi by car.",
     },
     {
-      id: "arriving",
-      title: "Arriving",
-      body: "Todi sits on a hill above the Tiber valley, an hour or two from three airports. It has a railway station, but no reliable train service to go with it.",
-      blocks: [
-        {
-          label: "By air",
-          /* VERIFIED Sept 2026 — drive times, not flight times. */
-          lines: [
-            "Rome Fiumicino (FCO): about two hours by car, and by far the most international flights",
-            "Perugia San Francesco (PEG): about forty minutes, small, with a handful of European routes",
-            "Florence (FLR): about two and a quarter hours north",
-            "A non-stop into Rome is worth paying for if you can find one, since a European connection means clearing the border at the first stop",
-          ],
-        },
-        {
-          label: "By train from Rome",
-          lines: [
-            /* TBD — re-confirm FCU service status before this goes to guests. */
-            "Todi has its own station on the Ferrovia Centrale Umbra, but the service has been unreliable and partly suspended, so we would not plan around it",
-            /* VERIFIED Sept 2026 */
-            "The route that works is Roma Termini to Orvieto, an hour to an hour and a quarter, then about forty minutes by taxi or hire car",
-            /* TBD — confirm the frequency, and whether taxis actually wait at
-               Orvieto, before this goes to guests. */
-            "Trains on that line run through the day, so you are not planning the trip around a single departure",
-            "Arrange the car for that last stretch before you travel rather than hoping for a taxi at the station",
-            "Or Roma Termini to Perugia, then about forty-five minutes by road",
-          ],
-        },
-        {
-          label: "By car",
-          lines: [
-            "Hiring a car is the easiest way to see Umbria. Collect it at the airport and keep it for the three days",
-            /* TBD — confirm the road numbers. */
-            "From Rome: the A1 north, then the E45 up the Tiber valley, about two hours",
-            "There is free parking at the Monastero",
-          ],
-        },
-        {
-          label: "If you are hiring a car",
-          lines: [
-            /* VERIFIED — Italy requires an International Driving Permit
-               alongside a foreign licence, issued in your own country. */
-            "Italy requires an International Driving Permit alongside your own licence. AAA issues them for about twenty dollars, and you have to get one before you leave, since you cannot arrange it once you are there",
-            /* Deliberately "check", not "you are covered": Italy is commonly
-               on the excluded list for credit-card rental cover, and getting
-               that wrong costs a guest real money at the desk. */
-            "Before you wave off the insurance at the desk, look for Italy by name in your card benefits guide. It is one of the countries cards often leave out",
-            "You will be leaving the car outside the old walls, which are closed to traffic",
-          ],
-        },
-        {
-          label: "Once you arrive",
-          /* VERIFIED — the ZTL and the Porta Orvietana lift are both real. */
-          lines: [
-            "The historic centre is a ZTL, a limited-traffic zone watched by cameras. Do not drive into it",
-            "Leave the car at Porta Orvietana and take the glass lift up into the old town",
-            "The Monastero sits just outside the walls, fifteen minutes on foot below Piazza del Popolo",
-          ],
-        },
-      ],
+      kicker: "Or the closest",
+      title: "Perugia",
+      body: "San Francesco (PEG) is about forty minutes away, with a handful of European routes.",
     },
     {
-      id: "accommodation",
-      title: "Where to stay",
-      /* Deliberately names nothing. See app/italy/accommodations. */
-      body: "We are arranging rooms for our guests, and what we can offer depends on who is coming, so please send your reply first. The details will be here once your RSVP is in.",
-      cta: { label: "Go to the RSVP", href: "/italy/rsvp" },
+      kicker: "Getting around",
+      title: "Hire a car",
+      body: "Collect it at the airport and keep it for the three days. Parking at the Monastero is free.",
+    },
+    /* VERIFIED Oct 2026 — the Schengen rule is issued within ten years
+       and valid three months past departure. */
+    {
+      kicker: "Check now",
+      title: "Passports",
+      body: "Issued within the last ten years, and valid three months after you leave Europe.",
     },
   ],
+  /* Border rules — the only thing on this site with an expiry date on it.
+     EES is live and settled. ETIAS is neither, and its start has moved
+     more than once, so that block is written as a warning rather than an
+     instruction and the section carries the date it was last checked.
+     Re-check travel-europe.europa.eu before the formal invitations go out;
+     if ETIAS is running by then, rewrite that block. */
+  border: {
+    id: "entering",
+    kicker: "01 · Before you book",
+    title: "The border",
+    intro: "Nothing here is hard, but the passport has a lead time, so read this part now.",
+    note: "Checked 10 November 2026. The rules are still changing, so travel-europe.europa.eu is the page to trust over this one.",
+    blocks: [
+      /* VERIFIED Nov 2026 — EES became fully operational 10 April 2026. */
+      {
+        label: "At the border",
+        body: "Since April 2026 the EU records arrivals electronically. There is nothing to apply for or pay. The first time, you will have a photo and fingerprints taken when you land. It takes a few minutes and lasts three years.",
+      },
+      /* VERIFIED Oct 2026 — you are enrolled at the first Schengen entry.
+         Ireland is outside EES and the UK is outside the EU. */
+      {
+        label: "If you are connecting",
+        body: "You are processed at the first European airport you land in, so leave extra time for the layover. Dublin and London are outside the zone, so through either you are processed in Italy instead.",
+      },
+      /* TBD — ETIAS. 2027 is the current expectation, which is our year.
+         Do not write this as settled until it is. */
+      {
+        label: "ETIAS, later",
+        body: "A separate online authorisation the EU plans to introduce: twenty euros, free under eighteen and over seventy, valid three years. It might start in 2027. There is nothing to do yet, and we will add details once there is a firm date.",
+      },
+    ],
+    /* The EU's own pages. The poster is the official campaign artwork,
+       hosted by Austria's interior ministry because the EU's materials
+       repository is not public. */
+    links: {
+      label: "From the EU",
+      items: [
+        { label: "The EU’s guide to the EES", href: "https://travel-europe.europa.eu/en/ees" },
+        { label: "Official questions and answers", href: "https://travel-europe.europa.eu/ees/faq" },
+        { label: "The poster you will see at the border", href: "https://www.bmi.gv.at/202/Fremdenpolizei_und_Grenzkontrolle/Entry_Exit_System/files/EN/EES_poster_A4_EN_print.pdf" },
+        { label: "Travel to Europe app", href: "https://travel-europe.europa.eu/ees/Travel-to-Europe-mobile-app" },
+      ],
+    },
+  },
+  arriving: {
+    id: "arriving",
+    kicker: "02 · Arriving",
+    title: "Three ways in",
+    ways: [
+      {
+        label: "By air",
+        body: "Rome Fiumicino, about two hours by car. Perugia, about forty minutes. Florence, about two and a quarter hours.",
+        aside: "A non-stop into Rome is worth paying for: connect in Europe and you clear the border at your first stop.",
+      },
+      /* TBD — re-confirm FCU service status, and the Orvieto frequency,
+         before this goes to guests. Termini to Orvieto VERIFIED Sept 2026. */
+      {
+        label: "By train",
+        body: "Roma Termini to Orvieto (an hour or so), then about forty minutes by car. Book that car before you travel.",
+        aside: "Or Termini to Perugia, then forty-five minutes by road. Todi’s own station is too unreliable to plan around.",
+      },
+      /* TBD — confirm the road numbers. */
+      {
+        label: "By car",
+        body: "From Rome, the A1 north and then the E45 up the Tiber valley, about two hours.",
+        aside: "The easiest way to see Umbria. Free parking at the Monastero.",
+      },
+    ],
+    drive: {
+      title: "Before you drive",
+      items: [
+        /* VERIFIED — Italy requires an IDP alongside a foreign licence,
+           issued in your own country. */
+        "Bring an International Driving Permit. AAA issues them for about $20, before you leave.",
+        /* Deliberately "check", not "you are covered": Italy is commonly on
+           the excluded list for credit-card rental cover. */
+        "Look for Italy by name in your card’s rental cover. It is often left out.",
+        /* VERIFIED — the ZTL and the Porta Orvietana lift are both real. */
+        "The old centre is a camera-watched ZTL. Do not drive into it.",
+        "Park at Porta Orvietana and ride the glass lift into town. The Monastero is fifteen minutes on foot below Piazza del Popolo.",
+      ],
+    },
+  },
+  /* Deliberately names nothing. See app/italy/accommodations. */
+  stay: {
+    id: "accommodation",
+    kicker: "03 · Where to stay",
+    title: "Rooms, after your reply",
+    body: "We are arranging rooms for our guests, and what we can offer depends on who is coming. Send your RSVP first and the details will appear here.",
+    cta: { label: "Go to the RSVP", href: "/italy/rsvp" },
+    closing: { prompt: "Anything we have missed?", cta: "Write to us" },
+  },
 };
 
 /*
@@ -727,7 +763,6 @@ export const ITALY_TRAVEL = {
  * from Travel so that page can stay the one a guest reads before booking.
  */
 export const ITALY_EXPLORE = {
-  eyebrow: "Around Todi",
   closing: {
     body: "For flights, trains, the car and the border, see the Travel page.",
     cta: { label: "Getting to Todi", href: "/italy/travel" },
@@ -893,7 +928,7 @@ export const ITALY_FAQ = {
     },
     {
       q: "Are you doing a gift list?",
-      a: "Your presence in Todi is the whole of it. There is a note on the RSVP page if you would like to mark the day, and no expectation whatsoever if you would not.",
+      a: "Your presence in Todi is the whole of it. We will share more closer to the date if you would like to mark the day, and there is no expectation whatsoever if you would not.",
     },
   ],
 };
@@ -906,8 +941,9 @@ export const ITALY_RSVP_PAGE = {
     "Find your invitation by name and answer for everyone in your party — and tell us anything the kitchen should know. If you are still deciding, tell us that too; we would rather hold a chair than lose one.",
   replyButton: "Reply online",
   emailLink: "Or write to us",
+  /* PARKED, not rendered: the registry gets its own page closer to the date
+     (docs/closer-to-the-date.md). Kept here as a starting point for it. */
   registryTitle: "Registry",
-  /* TBD — rewrite freely. */
   registryBody:
     "Your presence in Todi is the whole of it. If you would like to mark the day with something, we will share a small fund here closer to the date.",
   /* Links render only once a real URL is set. */

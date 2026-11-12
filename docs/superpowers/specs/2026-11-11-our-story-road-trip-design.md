@@ -168,7 +168,7 @@ Each heading names the matching part of the prototype's script.
 
 - Chapter text sits in the world as HTML inside SVG `foreignObject`: small-caps kicker, Pinyon heading (54 world units), Cormorant body (19.5 units).
 - Text slots, in world units (x, y, width): Boston (690, Y0−100, 470); long distance (180, Y0−550, 380); Italy (690, Y0−1010, 345); Chicago (180, Y0−1470, 380); Bali & Spain (690, Y0−1940, 345); Thanksgiving (180, Y0−2400, 380); crossing (690, Y0−2855, 345); Umbria (176, Y0−3306, 392); title (30, Y0+196, 520); closing (160, 70, 880).
-- The current stop's text is at full opacity and the others at 72%.
+- **Line by line** (the couple's pick, 2026-11-12): a stop's words stay hidden until the car is 0.4 scroll-weight units short of that stop (`TEXT_LEAD`, about half a screen of scrolling) and their whole block is on screen, then arrive in order (kicker at 0.1 s, title at 0.35 s, text at 0.7 s, each fading and rising 14 px), and go when the car heads for the next stop. The title under the merge always shows. Reduced motion gets a plain 0.3 s fade.
 - **Narrow screens:** body text and kickers are hidden in the world, and a paper card docked above the odometer shows the current stop's kicker, heading and body, fading between stops.
 - **Copy fit:** the slots were sized for the placeholder copy. If the final copy is much longer, the text could hit a drawing. The builder must check fit with the real copy (§12). Fixing a fit problem means asking the couple to trim, or nudging a slot by a few units. It never means re-laying out a stop.
 

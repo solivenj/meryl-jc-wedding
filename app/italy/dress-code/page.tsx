@@ -5,7 +5,7 @@ import { PaletteRow } from "@/components/italy/PaletteRow";
 import { PhotoPanel } from "@/components/italy/PhotoPanel";
 import { PhotoStrip } from "@/components/italy/PhotoStrip";
 import { PinterestBoard } from "@/components/italy/PinterestBoard";
-import { Eyebrow, Label, Prose, ScriptTitle, SmallCaps } from "@/components/italy/Type";
+import { Label, Prose, ScriptTitle, SmallCaps } from "@/components/italy/Type";
 import { ITALY_DRESS, type DressSection } from "@/lib/italy-content";
 
 export const metadata: Metadata = { title: "Dress Code" };
@@ -39,28 +39,19 @@ function CodeSection({ section }: { section: DressSection }) {
 }
 
 /*
- * Tones down the page, with the opening title on cream so it does not run
- * into the deep header, and the closing section on cream so it does not run
- * into the deep footer.
- *
- * Ten bands between those two ends is an even count, so strict alternation
- * cannot land cream at both. The one repeat is deliberate and placed where a
- * reader expects it least to matter: a code's Pinterest board takes the same
- * ground as the gentlemen's section above it, because the two read as one
- * thought — here is the attire, here is more like it. Everything else
- * alternates, and it still alternates if a code gains or loses a board.
+ * Tones down the page: the opening title is cream so it does not run into the
+ * deep header, and every band after it simply alternates in render order,
+ * boards included. With one board on Wednesday that is nine bands, so it lands
+ * cream on the closing section, clear of the deep footer. If a board is added
+ * or removed the parity flips; check the last band before the footer.
  */
-function codeTones(i: number) {
-  const opensCream = i % 2 === 0;
-  return {
-    hero: opensCream ? ("cream" as const) : ("band" as const),
-    ladies: opensCream ? ("band" as const) : ("cream" as const),
-    /* The board below inherits this one. */
-    gentlemen: opensCream ? ("cream" as const) : ("band" as const),
-  };
+function alternator() {
+  let n = 0;
+  return () => (n++ % 2 === 0 ? ("band" as const) : ("cream" as const));
 }
 
 export default function DressCodePage() {
+  const next = alternator();
   return (
     <>
       {/* Above the title, so the page names both codes before anything is
@@ -68,21 +59,17 @@ export default function DressCodePage() {
           it carries its own hairline. */}
       <DayJump items={ITALY_DRESS.codes.map((c) => ({ id: c.key, label: c.short }))} />
 
-      <Band tone="cream" width="prose" className="gap-5">
+      {/* No eyebrow: the title opens the page, so the top padding is about
+          half the usual and the bottom keeps the normal Band padding. */}
+      <Band tone="cream" width="prose" pad="none" className="gap-5 pt-[clamp(28px,4vw,48px)] pb-[clamp(56px,8vw,96px)]">
         <h1 className="sr-only">Dress code</h1>
-        <Eyebrow>{ITALY_DRESS.eyebrow}</Eyebrow>
         <ScriptTitle>{ITALY_DRESS.title}</ScriptTitle>
         <Prose>{ITALY_DRESS.intro}</Prose>
       </Band>
 
-      <Band tone="band" width="prose" className="gap-5">
-        <Label>{ITALY_DRESS.explainer.heading}</Label>
-        <Prose>{ITALY_DRESS.explainer.body}</Prose>
-      </Band>
-
-      {ITALY_DRESS.codes.map((code, i) => (
+      {ITALY_DRESS.codes.map((code) => (
         <section key={code.key}>
-          <Band id={code.key} tone={codeTones(i).hero} width="wide" className="gap-5">
+          <Band id={code.key} tone={next()} width="wide" className="gap-5">
             <SmallCaps>{code.day}</SmallCaps>
             <ScriptTitle as="h2">{code.word}</ScriptTitle>
             <p className="font-caps text-[calc(11px*var(--fs-scale))] uppercase tracking-[0.24em] text-ink-soft">
@@ -97,18 +84,18 @@ export default function DressCodePage() {
             <Prose className="mt-6">{code.intro}</Prose>
           </Band>
 
-          <Band tone={codeTones(i).ladies} width="wide">
+          <Band tone={next()} width="wide">
             <CodeSection section={code.ladies} />
           </Band>
 
-          <Band tone={codeTones(i).gentlemen} width="wide">
+          <Band tone={next()} width="wide">
             <CodeSection section={code.gentlemen} />
           </Band>
 
           {/* Meryl's board, embedded live rather than rehosted — it is the one
               source of attire inspiration that stays current on its own. */}
           {code.pinterestUrl && (
-            <Band tone={codeTones(i).gentlemen} width="prose" className="gap-6">
+            <Band tone={next()} width="prose" className="gap-6">
               <Label>More like this</Label>
               <PinterestBoard url={code.pinterestUrl} className="h-[clamp(300px,34vw,420px)]" />
             </Band>
