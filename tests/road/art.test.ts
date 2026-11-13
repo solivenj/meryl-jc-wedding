@@ -8,7 +8,9 @@ test("scenery has every stop's landmarks", () => {
     "boston_sign.webp",
     "NEU",
     "pst_sign.webp",
-    "POSITANO",
+    "florence.webp",
+    "tuscany.webp",
+    "chicago.webp",
     "ATLANTIC",
     "ITALIA",
     "TODI  3",
@@ -24,7 +26,7 @@ test("scenery has every stop's landmarks", () => {
 
 test("fx has every animated element", () => {
   const f = fxMarkup();
-  for (const id of ["heart", "ring", "sparks", "keys", "keysTxt", "stIt22", "stBali", "stSpain", "stIt27"]) {
+  for (const id of ["heart", "ring", "sparks", "keys", "keysTxt", "stIt22", "stMini0", "stMini1", "stMini2", "stMini3", "stMini4", "stIt27"]) {
     assert.ok(f.includes(`id="${id}"`), `missing #${id}`);
   }
 });

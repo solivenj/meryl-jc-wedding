@@ -9,6 +9,7 @@
 import {
   H,
   PIECES,
+  SCALE_W,
   SPURS,
   TOTAL_W,
   W,
@@ -22,6 +23,7 @@ import {
   roadPaths,
   textChapter,
 } from "./route.ts";
+import { MINI_STOPS, miniStopX } from "./art/miniStops.ts";
 import type { ITALY_STORY } from "@/lib/italy-content";
 
 type Story = typeof ITALY_STORY;
@@ -201,13 +203,16 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
 
   /* Stop text runs on its own clock: it comes in TEXT_LEAD ahead of the
      stop (route.ts), but only once its whole block is on screen, so a reader
-     never gets words that are already cut off. */
+     never gets words that are already cut off. Once in, a stop's words stay
+     as the car drives on; they only go if the reader scrolls back above
+     that stop, so they can come in again on the way down. */
   const slots = wts.map((w) => ({ w, chs: (w.dataset.ch || "").split(",").map(Number), y: Number(w.parentElement!.getAttribute("y")) }));
   let curText = -2;
+  let shownText = -1;
   const setText = (c: number) => {
     if (c === curText) return;
     curText = c;
-    slots.forEach((s) => s.w.classList.toggle("on", s.chs.includes(c)));
+    slots.forEach((s) => s.w.classList.toggle("on", Math.min(...s.chs) <= c));
   };
   let curCh = -2;
   let curUnit = "MI";
@@ -265,8 +270,8 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
   const I = {
     long: pieceIndex("long"),
     fly1: pieceIndex("fly1"),
-    bali: pieceIndex("bali"),
-    spain: pieceIndex("spain"),
+    leg5a: pieceIndex("leg5a"),
+    leg5b: pieceIndex("leg5b"),
     ring: pieceIndex("ring"),
     landed: pieceIndex("landed"),
     park: pieceIndex("park"),
@@ -360,7 +365,9 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
 
     /* merge heart */
     {
-      const hs = (s - PIECES[0].w * 0.82) / (PIECES[0].w * 0.18 + PIECES[1].w * 0.4);
+      /* Timed against the whole of leg 1's road weight (1.8), not PIECES[1],
+         which now ends early at the Boston pause. */
+      const hs = (s - PIECES[0].w * 0.82) / (PIECES[0].w * 0.18 + 1.8 * SCALE_W * 0.4);
       if (hs > 0 && hs < 1) {
         heart.setAttribute("opacity", String(f1(Math.sin(hs * Math.PI))));
         heart.setAttribute("transform", `translate(${f1(FORK.x)} ${f1(FORK.y - 56 - hs * 40)}) scale(${f1(1 + hs * 0.6)})`);
@@ -386,8 +393,16 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
 
     /* passport stamps */
     popStamp("stIt22", i === I.fly1 ? (t - 0.85) / 0.15 : i > I.fly1 ? 1 : 0);
-    popStamp("stBali", i === I.bali ? (t - 0.2) / 0.2 : i > I.bali ? 1 : 0);
-    popStamp("stSpain", i === I.spain ? (t - 0.2) / 0.2 : i > I.spain ? 1 : 0);
+    /* The five mini stops on leg 5: each stamp lands, and its polaroid and
+       name fade in, as the car reaches the stop, over the last 40 units of
+       road before it. */
+    MINI_STOPS.forEach((_, k) => {
+      const on5 = i === I.leg5a || i === I.leg5b;
+      const sx = miniStopX(k);
+      const kk = i > I.leg5b ? 1 : on5 ? (x - (sx - 40)) / 40 : 0;
+      popStamp(`stMini${k}`, kk);
+      fx(`pMini${k}`).setAttribute("opacity", String(f1(clamp(kk, 0, 1))));
+    });
     popStamp("stIt27", i === I.landed ? t / 0.3 : i > I.landed ? 1 : 0);
 
     /* Thanksgiving: the ring rises, both families jump up */
@@ -456,14 +471,21 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     world.style.transform = `translate3d(${ox.toFixed(1)}px, ${oy.toFixed(1)}px, 0)`;
 
     {
-      let tc = textChapter(p);
+      const raw = textChapter(p);
+      /* Scrolled back above a stop: let its words go. */
+      if (raw < shownText) shownText = raw;
+      let tc = raw;
       const slot = slots.find((s) => s.chs.includes(tc));
-      if (slot) {
+      if (slot && tc > shownText) {
         const top = oy + slot.y * S;
         const bottom = top + slot.w.offsetHeight * S;
-        if (top < 0 || bottom > SH) tc = -1;
+        /* A new stop's words wait until their whole block is on screen. Only
+           a stop not yet shown is held back; one already in stays even as it
+           scrolls off the top. */
+        if (top < 0 || bottom > SH) tc = Math.min(...slot.chs) - 1;
       }
-      setText(tc);
+      shownText = Math.max(shownText, tc);
+      setText(shownText);
     }
 
     /* light: late afternoon as you near Todi */

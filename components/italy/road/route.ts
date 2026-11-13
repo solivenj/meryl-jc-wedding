@@ -66,15 +66,26 @@ export type Piece = {
    the stretch of leg 1 before it is covered by the spurs. */
 export const FORK = legPt(1, 0.12);
 
+/* Where the car stops for a beat: beside the Boston sign (art/boston.ts puts
+   it at x ≈ 358 on leg 1) and halfway along Chicago's leg. Each leg keeps
+   its prototype road weight, split either side of the pause. */
+export const BOSTON_STOP = legPt(1, 0.225);
+export const CHICAGO_STOP = legPt(4, 0.5);
+
 /* Where the flights leave and land: Italy 2022 (leg 3) and the crossing (leg 7). */
-export const fA3 = legPt(3, 0.13);
-export const fB3 = legPt(3, 0.33);
+/* Italy 2022 takes off right as the hairpin bend ends and flies a
+   little further than the prototype (.01 to .25 of leg 3), leaving the
+   rest of the leg for the Florence, Tuscany and Amalfi drawings. */
+export const fA3 = legPt(3, 0.01);
+export const fB3 = legPt(3, 0.25);
 export const fA7 = legPt(7, 0.22);
 export const fB7 = legPt(7, 0.78);
 
 const RAW: Piece[] = [
   { kind: "spur", w: 1.0, ch: -1 },
-  { kind: "road", from: FORK, seg: lineSeg(legEnd(1)), w: 1.8, ch: 0 },
+  { kind: "road", from: FORK, seg: lineSeg(BOSTON_STOP), w: 0.6, ch: 0, ease: "out" },
+  { kind: "pause", w: 0.8, ch: 0, tag: "boston" },
+  { kind: "road", from: BOSTON_STOP, seg: lineSeg(legEnd(1)), w: 1.2, ch: 0, ease: "in" },
   { kind: "road", from: legEnd(1), seg: hairpinSeg(1), w: 0.5, ch: 0 },
   { kind: "road", from: legStart(2), seg: lineSeg(legEnd(2)), w: 3.0, ch: 1, tag: "long" },
   { kind: "road", from: legEnd(2), seg: hairpinSeg(2), w: 0.5, ch: 1 },
@@ -82,13 +93,14 @@ const RAW: Piece[] = [
   { kind: "flight", from: fA3, seg: arcSeg(fA3, fB3, 120), w: 1.0, ch: 2, ease: "io", tag: "fly1" },
   { kind: "road", from: fB3, seg: lineSeg(legEnd(3)), w: 1.9, ch: 2, tag: "italy22", car: "it" },
   { kind: "flight", from: legEnd(3), seg: hairpinSeg(3), w: 1.0, ch: 3, ease: "io", tag: "flyhome" },
-  { kind: "road", from: legStart(4), seg: lineSeg(legEnd(4)), w: 1.9, ch: 3 },
+  { kind: "road", from: legStart(4), seg: lineSeg(CHICAGO_STOP), w: 0.95, ch: 3, ease: "out" },
+  { kind: "pause", w: 0.8, ch: 3, tag: "chicago" },
+  { kind: "road", from: CHICAGO_STOP, seg: lineSeg(legEnd(4)), w: 0.95, ch: 3, ease: "in" },
   { kind: "road", from: legEnd(4), seg: hairpinSeg(4), w: 0.5, ch: 3 },
-  { kind: "road", from: legStart(5), seg: lineSeg(legPt(5, 0.25)), w: 0.6, ch: 4, ease: "out" },
-  { kind: "pause", w: 0.8, ch: 4, tag: "bali" },
-  { kind: "road", from: legPt(5, 0.25), seg: lineSeg(legPt(5, 0.75)), w: 1.0, ch: 5, ease: "io" },
-  { kind: "pause", w: 0.8, ch: 5, tag: "spain" },
-  { kind: "road", from: legPt(5, 0.75), seg: lineSeg(legEnd(5)), w: 0.4, ch: 5, ease: "in" },
+  /* Leg 5: the five mini stops (art/miniStops.ts). The car drives straight
+     through, no pauses; the road keeps the prototype leg's weight (2.0). */
+  { kind: "road", from: legStart(5), seg: lineSeg(legPt(5, 0.5)), w: 1.0, ch: 4, tag: "leg5a" },
+  { kind: "road", from: legPt(5, 0.5), seg: lineSeg(legEnd(5)), w: 1.0, ch: 5, tag: "leg5b" },
   { kind: "road", from: legEnd(5), seg: hairpinSeg(5), w: 0.5, ch: 5 },
   { kind: "road", from: legStart(6), seg: lineSeg(legPt(6, 0.52)), w: 1.0, ch: 6, ease: "out" },
   { kind: "pause", w: 1.5, ch: 6, tag: "ring" },

@@ -5,7 +5,7 @@ import { bostonArt } from "./boston.ts";
 import { distanceArt, longArcD } from "./distance.ts";
 import { italy22Art } from "./italy22.ts";
 import { chicagoArt } from "./chicago.ts";
-import { halfStopsArt } from "./halfStops.ts";
+import { miniStopsArt } from "./miniStops.ts";
 import { thanksgivingArt } from "./thanksgiving.ts";
 import { crossingArt } from "./crossing.ts";
 import { umbriaArt } from "./umbria.ts";
@@ -14,7 +14,7 @@ import { todiArt } from "./todi.ts";
 export { defsMarkup } from "./defs.ts";
 export { longArcD };
 
-const SCENES = [backdropArt, prologueArt, bostonArt, distanceArt, italy22Art, chicagoArt, halfStopsArt, thanksgivingArt, crossingArt, umbriaArt, todiArt];
+const SCENES = [backdropArt, prologueArt, bostonArt, distanceArt, italy22Art, chicagoArt, miniStopsArt, thanksgivingArt, crossingArt, umbriaArt, todiArt];
 
 let cache: { backdrop: string; scenery: string; fx: string } | null = null;
 const all = () => {

@@ -25,17 +25,19 @@ const endOf = (seg: string) => {
   return { x: n[n.length - 2], y: n[n.length - 1] };
 };
 
-test("PIECES has 28 pieces and ends with park", () => {
-  assert.equal(PIECES.length, 28);
+test("PIECES has 29 pieces and ends with park", () => {
+  assert.equal(PIECES.length, 29);
   assert.equal(PIECES[0].kind, "spur");
   assert.equal(PIECES[PIECES.length - 1].tag, "park");
 });
 
 test("weights are the prototype's", () => {
+  // The prototype's 28.8, plus the Boston and Chicago pauses (0.8 each),
+  // less the Bali and Spain pauses (leg 5 now drives straight through).
   assert.ok(Math.abs(TOTAL_W - 28.8 * 0.72) < 1e-9);
   assert.equal(SCALE_W, 0.72);
   assert.equal(PIECES[pieceIndex("long")].w, 3.0 * 0.72);
-  assert.equal(CUM.length, 29);
+  assert.equal(CUM.length, 30);
 });
 
 test("hairpins join legs", () => {
@@ -57,7 +59,7 @@ test("pieces are continuous", () => {
 
 test("locate bounds", () => {
   assert.deepEqual(locate(0), { i: 0, t: 0 });
-  assert.deepEqual(locate(1), { i: 27, t: 1 });
+  assert.deepEqual(locate(1), { i: 28, t: 1 });
   assert.deepEqual(locate(-1), locate(0));
   assert.deepEqual(locate(2), locate(1));
 });

@@ -375,11 +375,10 @@ export const ITALY_STORY: {
     },
     {
       id: "chicago",
-      kicker: "Chicago",
-      heading: "Same city, finally",
+      kicker: "Chicago · 2022",
+      heading: "Same City, Finally",
       body:
-        "Meryl moved to Chicago in 2022 to start medical school. John followed in 2023. Same " +
-        "city, same time zone, finally.",
+        "Meeting in the middle and making Chicago our home marked the beginning of our most grounded chapter yet. With Meryl tackling the challenges of medical school, John’s unwavering support became an anchor in our lives, proving that our strongest moments were the ones we built together.",
       chip: { text: "Chicago", style: "" },
     },
     {
@@ -401,10 +400,9 @@ export const ITALY_STORY: {
     {
       id: "thanksgiving",
       kicker: "Thanksgiving · 2025",
-      heading: "The question",
+      heading: "The Proposal",
       body:
-        "Thanksgiving 2025, in California, with both of our families at the table. Everyone we " +
-        "would have called afterwards was already in the room.",
+        "Surrounded by the warmth of both of our families, John decided to get down on one knee. Now, this time around saying yes was the easiest decision. In that circle of love, we promised forever and turned this holiday into one we would never forget.c",
       chip: { text: "California", style: "" },
     },
     {
@@ -426,9 +424,9 @@ export const ITALY_STORY: {
   ],
   /* One shared text block for the two half stops. */
   halfStops: {
-    kicker: "Two half stops",
-    heading: "Bali & Spain",
-    body: "Bali in 2024, Spain in 2025. One line about each goes here.",
+    kicker: "All Around the World",
+    heading: "Some of our favorite trips together",
+    body: "",
   },
   closing: {
     kicker: "Benvenuti a Todi",

@@ -65,7 +65,8 @@
 .road-trip .wt { font-family: var(--f-body); color: var(--ink); }
 /* Line by line (the couple's pick, 2026-11-12): a stop's words stay hidden
    until the car reaches that stop, arrive kicker, then title, then text, and
-   go when the car heads for the next. The title under the merge always shows. */
+   stay as the car drives on (engine.ts setText). The title under the merge
+   always shows. */
 .road-trip .wt > * { opacity: 0; transform: translateY(14px); transition: opacity .4s ease, transform .4s ease; }
 .road-trip .wt.on > *, .road-trip .wt.title > * { opacity: 1; transform: none; }
 .road-trip .wt.on > * { transition: opacity .7s ease, transform .8s cubic-bezier(.16,1,.3,1); }

@@ -165,8 +165,12 @@ export function RoadTrip() {
                 <h2>{halfStops.heading}</h2>
                 <p className="b">{halfStops.body}</p>
               </Slot>
-              <Slot x={180} y={Y0 - 2400} w={380} h={350} ch="6"><Block i={6} /></Slot>
-              <Slot x={690} y={Y0 - 2855} w={345} h={330} ch="7"><Block i={7} /></Slot>
+              {/* Thanksgiving sits top right, above its road (leg 6), clear of the
+                  palms, leaving the room below leg 6 to the mini stops. */}
+              <Slot x={690} y={Y0 - 2760} w={380} h={350} ch="6"><Block i={6} /></Slot>
+              {/* The crossing sits top left, above its road (leg 7), clear of the
+                  plane: Thanksgiving now takes its old spot. */}
+              <Slot x={130} y={Y0 - 3050} w={330} h={330} ch="7"><Block i={7} /></Slot>
               <Slot x={176} y={Y0 - 3306} w={392} h={330} ch="8"><Block i={8} /></Slot>
               <Slot x={140} y={Y0 + 196} w={360} h={270} ch="" className="title on">
                 <p className="b">{title.tagline}</p>
