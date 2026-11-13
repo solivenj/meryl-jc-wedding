@@ -10,11 +10,13 @@ import {
   locate,
   chapterStart,
   odometerReading,
+  TRIP_MILES,
   pieceIndex,
   roadPaths,
   TEXT_LEAD,
   textChapter,
   SPURS,
+  FORK,
 } from "../../components/italy/road/route.ts";
 
 /* The last two numbers in an SVG segment are its end point. */
@@ -23,17 +25,19 @@ const endOf = (seg: string) => {
   return { x: n[n.length - 2], y: n[n.length - 1] };
 };
 
-test("PIECES has 28 pieces and ends with park", () => {
-  assert.equal(PIECES.length, 28);
+test("PIECES has 29 pieces and ends with park", () => {
+  assert.equal(PIECES.length, 29);
   assert.equal(PIECES[0].kind, "spur");
   assert.equal(PIECES[PIECES.length - 1].tag, "park");
 });
 
 test("weights are the prototype's", () => {
+  // The prototype's 28.8, plus the Boston and Chicago pauses (0.8 each),
+  // less the Bali and Spain pauses (leg 5 now drives straight through).
   assert.ok(Math.abs(TOTAL_W - 28.8 * 0.72) < 1e-9);
   assert.equal(SCALE_W, 0.72);
   assert.equal(PIECES[pieceIndex("long")].w, 3.0 * 0.72);
-  assert.equal(CUM.length, 29);
+  assert.equal(CUM.length, 30);
 });
 
 test("hairpins join legs", () => {
@@ -55,7 +59,7 @@ test("pieces are continuous", () => {
 
 test("locate bounds", () => {
   assert.deepEqual(locate(0), { i: 0, t: 0 });
-  assert.deepEqual(locate(1), { i: 27, t: 1 });
+  assert.deepEqual(locate(1), { i: 28, t: 1 });
   assert.deepEqual(locate(-1), locate(0));
   assert.deepEqual(locate(2), locate(1));
 });
@@ -78,7 +82,7 @@ test("chapter starts", () => {
 test("road paths", () => {
   const r = roadPaths();
   // one continuous path for the reveal mask, starting where leg 1 starts
-  assert.ok(r.full.startsWith(`M ${legStart(1).x} ${legStart(1).y} `));
+  assert.ok(r.full.startsWith(`M ${FORK.x} ${FORK.y} `));
   assert.equal((r.full.match(/M /g) || []).length, 1);
   // the drivable road skips the three flights: a move-to for each
   assert.equal((r.road.match(/M /g) || []).length, 1 + 3);
@@ -98,12 +102,10 @@ test("stop text comes in ahead of the stop", () => {
   assert.equal(textChapter(1), 9);
 });
 
-test("odometer", () => {
-  assert.deepEqual(odometerReading({ i: pieceIndex("long"), t: 0.5, roadUnits: 0 }), { value: 1050, unit: "MI" });
-  assert.equal(odometerReading({ i: pieceIndex("italy22"), t: 0.5, roadUnits: 100 }).unit, "KM");
-  assert.equal(odometerReading({ i: pieceIndex("flyhome"), t: 0.5, roadUnits: 100 }).unit, "MI");
-  assert.equal(odometerReading({ i: pieceIndex("landed"), t: 0.5, roadUnits: 100 }).unit, "KM");
-  const park = odometerReading({ i: pieceIndex("park"), t: 1, roadUnits: 1000 });
-  assert.ok(Math.abs(park.value - (1000 * 0.36 + 2100) * 1.609) < 1e-9);
-  assert.equal(park.unit, "KM");
+test("odometer runs 0 to Chicago–Todi miles", () => {
+  assert.deepEqual(odometerReading({ roadFraction: 0 }), { value: 0, unit: "MI" });
+  assert.deepEqual(odometerReading({ roadFraction: 0.5 }), { value: TRIP_MILES / 2, unit: "MI" });
+  assert.deepEqual(odometerReading({ roadFraction: 1 }), { value: TRIP_MILES, unit: "MI" });
+  assert.deepEqual(odometerReading({ roadFraction: 1.2 }), { value: TRIP_MILES, unit: "MI" });
+  assert.equal(TRIP_MILES, 4768);
 });

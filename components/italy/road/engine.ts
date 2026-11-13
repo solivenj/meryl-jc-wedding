@@ -9,11 +9,12 @@
 import {
   H,
   PIECES,
+  SCALE_W,
   SPURS,
   TOTAL_W,
   W,
+  FORK,
   XL,
-  Y0,
   chapterStart,
   ease,
   locate,
@@ -22,6 +23,7 @@ import {
   roadPaths,
   textChapter,
 } from "./route.ts";
+import { MINI_STOPS, miniStopX } from "./art/miniStops.ts";
 import type { ITALY_STORY } from "@/lib/italy-content";
 
 type Story = typeof ITALY_STORY;
@@ -201,27 +203,38 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
 
   /* Stop text runs on its own clock: it comes in TEXT_LEAD ahead of the
      stop (route.ts), but only once its whole block is on screen, so a reader
-     never gets words that are already cut off. */
+     never gets words that are already cut off. Once in, a stop's words stay
+     as the car drives on; they only go if the reader scrolls back above
+     that stop, so they can come in again on the way down. */
   const slots = wts.map((w) => ({ w, chs: (w.dataset.ch || "").split(",").map(Number), y: Number(w.parentElement!.getAttribute("y")) }));
   let curText = -2;
+  let shownText = -1;
   const setText = (c: number) => {
     if (c === curText) return;
     curText = c;
-    slots.forEach((s) => s.w.classList.toggle("on", s.chs.includes(c)));
+    slots.forEach((s) => s.w.classList.toggle("on", Math.min(...s.chs) <= c));
   };
   let curCh = -2;
   let curUnit = "MI";
   let swapTimer = 0;
+  let flashTimer = 0;
   const setChapter = (c: number) => {
     if (c === curCh) return;
     curCh = c;
     const meta: { chip: { text: string; style: string } } = c < 0 ? { chip: { text: "NJ · CA", style: "" } } : CH[c];
     chip.textContent = meta.chip.text;
     chip.className = "chip " + (meta.chip.style || "");
+    /* A stop that is not a place (the long-distance years) has no sign. */
+    chip.hidden = !meta.chip.text;
     stopBtns.forEach((b, i) => {
       b.classList.toggle("on", i === c);
       b.classList.toggle("done", i < c);
+      b.classList.toggle("flash", i === c);
     });
+    /* The new stop's name shows for a moment, then tucks away; hovering or
+       focusing a dot brings any name back. */
+    window.clearTimeout(flashTimer);
+    flashTimer = window.setTimeout(() => stopBtns.forEach((b) => b.classList.remove("flash")), 1200);
     if (c >= 0) {
       card.classList.add("swap");
       window.clearTimeout(swapTimer);
@@ -257,15 +270,16 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
   const I = {
     long: pieceIndex("long"),
     fly1: pieceIndex("fly1"),
-    bali: pieceIndex("bali"),
-    spain: pieceIndex("spain"),
+    leg5a: pieceIndex("leg5a"),
+    leg5b: pieceIndex("leg5b"),
     ring: pieceIndex("ring"),
     landed: pieceIndex("landed"),
     park: pieceIndex("park"),
   };
   const flights = PIECES.map((p, i) => (p.kind === "flight" ? i : -1)).filter((i) => i >= 0);
+  /* Road length with the flights taken out: the odometer's full scale. */
+  const ROAD_TOTAL = TOTAL - flights.reduce((sum, fi) => sum + M[fi]!.len, 0);
   const famHeads = [...root.querySelectorAll<SVGGElement>("#family .fam")];
-  const tally = [...$<SVGGElement>("tally").children] as SVGElement[];
   const fx = (id: string) => $<SVGElement>(id);
   const heart = fx("heart");
   const ring = fx("ring");
@@ -303,7 +317,7 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
       placeCar(carB, b.x, b.y, b2.x - b.x || -1, b2.y - b.y, te * spurLen[1], t > 0 && t < 1, 0.9);
       carA.g.setAttribute("opacity", "1");
       carB.g.setAttribute("opacity", "1");
-      x = lerp(290, XL, easeIO(t));
+      x = lerp(290 + FORK.x - XL, FORK.x, easeIO(t));
       y = (a.y + b.y) / 2;
       vehicle = "none";
     } else {
@@ -351,21 +365,21 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
 
     /* merge heart */
     {
-      const hs = (s - PIECES[0].w * 0.82) / (PIECES[0].w * 0.18 + PIECES[1].w * 0.4);
+      /* Timed against the whole of leg 1's road weight (1.8), not PIECES[1],
+         which now ends early at the Boston pause. */
+      const hs = (s - PIECES[0].w * 0.82) / (PIECES[0].w * 0.18 + 1.8 * SCALE_W * 0.4);
       if (hs > 0 && hs < 1) {
         heart.setAttribute("opacity", String(f1(Math.sin(hs * Math.PI))));
-        heart.setAttribute("transform", `translate(${XL} ${f1(Y0 - 56 - hs * 40)}) scale(${f1(1 + hs * 0.6)})`);
+        heart.setAttribute("transform", `translate(${f1(FORK.x)} ${f1(FORK.y - 56 - hs * 40)}) scale(${f1(1 + hs * 0.6)})`);
       } else heart.setAttribute("opacity", "0");
     }
 
-    /* long-distance flights + tally */
+    /* long-distance flights (the post-it tally that counted them is gone) */
     {
-      let passes = 0;
       if (i === I.long) {
         const u = t * 5;
         const pass = Math.min(4, Math.floor(u));
         const fr = u - pass;
-        passes = Math.floor(u + 1e-6);
         const fwd = pass % 2 === 0;
         const q = easeIO(fwd ? fr : 1 - fr);
         const a = longArc.getPointAtLength(q * longArcLen);
@@ -374,15 +388,21 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
         placePlane(longPlane, a.x, a.y + 14, (b.x - a.x) * (fwd ? 1 : -1) || (fwd ? -1 : 1), (b.y - a.y) * (fwd ? 1 : -1));
       } else {
         longPlane.setAttribute("opacity", "0");
-        passes = i > I.long ? 5 : 0;
       }
-      for (let k = 0; k < 5; k++) tally[k].setAttribute("opacity", k < passes ? "1" : "0");
     }
 
     /* passport stamps */
     popStamp("stIt22", i === I.fly1 ? (t - 0.85) / 0.15 : i > I.fly1 ? 1 : 0);
-    popStamp("stBali", i === I.bali ? (t - 0.2) / 0.2 : i > I.bali ? 1 : 0);
-    popStamp("stSpain", i === I.spain ? (t - 0.2) / 0.2 : i > I.spain ? 1 : 0);
+    /* The five mini stops on leg 5: each stamp lands, and its polaroid and
+       name fade in, as the car reaches the stop, over the last 40 units of
+       road before it. */
+    MINI_STOPS.forEach((_, k) => {
+      const on5 = i === I.leg5a || i === I.leg5b;
+      const sx = miniStopX(k);
+      const kk = i > I.leg5b ? 1 : on5 ? (x - (sx - 40)) / 40 : 0;
+      popStamp(`stMini${k}`, kk);
+      fx(`pMini${k}`).setAttribute("opacity", String(f1(clamp(kk, 0, 1))));
+    });
     popStamp("stIt27", i === I.landed ? t / 0.3 : i > I.landed ? 1 : 0);
 
     /* Thanksgiving: the ring rises, both families jump up */
@@ -424,7 +444,7 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
         if (i > fi) flown += M[fi]!.len;
         else if (i === fi) flown += d - M[fi]!.d0;
       });
-      const reading = odometerReading({ i, t, roadUnits: Math.max(0, d - flown) });
+      const reading = odometerReading({ roadFraction: Math.max(0, d - flown) / ROAD_TOTAL });
       setOdo(reading.value);
       if (reading.unit !== curUnit) {
         curUnit = reading.unit;
@@ -451,14 +471,21 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     world.style.transform = `translate3d(${ox.toFixed(1)}px, ${oy.toFixed(1)}px, 0)`;
 
     {
-      let tc = textChapter(p);
+      const raw = textChapter(p);
+      /* Scrolled back above a stop: let its words go. */
+      if (raw < shownText) shownText = raw;
+      let tc = raw;
       const slot = slots.find((s) => s.chs.includes(tc));
-      if (slot) {
+      if (slot && tc > shownText) {
         const top = oy + slot.y * S;
         const bottom = top + slot.w.offsetHeight * S;
-        if (top < 0 || bottom > SH) tc = -1;
+        /* A new stop's words wait until their whole block is on screen. Only
+           a stop not yet shown is held back; one already in stays even as it
+           scrolls off the top. */
+        if (top < 0 || bottom > SH) tc = Math.min(...slot.chs) - 1;
       }
-      setText(tc);
+      shownText = Math.max(shownText, tc);
+      setText(shownText);
     }
 
     /* light: late afternoon as you near Todi */
@@ -475,6 +502,7 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
        clean instead of stacking a second set of cars and digits. */
     destroy() {
       window.clearTimeout(swapTimer);
+      window.clearTimeout(flashTimer);
       cleanups.forEach((f) => f());
       for (const g of [measure, V, digits, stopsUl]) g.replaceChildren();
     },

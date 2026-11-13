@@ -172,8 +172,11 @@ function Art({ piece }: { piece: CollagePiece }) {
 export function DetailCollage() {
   return (
     <div className="collage-stage">
+      {/* The whole wide arrangement sits 5% right of centre; the tall
+          (phone) pack stays centred. Moving the group as one keeps every
+          overlap, and the ink clip, exactly as laid out. */}
       <div
-        className="collage-inner"
+        className="collage-inner @min-[721px]:translate-x-[5%]"
         style={
           {
             "--collage-ratio": ITALY_COLLAGE.ratio,

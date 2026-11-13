@@ -65,7 +65,8 @@
 .road-trip .wt { font-family: var(--f-body); color: var(--ink); }
 /* Line by line (the couple's pick, 2026-11-12): a stop's words stay hidden
    until the car reaches that stop, arrive kicker, then title, then text, and
-   go when the car heads for the next. The title under the merge always shows. */
+   stay as the car drives on (engine.ts setText). The title under the merge
+   always shows. */
 .road-trip .wt > * { opacity: 0; transform: translateY(14px); transition: opacity .4s ease, transform .4s ease; }
 .road-trip .wt.on > *, .road-trip .wt.title > * { opacity: 1; transform: none; }
 .road-trip .wt.on > * { transition: opacity .7s ease, transform .8s cubic-bezier(.16,1,.3,1); }
@@ -73,11 +74,11 @@
 .road-trip .wt.on > :nth-child(2) { transition-delay: .35s; }
 .road-trip .wt.on > :nth-child(3) { transition-delay: .7s; }
 .road-trip .wt .k { font-family: var(--f-caps); font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 6px; }
-.road-trip .wt h2 { font-family: var(--f-script); font-weight: 400; font-size: 54px; line-height: 1.05; margin: 0 0 10px; text-wrap: balance; }
-.road-trip .wt p.b { font-size: 19.5px; line-height: 1.45; margin: 0; font-weight: 400; text-wrap: pretty; }
+.road-trip .wt h2 { font-family: var(--f-script); font-weight: 400; font-size: 45.9px; line-height: 1.05; margin: 0 0 10px; text-wrap: balance; }
+.road-trip .wt p.b { font-size: 18px; line-height: 1.45; margin: 0; font-weight: 400; text-wrap: pretty; }
 .road-trip .wt.title { text-align: center; }
-.road-trip .wt.title h2 { font-size: 66px; margin-bottom: 2px; }
-.road-trip .wt .cue { font-family: var(--f-caps); font-size: 10.5px; letter-spacing: .26em; text-transform: uppercase; color: var(--ink-soft); margin-top: 18px; }
+.road-trip .wt.title p.b { text-align: justify; hyphens: none; }
+.road-trip .wt .cue { font-family: var(--f-caps); font-size: 10.5px; line-height: 1.9; letter-spacing: .26em; text-transform: uppercase; color: var(--ink-soft); margin-top: 32px; white-space: pre-line; }
 .road-trip .wt.closing { text-align: center; }
 .road-trip .wt.closing p.b { font-size: 30px; line-height: 1.3; max-width: 30ch; margin: 0 auto 14px; }
 .road-trip .wt.closing .date { font-family: var(--f-caps); font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: var(--ink-soft); }
@@ -124,7 +125,7 @@
   line-height: normal; /* the site reset makes buttons inherit 1.5; the prototype had the browser default */
 }
 .road-trip .stops .lab { opacity: 0; transform: translateX(6px); transition: opacity .25s, transform .25s; white-space: nowrap; background: var(--ivory); padding: 2px 4px; }
-.road-trip .stops button:hover .lab, .road-trip .stops button:focus-visible .lab, .road-trip .stops button.on .lab { opacity: 1; transform: none; }
+.road-trip .stops button:hover .lab, .road-trip .stops button:focus-visible .lab, .road-trip .stops button.flash .lab { opacity: 1; transform: none; }
 .road-trip .stops .dot { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--ivory); flex: none; transition: background .3s; }
 .road-trip .stops button.half .dot { width: 6px; height: 6px; margin-right: 1.5px; }
 .road-trip .stops button.done .dot { background: var(--ink-soft); border-color: var(--ink-soft); }
@@ -148,13 +149,13 @@
   transition: opacity .35s ease, transform .35s ease;
 }
 .road-trip .card .k { font-family: var(--f-caps); font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 2px; }
-.road-trip .card h3 { font-family: var(--f-script); font-weight: 400; font-size: 36px; line-height: 1.1; margin: 0 0 6px; }
+.road-trip .card h3 { font-family: var(--f-script); font-weight: 400; font-size: 30.6px; line-height: 1.1; margin: 0 0 6px; }
 .road-trip .card p { margin: 0; font-size: 17.5px; line-height: 1.42; }
 .road-trip .card.swap { opacity: 0; transform: translateY(8px); }
-.road-trip .card[hidden] { display: none !important; }
+.road-trip .card[hidden], .road-trip .chip[hidden] { display: none !important; }
 .road-trip .narrow .card { display: block; }
 .road-trip .narrow .wt p.b, .road-trip .narrow .wt .k { display: none; }
-.road-trip .narrow .wt.closing p.b, .road-trip .narrow .wt.closing .k, .road-trip .narrow .wt.title .k { display: block; }
+.road-trip .narrow .wt.closing p.b, .road-trip .narrow .wt.closing .k, .road-trip .narrow .wt.title p.b { display: block; }
 .road-trip .narrow .stops .lab { display: none; }
 .road-trip .narrow .hud-sign .chip { font-size: 10.5px; max-width: 52vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 

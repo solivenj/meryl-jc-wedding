@@ -61,15 +61,31 @@ export type Piece = {
   car?: "us" | "it";
 };
 
+/* Where the two spur roads merge: a little way along leg 1 rather than at its
+   start, so the fork sits in from the left edge. The road proper starts here;
+   the stretch of leg 1 before it is covered by the spurs. */
+export const FORK = legPt(1, 0.12);
+
+/* Where the car stops for a beat: beside the Boston sign (art/boston.ts puts
+   it at x ≈ 358 on leg 1) and halfway along Chicago's leg. Each leg keeps
+   its prototype road weight, split either side of the pause. */
+export const BOSTON_STOP = legPt(1, 0.225);
+export const CHICAGO_STOP = legPt(4, 0.5);
+
 /* Where the flights leave and land: Italy 2022 (leg 3) and the crossing (leg 7). */
-export const fA3 = legPt(3, 0.13);
-export const fB3 = legPt(3, 0.33);
+/* Italy 2022 takes off right as the hairpin bend ends and flies a
+   little further than the prototype (.01 to .25 of leg 3), leaving the
+   rest of the leg for the Florence, Tuscany and Amalfi drawings. */
+export const fA3 = legPt(3, 0.01);
+export const fB3 = legPt(3, 0.25);
 export const fA7 = legPt(7, 0.22);
 export const fB7 = legPt(7, 0.78);
 
 const RAW: Piece[] = [
   { kind: "spur", w: 1.0, ch: -1 },
-  { kind: "road", from: legStart(1), seg: lineSeg(legEnd(1)), w: 1.8, ch: 0 },
+  { kind: "road", from: FORK, seg: lineSeg(BOSTON_STOP), w: 0.6, ch: 0, ease: "out" },
+  { kind: "pause", w: 0.8, ch: 0, tag: "boston" },
+  { kind: "road", from: BOSTON_STOP, seg: lineSeg(legEnd(1)), w: 1.2, ch: 0, ease: "in" },
   { kind: "road", from: legEnd(1), seg: hairpinSeg(1), w: 0.5, ch: 0 },
   { kind: "road", from: legStart(2), seg: lineSeg(legEnd(2)), w: 3.0, ch: 1, tag: "long" },
   { kind: "road", from: legEnd(2), seg: hairpinSeg(2), w: 0.5, ch: 1 },
@@ -77,13 +93,14 @@ const RAW: Piece[] = [
   { kind: "flight", from: fA3, seg: arcSeg(fA3, fB3, 120), w: 1.0, ch: 2, ease: "io", tag: "fly1" },
   { kind: "road", from: fB3, seg: lineSeg(legEnd(3)), w: 1.9, ch: 2, tag: "italy22", car: "it" },
   { kind: "flight", from: legEnd(3), seg: hairpinSeg(3), w: 1.0, ch: 3, ease: "io", tag: "flyhome" },
-  { kind: "road", from: legStart(4), seg: lineSeg(legEnd(4)), w: 1.9, ch: 3 },
+  { kind: "road", from: legStart(4), seg: lineSeg(CHICAGO_STOP), w: 0.95, ch: 3, ease: "out" },
+  { kind: "pause", w: 0.8, ch: 3, tag: "chicago" },
+  { kind: "road", from: CHICAGO_STOP, seg: lineSeg(legEnd(4)), w: 0.95, ch: 3, ease: "in" },
   { kind: "road", from: legEnd(4), seg: hairpinSeg(4), w: 0.5, ch: 3 },
-  { kind: "road", from: legStart(5), seg: lineSeg(legPt(5, 0.25)), w: 0.6, ch: 4, ease: "out" },
-  { kind: "pause", w: 0.8, ch: 4, tag: "bali" },
-  { kind: "road", from: legPt(5, 0.25), seg: lineSeg(legPt(5, 0.75)), w: 1.0, ch: 5, ease: "io" },
-  { kind: "pause", w: 0.8, ch: 5, tag: "spain" },
-  { kind: "road", from: legPt(5, 0.75), seg: lineSeg(legEnd(5)), w: 0.4, ch: 5, ease: "in" },
+  /* Leg 5: the five mini stops (art/miniStops.ts). The car drives straight
+     through, no pauses; the road keeps the prototype leg's weight (2.0). */
+  { kind: "road", from: legStart(5), seg: lineSeg(legPt(5, 0.5)), w: 1.0, ch: 4, tag: "leg5a" },
+  { kind: "road", from: legPt(5, 0.5), seg: lineSeg(legEnd(5)), w: 1.0, ch: 5, tag: "leg5b" },
   { kind: "road", from: legEnd(5), seg: hairpinSeg(5), w: 0.5, ch: 5 },
   { kind: "road", from: legStart(6), seg: lineSeg(legPt(6, 0.52)), w: 1.0, ch: 6, ease: "out" },
   { kind: "pause", w: 1.5, ch: 6, tag: "ring" },
@@ -114,10 +131,12 @@ export const PIECES: readonly Piece[] = RAW.map((p, i) => {
 });
 
 /* John from New Jersey: the short road, from the left edge. Meryl from
-   California: the long road, from the right edge. */
+   California: the long road, from the right edge. Both arrive at FORK along
+   leg 1's own slope, so the join is smooth. */
+const FDX = FORK.x - XL;
 export const SPURS = {
-  a: `M -60 ${Y0 + 90} C 20 ${Y0 + 90} 63 ${Y0 + 24} ${XL} ${Y0}`,
-  b: `M 1240 ${Y0 + 260} C 700 ${Y0 + 260} 63 ${Y0 + 24} ${XL} ${Y0}`,
+  a: `M -60 ${Y0 + 90} C ${f1(20 + FDX)} ${Y0 + 90} ${f1(63 + FDX)} ${f1(FORK.y + 24)} ${f1(FORK.x)} ${f1(FORK.y)}`,
+  b: `M 1240 ${Y0 + 260} C 700 ${Y0 + 260} ${f1(63 + FDX)} ${f1(FORK.y + 24)} ${f1(FORK.x)} ${f1(FORK.y)}`,
 };
 
 /* The road as SVG paths, computed rather than measured so they can render on
@@ -174,13 +193,11 @@ export function ease(kind: Piece["ease"], t: number): number {
   return t;
 }
 
-/* Decorative, not a fact: road distance only (frozen while flying), plus up
-   to 2,100 miles for the long-distance years; kilometres while in Italy. */
-const LONG = pieceIndex("long");
-const ITALY22 = pieceIndex("italy22");
-const LANDED = pieceIndex("landed");
-export function odometerReading(o: { i: number; t: number; roadUnits: number }): { value: number; unit: "MI" | "KM" } {
-  const miles = o.roadUnits * 0.36 + (o.i === LONG ? o.t * 2100 : o.i > LONG ? 2100 : 0);
-  const km = o.i === ITALY22 || o.i >= LANDED;
-  return km ? { value: miles * 1.609, unit: "KM" } : { value: miles, unit: "MI" };
+/* The odometer runs from 0 to the great-circle distance from Chicago to the
+   Monastero di Santa Margherita in Todi (41.878 N 87.630 W to 42.780 N
+   12.408 E), reaching it as the car parks. It counts road only (frozen while
+   flying), in miles throughout. */
+export const TRIP_MILES = 4768;
+export function odometerReading(o: { roadFraction: number }): { value: number; unit: "MI" | "KM" } {
+  return { value: TRIP_MILES * Math.min(1, Math.max(0, o.roadFraction)), unit: "MI" };
 }

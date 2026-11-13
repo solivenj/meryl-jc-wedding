@@ -86,10 +86,9 @@ export function ItalyCountdown() {
     <div className="flex w-full flex-col items-center gap-5">
       <SmallCaps>{countdown.eyebrow}</SmallCaps>
       <ScriptTitle>{countdown.line}</ScriptTitle>
-      <p className="font-caps text-[calc(10px*var(--fs-scale))] uppercase tracking-[0.24em] text-ink-soft">
-        {countdown.dateLine}
-      </p>
-      {/* aria-live off on purpose: a region that changes every second would
+      {/* No visible date line: the card at the top of the page already says
+          when. dateLine still names the date for screen readers below.
+          aria-live off on purpose: a region that changes every second would
           have a screen reader announce the time forever. The label carries
           the meaning instead. */}
       <div

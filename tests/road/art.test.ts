@@ -5,21 +5,20 @@ import { defsMarkup, backdropMarkup, sceneryMarkup, fxMarkup, longArcD } from ".
 test("scenery has every stop's landmarks", () => {
   const s = sceneryMarkup();
   for (const needle of [
-    "BOSTON, MA",
+    "boston_sign.webp",
     "NEU",
-    "CHARLES RIVER",
-    "PACIFIC",
-    ">80<",
-    "POSITANO",
+    "pst_sign.webp",
+    "florence.webp",
+    "tuscany.webp",
+    "chicago.webp",
     "ATLANTIC",
     "ITALIA",
     "TODI  3",
     "S. MARGHERITA",
-    'id="tally"',
     'id="family"',
     'id="town"',
-    "CA</text>",
-    "NJ</text>",
+    "ca_sign.webp",
+    "nj_sign.webp",
   ]) {
     assert.ok(s.includes(needle), `missing ${needle}`);
   }
@@ -27,7 +26,7 @@ test("scenery has every stop's landmarks", () => {
 
 test("fx has every animated element", () => {
   const f = fxMarkup();
-  for (const id of ["heart", "ring", "sparks", "keys", "keysTxt", "stIt22", "stBali", "stSpain", "stIt27"]) {
+  for (const id of ["heart", "ring", "sparks", "keys", "keysTxt", "stIt22", "stMini0", "stMini1", "stMini2", "stMini3", "stMini4", "stIt27"]) {
     assert.ok(f.includes(`id="${id}"`), `missing #${id}`);
   }
 });
@@ -41,9 +40,10 @@ test("defs has the vehicles", () => {
 
 test("Meryl's CA sign is on the long road, John's NJ sign on the short one", () => {
   // The long spur road comes in from the right edge, the short one from the left.
-  const x = (label: string) => Number(sceneryMarkup().match(new RegExp(`<text class="hwy" x="([\\d.]+)"[^>]*>${label}</text>`))![1]);
-  assert.ok(x("CA") > 600, `CA sign at x=${x("CA")}`);
-  assert.ok(x("NJ") < 200, `NJ sign at x=${x("NJ")}`);
+  // Signs are drawn images; x is the image's left edge.
+  const x = (name: string) => Number(sceneryMarkup().match(new RegExp(`<image href="/italy/road/${name}_sign.webp" x="([\\d.-]+)"`))![1]);
+  assert.ok(x("ca") > 600, `CA sign at x=${x("ca")}`);
+  assert.ok(x("nj") < 400, `NJ sign at x=${x("nj")}`);
 });
 
 test("Chicago has no Bean and no city flag", () => {
@@ -75,6 +75,6 @@ test("content rules", () => {
   for (const word of ["church", "twice", "moved in"]) assert.ok(!all.includes(word), `contains ${word}`);
 });
 
-test("long-distance arc is a cubic path", () => {
-  assert.match(longArcD(), /^M [\d.-]+ [\d.-]+ C /);
+test("long-distance arc is a single parabola", () => {
+  assert.match(longArcD(), /^M [\d.-]+ [\d.-]+ Q [\d.-]+ [\d.-]+ [\d.-]+ [\d.-]+$/);
 });
