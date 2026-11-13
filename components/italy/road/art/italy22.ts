@@ -1,7 +1,7 @@
 /* Italy, 2022: the Atlantic, Tuscany (vines, cypresses, the villa) and Positano.
    Moved verbatim from the approved prototype; see components/italy/road/route.ts. */
 import { Y0, legPt, legY, fA3, fB3 } from "../route.ts";
-import { f1, cypress, waves, stamp, up, TERRA } from "./kit.ts";
+import { f1, cypress, waves, up, TERRA } from "./kit.ts";
 
 export function italy22Art(): { backdrop: string; scenery: string; fx: string } {
   const B: string[] = [], S: string[] = [], F: string[] = [];
@@ -10,7 +10,10 @@ export function italy22Art(): { backdrop: string; scenery: string; fx: string } 
     S.push(`<path class="ln" d="M ${f1(fA3.x - 4)} ${f1(fA3.y - 16)} l 10 10 l -4 14 l 12 8 M ${f1(fB3.x + 6)} ${f1(fB3.y - 16)} l -10 12 l 6 10 l -12 10"/>`);
     const m = legPt(3, .23);
     // S.push(`<text x="${m.x}" y="${m.y + 56}" text-anchor="middle" style="font: 400 10px var(--f-caps); letter-spacing: .5em; fill: var(--ink-soft)">ATLANTIC</text>`);
-    F.push(stamp('stIt22', 604, Y0 - 896, 'ITALIA', '2022', -10));
+    {
+      const r = 34;
+      F.push(`<g id="stIt22" opacity="0" data-x="468" data-y="${Y0 - 1062}" data-r="-10"><image href="/italy/road/italy2022_stamp.webp" x="${-r}" y="${-r}" width="${r * 2}" height="${r * 2}"/></g>`);
+    }
     // vineyard rows below the road
     let vines = '';
     for (let r = 0; r < 4; r++) for (let x = 480; x < 656; x += 14) { const y = yL3(x) + 34 + r * 15 - (x - 480) * .02; vines += `<circle cx="${x + r * 4}" cy="${f1(y)}" r="2.6" class="leaf" stroke="var(--ink)" stroke-width=".8"/>`; }
