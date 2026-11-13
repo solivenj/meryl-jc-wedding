@@ -60,7 +60,7 @@ export const ITALY_HOME = {
   collageAlt: "Photographs, an envelope and a card laid out on a table",
   rsvp: {
     script: "Will you join us?",
-    replyBy: "Kindly reply by the first of February, 2027",
+    replyBy: "Kindly reply by the fourteenth of February 2027",
     button: "RSVP here",
   },
   /* Has the olive band before the reply to itself, in the slot the parked
@@ -135,7 +135,7 @@ export const ITALY_COLLAGE: {
   pieces: readonly CollagePiece[];
 } = {
   ratio: "1230 / 633",
-  ratioTall: "10 / 15.8",
+  ratioTall: "10 / 17.8",
   card: {
     dates: "April 21 – 23",
     year: "2027",
@@ -175,7 +175,7 @@ export const ITALY_COLLAGE: {
       r: 1,
       z: 3,
       pl: 2,
-      pt: 54,
+      pt: 59.5,
       pwidth: 52,
       pr: 2,
     },
@@ -190,7 +190,7 @@ export const ITALY_COLLAGE: {
       r: -4,
       z: 4,
       pl: 40,
-      pt: 64.5,
+      pt: 68.5,
       pwidth: 56,
       pr: -4,
     },
@@ -207,7 +207,7 @@ export const ITALY_COLLAGE: {
       r: 8,
       z: 6,
       pl: 56,
-      pt: 47,
+      pt: 53,
       pwidth: 42,
       pr: 8,
     },
@@ -221,24 +221,25 @@ export const ITALY_COLLAGE: {
       width: 35,
       r: -9,
       z: 5,
-      pt: 8.2,
+      pt: 7.3,
       pwidth: 96,
       pr: -6,
     },
     {
-      /* Over the card's bottom-right corner, in front of it; on a phone it
-         takes the bottom-left corner instead, clear of the map. */
+      /* Tucked just under the card's bottom edge, the top of his head
+         clear of it, so he never crosses the card and needs no ink copy.
+         On a phone he sits under the card's left end instead, clear of the
+         map, with the polaroids pushed down below him. */
       kind: "art",
       src: "/italy/collage/cupid.webp",
-      ink: "/italy/collage/cupid-ink.webp",
       w: 700,
       h: 779,
       l: 35,
-      t: 59,
+      t: 68,
       width: 14,
       z: 7,
       pl: -2,
-      pt: 39,
+      pt: 44,
       pwidth: 24,
     },
   ],
@@ -329,7 +330,7 @@ export type StoryStop = {
 };
 
 export const ITALY_STORY: {
-  title: { kicker: string; tagline: string; cue: string };
+  title: { tagline: string; cue: string };
   stops: StoryStop[];
   halfStops: { kicker: string; heading: string; body: string };
   closing: {
@@ -342,38 +343,34 @@ export const ITALY_STORY: {
   };
 } = {
   title: {
-    kicker: "Our story, by road",
-    tagline: "From New Jersey and California to a hill in Umbria.",
-    cue: "Scroll to start the car",
+    tagline: "Two roads, one story and a journey of a lifetime. No matter which way the path turns, as long as it’s side by side with you I’ll take any detour.",
+    /* "\n" starts a new line in the cue. */
+    cue: "Scroll to start the car &\ntake a ride on our adventure",
   },
   stops: [
     {
       id: "boston",
-      kicker: "Boston · 2019",
-      heading: "Where it started",
+      kicker: "Boston · 2018",
+      heading: "Where It All Began",
       body:
-        "We met at Northeastern, in study sessions that kept running long. They turned into " +
-        "meals, then into most of our free time. By 2019 it was official: dinner, a movie, and " +
-        "both of us already sure.",
+        "Our story began far from home, on a cold Boston night where we met as freshmen at Northeastern University. What started as shared study sessions and endless conversation quietly blossomed into something more. Our very first date was dinner and a movie. It wasn’t until months of asking Meryl to be his girlfriend, did she finally say “yes”.",
       chip: { text: "Boston, MA", style: "olive" },
     },
     {
       id: "distance",
-      kicker: "The long-distance years",
-      heading: "Opposite coasts",
+      kicker: "Opposite Coasts · 2020-2022",
+      heading: "The Long Distance Years",
       body:
-        "Then came the years with the whole country in the middle and a running list of flights " +
-        "we could just about afford. We would not choose it again. We would not give it back " +
-        "either. It made us each other’s first call, about anything.",
-      chip: { text: "I-80 · Westbound", style: "" },
+        "Love was tested by distance when life placed us on opposite coasts. Navigating the uncertainties of the pandemic and the miles between us only proved that our bond was unbreakable. Through countless flights, late night phone calls and moments across time zones, we learned that distance really does make the heart fonder. ",
+      /* Empty: not a place, so no road sign in the corner for this stop. */
+      chip: { text: "", style: "" },
     },
     {
       id: "italy-2022",
       kicker: "Italy · 2022",
-      heading: "Where we fell for it",
+      heading: "A Special Trip",
       body:
-        "In 2022 we went to Italy together for the first time. A villa in Tuscany, the long " +
-        "drive south, Positano. We flew home already talking about coming back.",
+        "We fell in love with Italy on our first international adventure together. From the art-filled streets of Florence and the rolling hills of Tuscany to the sun-drenched cliffs of the Amalfi Coast, every moment felt like a dream.",
       chip: { text: "Italia · 2022", style: "eu" },
     },
     {
@@ -935,7 +932,7 @@ export const ITALY_FAQ = {
 
 export const ITALY_RSVP_PAGE = {
   hero: "RSVP",
-  heroSub: "Kindly reply by the first of February, 2027",
+  heroSub: "Kindly reply by the fourteenth of February 2027",
   replyTitle: "Reply",
   replyBody:
     "Find your invitation by name and answer for everyone in your party — and tell us anything the kitchen should know. If you are still deciding, tell us that too; we would rather hold a chair than lose one.",
@@ -954,8 +951,8 @@ export const ITALY_RSVP_PAGE = {
 export const ITALY_RSVP = {
   ...SAVE_THE_DATE_RSVP,
   subline: {
-    before: "Kindly send your reply by ",
-    date: "February 1, 2027",
+    before: "Kindly reply by the ",
+    date: "fourteenth of February 2027",
     after: " so we can save you a seat in Todi.",
   },
   successBody: "Your RSVP is in. We can’t wait to see you in Todi.",

@@ -15,7 +15,7 @@ import { overpass, titillium } from "./fonts";
 import { H, TOTAL_W, W, Y0, roadPaths } from "./route.ts";
 import { createDrive } from "./engine.ts";
 import { backdropMarkup, defsMarkup, fxMarkup, sceneryMarkup } from "./art/index.ts";
-import { ITALY, ITALY_STORY } from "@/lib/italy-content";
+import { ITALY_STORY } from "@/lib/italy-content";
 
 const PATHS = roadPaths();
 
@@ -158,7 +158,7 @@ export function RoadTrip() {
             <g id="texts">
               <Slot x={690} y={Y0 - 100} w={470} h={280} ch="0"><Block i={0} /></Slot>
               <Slot x={180} y={Y0 - 550} w={380} h={370} ch="1"><Block i={1} /></Slot>
-              <Slot x={690} y={Y0 - 1010} w={345} h={370} ch="2"><Block i={2} /></Slot>
+              <Slot x={690} y={Y0 - 1025} w={450} h={370} ch="2"><Block i={2} /></Slot>
               <Slot x={180} y={Y0 - 1470} w={380} h={340} ch="3"><Block i={3} /></Slot>
               <Slot x={690} y={Y0 - 1940} w={345} h={190} ch="4,5">
                 <p className="k">{halfStops.kicker}</p>
@@ -168,10 +168,8 @@ export function RoadTrip() {
               <Slot x={180} y={Y0 - 2400} w={380} h={350} ch="6"><Block i={6} /></Slot>
               <Slot x={690} y={Y0 - 2855} w={345} h={330} ch="7"><Block i={7} /></Slot>
               <Slot x={176} y={Y0 - 3306} w={392} h={330} ch="8"><Block i={8} /></Slot>
-              <Slot x={30} y={Y0 + 196} w={520} h={270} ch="" className="title on">
-                <p className="k">{title.kicker}</p>
-                <h2>{ITALY.names}</h2>
-                <p className="b" style={{ fontSize: 20 }}>{title.tagline}</p>
+              <Slot x={140} y={Y0 + 196} w={360} h={270} ch="" className="title on">
+                <p className="b">{title.tagline}</p>
                 <p className="cue">{title.cue} &darr;</p>
               </Slot>
               <Slot x={160} y={70} w={880} h={260} ch="9" className="closing">

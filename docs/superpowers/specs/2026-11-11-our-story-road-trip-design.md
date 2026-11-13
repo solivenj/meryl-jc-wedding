@@ -240,7 +240,7 @@ scripts/road-shot.mjs                 prototype vs page screenshots at every sto
 
 ```ts
 ITALY_STORY = {
-  title: { kicker: "Our story, by road", tagline: "From New Jersey and California to a hill in Umbria.", cue: "Scroll to start the car" },
+  title: { tagline: "From New Jersey and California to a hill in Umbria.", cue: "Scroll to start the car" },
   stops: [
     { id: "boston", kicker, heading, body, chip: { text: "Boston, MA", style: "olive" } },
     { id: "distance", ... }, { id: "italy-2022", ... }, { id: "chicago", ... },

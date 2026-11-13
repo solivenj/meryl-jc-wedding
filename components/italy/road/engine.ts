@@ -12,8 +12,8 @@ import {
   SPURS,
   TOTAL_W,
   W,
+  FORK,
   XL,
-  Y0,
   chapterStart,
   ease,
   locate,
@@ -212,16 +212,24 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
   let curCh = -2;
   let curUnit = "MI";
   let swapTimer = 0;
+  let flashTimer = 0;
   const setChapter = (c: number) => {
     if (c === curCh) return;
     curCh = c;
     const meta: { chip: { text: string; style: string } } = c < 0 ? { chip: { text: "NJ · CA", style: "" } } : CH[c];
     chip.textContent = meta.chip.text;
     chip.className = "chip " + (meta.chip.style || "");
+    /* A stop that is not a place (the long-distance years) has no sign. */
+    chip.hidden = !meta.chip.text;
     stopBtns.forEach((b, i) => {
       b.classList.toggle("on", i === c);
       b.classList.toggle("done", i < c);
+      b.classList.toggle("flash", i === c);
     });
+    /* The new stop's name shows for a moment, then tucks away; hovering or
+       focusing a dot brings any name back. */
+    window.clearTimeout(flashTimer);
+    flashTimer = window.setTimeout(() => stopBtns.forEach((b) => b.classList.remove("flash")), 1200);
     if (c >= 0) {
       card.classList.add("swap");
       window.clearTimeout(swapTimer);
@@ -264,8 +272,9 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     park: pieceIndex("park"),
   };
   const flights = PIECES.map((p, i) => (p.kind === "flight" ? i : -1)).filter((i) => i >= 0);
+  /* Road length with the flights taken out: the odometer's full scale. */
+  const ROAD_TOTAL = TOTAL - flights.reduce((sum, fi) => sum + M[fi]!.len, 0);
   const famHeads = [...root.querySelectorAll<SVGGElement>("#family .fam")];
-  const tally = [...$<SVGGElement>("tally").children] as SVGElement[];
   const fx = (id: string) => $<SVGElement>(id);
   const heart = fx("heart");
   const ring = fx("ring");
@@ -303,7 +312,7 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
       placeCar(carB, b.x, b.y, b2.x - b.x || -1, b2.y - b.y, te * spurLen[1], t > 0 && t < 1, 0.9);
       carA.g.setAttribute("opacity", "1");
       carB.g.setAttribute("opacity", "1");
-      x = lerp(290, XL, easeIO(t));
+      x = lerp(290 + FORK.x - XL, FORK.x, easeIO(t));
       y = (a.y + b.y) / 2;
       vehicle = "none";
     } else {
@@ -354,18 +363,16 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
       const hs = (s - PIECES[0].w * 0.82) / (PIECES[0].w * 0.18 + PIECES[1].w * 0.4);
       if (hs > 0 && hs < 1) {
         heart.setAttribute("opacity", String(f1(Math.sin(hs * Math.PI))));
-        heart.setAttribute("transform", `translate(${XL} ${f1(Y0 - 56 - hs * 40)}) scale(${f1(1 + hs * 0.6)})`);
+        heart.setAttribute("transform", `translate(${f1(FORK.x)} ${f1(FORK.y - 56 - hs * 40)}) scale(${f1(1 + hs * 0.6)})`);
       } else heart.setAttribute("opacity", "0");
     }
 
-    /* long-distance flights + tally */
+    /* long-distance flights (the post-it tally that counted them is gone) */
     {
-      let passes = 0;
       if (i === I.long) {
         const u = t * 5;
         const pass = Math.min(4, Math.floor(u));
         const fr = u - pass;
-        passes = Math.floor(u + 1e-6);
         const fwd = pass % 2 === 0;
         const q = easeIO(fwd ? fr : 1 - fr);
         const a = longArc.getPointAtLength(q * longArcLen);
@@ -374,9 +381,7 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
         placePlane(longPlane, a.x, a.y + 14, (b.x - a.x) * (fwd ? 1 : -1) || (fwd ? -1 : 1), (b.y - a.y) * (fwd ? 1 : -1));
       } else {
         longPlane.setAttribute("opacity", "0");
-        passes = i > I.long ? 5 : 0;
       }
-      for (let k = 0; k < 5; k++) tally[k].setAttribute("opacity", k < passes ? "1" : "0");
     }
 
     /* passport stamps */
@@ -424,7 +429,7 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
         if (i > fi) flown += M[fi]!.len;
         else if (i === fi) flown += d - M[fi]!.d0;
       });
-      const reading = odometerReading({ i, t, roadUnits: Math.max(0, d - flown) });
+      const reading = odometerReading({ roadFraction: Math.max(0, d - flown) / ROAD_TOTAL });
       setOdo(reading.value);
       if (reading.unit !== curUnit) {
         curUnit = reading.unit;
@@ -475,6 +480,7 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
        clean instead of stacking a second set of cars and digits. */
     destroy() {
       window.clearTimeout(swapTimer);
+      window.clearTimeout(flashTimer);
       cleanups.forEach((f) => f());
       for (const g of [measure, V, digits, stopsUl]) g.replaceChildren();
     },

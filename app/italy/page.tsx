@@ -45,14 +45,20 @@ export default function ItalyHome() {
 
           The welcome's old PolaroidStack is gone with it: the collage carries
           photographs now, and two polaroid groups in one band is one too many. */}
-      <Band tone="band" width="wide">
+      {/* Only a sliver of top padding: the collage stage already opens with
+          empty space above its highest piece, so the usual padding stacked
+          on that read as a gap under the carousel. The bottom keeps the
+          normal Band padding. */}
+      <Band tone="band" width="wide" pad="none" className="pt-[clamp(8px,1.5vw,16px)] pb-[clamp(56px,8vw,96px)]">
         <DetailCollage />
         <div className="mt-[clamp(36px,5vw,64px)] flex flex-col items-center gap-6">
           <ScriptTitle size="lead">{ITALY_HOME.welcome.script}</ScriptTitle>
-          <Prose align="center">{ITALY_HOME.welcome.body}</Prose>
+          {/* White rather than the band's cream: at this light weight the
+              cream reads darker than it is. */}
+          <Prose align="center" className="text-white!">{ITALY_HOME.welcome.body}</Prose>
           {/* No reply button here: the RSVP band at the foot of the page
               is the one place to answer. */}
-          <Prose align="center">{ITALY_HOME.welcome.body2}</Prose>
+          <Prose align="center" className="text-white!">{ITALY_HOME.welcome.body2}</Prose>
         </div>
       </Band>
 

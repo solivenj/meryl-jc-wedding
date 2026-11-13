@@ -9,7 +9,7 @@ export function italy22Art(): { backdrop: string; scenery: string; fx: string } 
     S.push(waves(fA3.x + 12, fB3.x - 6, (x) => yL3(x) + 4));
     S.push(`<path class="ln" d="M ${f1(fA3.x - 4)} ${f1(fA3.y - 16)} l 10 10 l -4 14 l 12 8 M ${f1(fB3.x + 6)} ${f1(fB3.y - 16)} l -10 12 l 6 10 l -12 10"/>`);
     const m = legPt(3, .23);
-    S.push(`<text x="${m.x}" y="${m.y + 56}" text-anchor="middle" style="font: 400 10px var(--f-caps); letter-spacing: .5em; fill: var(--ink-soft)">ATLANTIC</text>`);
+    // S.push(`<text x="${m.x}" y="${m.y + 56}" text-anchor="middle" style="font: 400 10px var(--f-caps); letter-spacing: .5em; fill: var(--ink-soft)">ATLANTIC</text>`);
     F.push(stamp('stIt22', 604, Y0 - 896, 'ITALIA', '2022', -10));
     // vineyard rows below the road
     let vines = '';

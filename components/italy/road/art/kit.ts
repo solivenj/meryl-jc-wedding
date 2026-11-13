@@ -19,7 +19,16 @@ export const greenSign = (x: number, yb: number, lines: string[], color = "var(-
     </g>`;
 };
 
-export const itArrow = (x: number, yb: number, text: string, dir = -1): string => {
+/* A hand-drawn signpost image (public/italy/road/), centred on x with its
+   posts standing on yb. The place signs are 480 × 356 and the time zone
+   banners 480 × 283 (pass ratio); boards are olive with cream lettering
+   (#7d7d55 board), made from John’s drawings in public/italy/art/. */
+export const drawnSign = (x: number, yb: number, href: string, w: number, ratio = 356 / 480): string => {
+  const h = w * ratio;
+  return `<image href="${href}" x="${x - w / 2}" y="${yb - h}" width="${w}" height="${h}"/>`;
+};
+
+export const itArrow =(x: number, yb: number, text: string, dir = -1): string => {
   const ww = text.length * 9.5 + 40, h = 30, top = yb - h - 40;
   const l = x - ww / 2, r = x + ww / 2, m = top + h / 2;
   const pts = dir < 0 ? `${l},${m} ${l + 16},${top} ${r},${top} ${r},${top + h} ${l + 16},${top + h}` : `${r},${m} ${r - 16},${top} ${l},${top} ${l},${top + h} ${r - 16},${top + h}`;

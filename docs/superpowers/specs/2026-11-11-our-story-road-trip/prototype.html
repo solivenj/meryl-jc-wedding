@@ -108,7 +108,7 @@ a { color: inherit; }
 .wt h2 { font-family: var(--f-script); font-weight: 400; font-size: 54px; line-height: 1.05; margin: 0 0 10px; text-wrap: balance; }
 .wt p.b { font-size: 19.5px; line-height: 1.45; margin: 0; font-weight: 400; text-wrap: pretty; }
 .wt.title { text-align: center; }
-.wt.title h2 { font-size: 66px; margin-bottom: 2px; }
+.wt.title p.b { text-align: justify; hyphens: none; }
 .wt .cue { font-family: var(--f-caps); font-size: 10.5px; letter-spacing: .26em; text-transform: uppercase; color: var(--ink-soft); margin-top: 18px; }
 .wt.closing { text-align: center; }
 .wt.closing p.b { font-size: 30px; line-height: 1.3; max-width: 30ch; margin: 0 auto 14px; }
@@ -185,7 +185,7 @@ a { color: inherit; }
 .card.swap { opacity: 0; transform: translateY(8px); }
 .narrow .card { display: block; }
 .narrow .wt p.b, .narrow .wt .k { display: none; }
-.narrow .wt.closing p.b, .narrow .wt.closing .k, .narrow .wt.title .k { display: block; }
+.narrow .wt.closing p.b, .narrow .wt.closing .k, .narrow .wt.title p.b { display: block; }
 .narrow .stops .lab { display: none; }
 .narrow .hud-sign .chip-sub { display: none; }
 .narrow .hud-sign .chip { font-size: 10.5px; max-width: 52vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -932,7 +932,7 @@ a { color: inherit; }
     fo(690, Y0 - 2855, 345, 330, block(CH[7]), '', '7'),           // above the sixth, right
     fo(176, Y0 - 3306, 392, 330, block(CH[8]), '', '8'),           // above the seventh, left
   ];
-  fo(30, Y0 + 196, 520, 270, `<p class="k">Our story, by road</p><h2>Meryl &amp; John</h2><p class="b" style="font-size:20px">From New Jersey and California to a hill in Umbria.</p><p class="cue">Scroll to start the car &darr;</p>`, 'title on');
+  fo(140, Y0 + 196, 360, 270, `<p class="b" style="font-size:18px">From New Jersey and California to a hill in Umbria.</p><p class="cue">Scroll to start the car &darr;</p>`, 'title on');
   wts.push(fo(160, 70, 880, 260, `<p class="k" style="margin-bottom:10px">Benvenuti a Todi</p><p class="b">${CH[9].b}</p><p class="date">21 &middot; 22 &middot; 23 April 2027</p>`, 'closing', '9'));
 
   /* ---------- vehicles ---------- */

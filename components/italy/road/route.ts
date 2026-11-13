@@ -61,6 +61,11 @@ export type Piece = {
   car?: "us" | "it";
 };
 
+/* Where the two spur roads merge: a little way along leg 1 rather than at its
+   start, so the fork sits in from the left edge. The road proper starts here;
+   the stretch of leg 1 before it is covered by the spurs. */
+export const FORK = legPt(1, 0.12);
+
 /* Where the flights leave and land: Italy 2022 (leg 3) and the crossing (leg 7). */
 export const fA3 = legPt(3, 0.13);
 export const fB3 = legPt(3, 0.33);
@@ -69,7 +74,7 @@ export const fB7 = legPt(7, 0.78);
 
 const RAW: Piece[] = [
   { kind: "spur", w: 1.0, ch: -1 },
-  { kind: "road", from: legStart(1), seg: lineSeg(legEnd(1)), w: 1.8, ch: 0 },
+  { kind: "road", from: FORK, seg: lineSeg(legEnd(1)), w: 1.8, ch: 0 },
   { kind: "road", from: legEnd(1), seg: hairpinSeg(1), w: 0.5, ch: 0 },
   { kind: "road", from: legStart(2), seg: lineSeg(legEnd(2)), w: 3.0, ch: 1, tag: "long" },
   { kind: "road", from: legEnd(2), seg: hairpinSeg(2), w: 0.5, ch: 1 },
@@ -114,10 +119,12 @@ export const PIECES: readonly Piece[] = RAW.map((p, i) => {
 });
 
 /* John from New Jersey: the short road, from the left edge. Meryl from
-   California: the long road, from the right edge. */
+   California: the long road, from the right edge. Both arrive at FORK along
+   leg 1's own slope, so the join is smooth. */
+const FDX = FORK.x - XL;
 export const SPURS = {
-  a: `M -60 ${Y0 + 90} C 20 ${Y0 + 90} 63 ${Y0 + 24} ${XL} ${Y0}`,
-  b: `M 1240 ${Y0 + 260} C 700 ${Y0 + 260} 63 ${Y0 + 24} ${XL} ${Y0}`,
+  a: `M -60 ${Y0 + 90} C ${f1(20 + FDX)} ${Y0 + 90} ${f1(63 + FDX)} ${f1(FORK.y + 24)} ${f1(FORK.x)} ${f1(FORK.y)}`,
+  b: `M 1240 ${Y0 + 260} C 700 ${Y0 + 260} ${f1(63 + FDX)} ${f1(FORK.y + 24)} ${f1(FORK.x)} ${f1(FORK.y)}`,
 };
 
 /* The road as SVG paths, computed rather than measured so they can render on
@@ -174,13 +181,11 @@ export function ease(kind: Piece["ease"], t: number): number {
   return t;
 }
 
-/* Decorative, not a fact: road distance only (frozen while flying), plus up
-   to 2,100 miles for the long-distance years; kilometres while in Italy. */
-const LONG = pieceIndex("long");
-const ITALY22 = pieceIndex("italy22");
-const LANDED = pieceIndex("landed");
-export function odometerReading(o: { i: number; t: number; roadUnits: number }): { value: number; unit: "MI" | "KM" } {
-  const miles = o.roadUnits * 0.36 + (o.i === LONG ? o.t * 2100 : o.i > LONG ? 2100 : 0);
-  const km = o.i === ITALY22 || o.i >= LANDED;
-  return km ? { value: miles * 1.609, unit: "KM" } : { value: miles, unit: "MI" };
+/* The odometer runs from 0 to the great-circle distance from Chicago to the
+   Monastero di Santa Margherita in Todi (41.878 N 87.630 W to 42.780 N
+   12.408 E), reaching it as the car parks. It counts road only (frozen while
+   flying), in miles throughout. */
+export const TRIP_MILES = 4768;
+export function odometerReading(o: { roadFraction: number }): { value: number; unit: "MI" | "KM" } {
+  return { value: TRIP_MILES * Math.min(1, Math.max(0, o.roadFraction)), unit: "MI" };
 }
