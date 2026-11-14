@@ -14,6 +14,8 @@ import {
   TOTAL_W,
   W,
   FORK,
+  ITALY_ENTRY,
+  ITALY_TIP,
   XL,
   chapterStart,
   ease,
@@ -117,6 +119,13 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     <path d="M -34 2 L 34 2" stroke="var(--olive)" stroke-width="1.6"/>`;
   const plane = el("g", { opacity: 0 }, V);
   plane.insertAdjacentHTML("beforeend", PLANE);
+  /* The Vespa, Italy 2022 only: side-on along leg 3, riding away up the
+     drawing. Two puffs mark it turning back into the plane at the tip. */
+  const vespaSide = el("g", { opacity: 0 }, V);
+  el("use", { href: "#vespaSide" }, vespaSide);
+  const vespaRear = el("g", { opacity: 0 }, V);
+  el("use", { href: "#vespaRear" }, vespaRear);
+  const tipPuffs = [0, 1].map((k) => el("circle", { r: 0, fill: "none", stroke: "var(--ink)", "stroke-width": k ? 1.4 : 2, opacity: 0 }, V));
   const longPlane = el("g", { opacity: 0 }, V);
   longPlane.insertAdjacentHTML("beforeend", `<g transform="scale(.62)">${PLANE}</g>`);
   const longArc = $<SVGPathElement>("longArc");
@@ -140,10 +149,25 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
       p.setAttribute("opacity", String(mv ? f1((1 - ph) * 0.55) : 0));
     });
   };
-  const placePlane = (g: SVGGElement, x: number, y: number, dx: number, dy: number) => {
+  const placePlane = (g: SVGGElement, x: number, y: number, dx: number, dy: number, s = 1) => {
     const sx = dx < 0 ? -1 : 1;
     const tilt = clamp((Math.atan2(dy, Math.abs(dx)) * 180) / Math.PI, -30, 30);
-    g.setAttribute("transform", `translate(${f1(x)} ${f1(y - 14)}) scale(${sx} 1) rotate(${tilt.toFixed(2)})`);
+    g.setAttribute("transform", `translate(${f1(x)} ${f1(y - 14 * s)}) scale(${(sx * s).toFixed(3)} ${s.toFixed(3)}) rotate(${tilt.toFixed(2)})`);
+  };
+  /* The Vespa is a little smaller than the cars. Up the drawing it shrinks
+     with the drawn road, which narrows with height: full size where leg 3
+     joins it, under a third of that at the tip. */
+  const VESPA = 0.7;
+  const vespaScale = (y: number) => VESPA * (0.3 + 0.7 * Math.pow(clamp((y - ITALY_TIP.y) / (ITALY_ENTRY.y - ITALY_TIP.y), 0, 1), 1.1));
+  const placeVespaSide = (x: number, y: number, dx: number, dy: number, s: number) => {
+    const sx = dx < 0 ? -1 : 1;
+    const tilt = clamp((Math.atan2(dy, Math.abs(dx)) * 180) / Math.PI, -24, 24);
+    vespaSide.setAttribute("transform", `translate(${f1(x)} ${f1(y)}) scale(${(sx * s).toFixed(3)} ${s.toFixed(3)}) rotate(${tilt.toFixed(2)})`);
+  };
+  /* Seen from behind, it leans a little into the bends rather than turning. */
+  const placeVespaRear = (x: number, y: number, dx: number, dy: number, s: number) => {
+    const lean = clamp(((Math.atan2(dx, -dy) * 180) / Math.PI) * 0.3, -16, 16);
+    vespaRear.setAttribute("transform", `translate(${f1(x)} ${f1(y + 6 * s)}) scale(${s.toFixed(3)}) rotate(${lean.toFixed(2)})`);
   };
 
   /* ---------- HUD ---------- */
@@ -218,8 +242,10 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
   let curUnit = "MI";
   let swapTimer = 0;
   let flashTimer = 0;
+  let curMini = -1;
   const setChapter = (c: number) => {
     if (c === curCh) return;
+    curMini = -1;
     curCh = c;
     const meta: { chip: { text: string; style: string } } = c < 0 ? { chip: { text: "NJ · CA", style: "" } } : CH[c];
     chip.textContent = meta.chip.text;
@@ -274,6 +300,8 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     leg5b: pieceIndex("leg5b"),
     ring: pieceIndex("ring"),
     landed: pieceIndex("landed"),
+    ride: pieceIndex("vespaRide"),
+    flyhome: pieceIndex("flyhome"),
     park: pieceIndex("park"),
   };
   const flights = PIECES.map((p, i) => (p.kind === "flight" ? i : -1)).filter((i) => i >= 0);
@@ -306,7 +334,7 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     let dy = 0;
     let d = 0;
     let mv = true;
-    let vehicle: "us" | "it" | "plane" | "none" = pc.car === "it" ? "it" : "us";
+    let vehicle: "us" | "it" | "vespa" | "plane" | "none" = pc.car === "it" ? "it" : pc.car === "vespa" ? "vespa" : "us";
     if (pc.kind === "spur") {
       const te = easeIO(t);
       const a = spurA.getPointAtLength(te * spurLen[0]);
@@ -357,7 +385,41 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     plane.setAttribute("opacity", vehicle === "plane" ? "1" : "0");
     if (vehicle === "us") placeCar(car, x, y, dx, dy, d, mv);
     if (vehicle === "it") placeCar(itc, x, y, dx, dy, d, mv);
-    if (vehicle === "plane") placePlane(plane, x, y, dx, dy);
+    if (vehicle === "plane") {
+      /* Out of the drawing's tip the plane starts small, the size the
+         Vespa was, and grows to full size as it climbs away. */
+      const fromTip = i === I.flyhome;
+      const ps = fromTip ? 0.35 + 0.65 * clamp(t / 0.6, 0, 1) : 1;
+      if (fromTip) plane.setAttribute("opacity", String(f1(clamp(t / 0.06, 0, 1))));
+      placePlane(plane, x, y, dx, dy, ps);
+    }
+    {
+      /* The Vespa: side-on along leg 3, turning to ride away over the first
+         stretch of the drawing, then fading at the tip as the plane takes
+         over. */
+      let side = 0;
+      let rear = 0;
+      if (vehicle === "vespa") {
+        const turn = i === I.ride ? clamp(t / 0.08, 0, 1) : 0;
+        const out = i === I.ride ? 1 - clamp((t - 0.96) / 0.04, 0, 1) : 1;
+        side = (1 - turn) * out;
+        rear = turn * out;
+        const vs = i === I.ride ? vespaScale(y) : VESPA;
+        if (side > 0) placeVespaSide(x, y, dx, dy, vs);
+        if (rear > 0) placeVespaRear(x, y, dx, dy, vs);
+      }
+      vespaSide.setAttribute("opacity", String(f1(side)));
+      vespaRear.setAttribute("opacity", String(f1(rear)));
+      /* the puff at the tip, as the Vespa becomes the plane */
+      const pu = i === I.ride ? clamp((t - 0.94) / 0.06, 0, 1) * 0.4 : i === I.flyhome ? 0.4 + clamp(t / 0.2, 0, 1) * 0.6 : 0;
+      tipPuffs.forEach((c, k) => {
+        const u = clamp(pu - k * 0.15, 0, 1);
+        c.setAttribute("cx", String(ITALY_TIP.x));
+        c.setAttribute("cy", String(f1(ITALY_TIP.y - 6)));
+        c.setAttribute("r", String(f1((k ? 14 : 24) * u)));
+        c.setAttribute("opacity", u > 0 && u < 1 ? String(f1(1 - u)) : "0");
+      });
+    }
     itc.lug.setAttribute("opacity", i >= I.landed ? "1" : "0");
 
     revealPath.setAttribute("stroke-dashoffset", String(f1(TOTAL - d)));
@@ -456,6 +518,21 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     }
 
     setChapter(pc.ch);
+
+    /* On leg 5 the corner badge names the mini stop the car has reached
+       (the first one until it gets there), rather than the half-leg. */
+    if (i === I.leg5a || i === I.leg5b) {
+      let k = 0;
+      MINI_STOPS.forEach((_, j) => {
+        if (x >= miniStopX(j) - 40) k = j;
+      });
+      if (k !== curMini) {
+        curMini = k;
+        chip.textContent = `${MINI_STOPS[k].name} · ${MINI_STOPS[k].year}`;
+        chip.className = "chip stamp";
+        chip.hidden = false;
+      }
+    } else curMini = -1;
 
     /* camera */
     const ay = SH * (narrow ? 0.36 : 0.58);

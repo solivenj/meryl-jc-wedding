@@ -382,19 +382,24 @@ export const ITALY_STORY: {
       chip: { text: "Chicago", style: "" },
     },
     {
+      /* The ids are historical: these two entries are the two halves of
+         leg 5, which now carries the five mini stops (road/art/miniStops.ts).
+         The corner badge follows the stop the car has reached (engine.ts);
+         these headings name the stops in each half for the stop list and
+         the phone card. */
       id: "bali",
-      kicker: "Half stop",
-      heading: "Bali, 2024",
-      body: "One line about Bali goes here.",
-      chip: { text: "Bali · 2024", style: "stamp" },
+      kicker: "All around the world",
+      heading: "France, Puerto Rico & Indonesia",
+      body: "",
+      chip: { text: "France · 2024", style: "stamp" },
       half: true,
     },
     {
       id: "spain",
-      kicker: "Half stop",
-      heading: "Spain, 2025",
-      body: "One line about Spain goes here.",
-      chip: { text: "España · 2025", style: "stamp" },
+      kicker: "All around the world",
+      heading: "Spain & Canada",
+      body: "",
+      chip: { text: "Spain · 2024", style: "stamp" },
       half: true,
     },
     {
@@ -531,7 +536,7 @@ export const ITALY_DRESS: {
 } = {
   title: "What To Wear",
   intro:
-    "Two days means to ",
+    "Two evenings, two moods. Wednesday is our summer cocktail welcome, easy and full of colour under the lamps of the piazza. Thursday is the night we say I do, and we would love to see you in black tie. Friday is yours to wear whatever carries you home.",
   paletteNote: "Use these as inspiration — no need to match exactly.",
   codes: [
     {

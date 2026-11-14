@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import { Motif } from "@/components/italy/Art";
 import { Band } from "@/components/italy/Band";
+import { Scatter, type Placed } from "@/components/italy/Scatter";
+import type { MotifName } from "@/components/italy/sketches";
 import { DayJump } from "@/components/italy/DayJump";
 import { PaletteRow } from "@/components/italy/PaletteRow";
 import { PhotoPanel } from "@/components/italy/PhotoPanel";
@@ -14,6 +17,28 @@ const HERO_GRADIENT: Record<string, string> = {
   cocktail: "linear-gradient(165deg,#E8C79A 0%,#C97B52 46%,#7C3F2E 100%)",
   blacktie: "linear-gradient(200deg,#BFCBB4 0%,#6F8A6A 44%,#26382C 100%)",
 };
+
+/* Margin line art, as on Travel: above 900px only, each set placed inside
+   the band it belongs to. */
+const TITLE_ART: Placed[] = [
+  { name: "hat", size: 104, rot: -6, style: { left: "6%", top: 4 } },
+  { name: "flowers", size: 96, rot: 7, style: { right: "8%", top: -12 } },
+];
+const CODE_ART: Record<string, Placed[]> = {
+  cocktail: [
+    { name: "coupe", size: 84, rot: -8, style: { left: "4%", top: -6 } },
+    { name: "wineglass", size: 70, rot: 8, style: { right: "5%", top: 6 } },
+  ],
+  blacktie: [
+    { name: "rings", size: 96, rot: -5, style: { left: "3%", top: -4 } },
+    { name: "doves", size: 112, rot: 4, style: { right: "3%", top: -14 } },
+  ],
+};
+const CLOSING_ART: Placed[] = [
+  { name: "swallow", size: 78, rot: -8, style: { left: "10%", top: -6 } },
+  { name: "espresso", size: 62, rot: 6, style: { right: "11%", top: 8 } },
+];
+const MOBILE_ROW: MotifName[] = ["hat", "coupe", "flowers", "rings"];
 
 /* Ladies and gentlemen are the same block twice, so it is one component used
    twice rather than two near-identical lumps of JSX. */
@@ -61,15 +86,32 @@ export default function DressCodePage() {
 
       {/* No eyebrow: the title opens the page, so the top padding is about
           half the usual and the bottom keeps the normal Band padding. */}
-      <Band tone="cream" width="prose" pad="none" className="gap-5 pt-[clamp(28px,4vw,48px)] pb-[clamp(56px,8vw,96px)]">
-        <h1 className="sr-only">Dress code</h1>
-        <ScriptTitle>{ITALY_DRESS.title}</ScriptTitle>
-        <Prose>{ITALY_DRESS.intro}</Prose>
+      {/* Wide, so the margin art has room either side; the copy keeps the
+          prose measure in its own column. */}
+      <Band tone="cream" width="wide" pad="none" className="pt-[clamp(28px,4vw,48px)] pb-[clamp(56px,8vw,96px)]">
+        <div className="relative flex w-full flex-col items-center">
+          <Scatter items={TITLE_ART} />
+          <div className="flex w-full max-w-[29rem] flex-col items-center gap-5">
+            <h1 className="sr-only">Dress code</h1>
+            <ScriptTitle>{ITALY_DRESS.title}</ScriptTitle>
+            <Prose>{ITALY_DRESS.intro}</Prose>
+            <div aria-hidden="true" className="mt-2 flex justify-center gap-5 text-ink min-[901px]:hidden">
+              {MOBILE_ROW.map((m) => (
+                <Motif key={m} name={m} size={40} />
+              ))}
+            </div>
+          </div>
+        </div>
       </Band>
 
       {ITALY_DRESS.codes.map((code) => (
         <section key={code.key}>
           <Band id={code.key} tone={next()} width="wide" className="gap-5">
+            {/* Art sits level with the day and title, which are centred and
+                narrow; lower down the photo takes the full width. */}
+            <div className="relative -mb-5 w-full">
+              <Scatter items={CODE_ART[code.key] ?? []} />
+            </div>
             <SmallCaps>{code.day}</SmallCaps>
             <ScriptTitle as="h2">{code.word}</ScriptTitle>
             <p className="font-caps text-[calc(11px*var(--fs-scale))] uppercase tracking-[0.24em] text-ink-soft">
@@ -103,9 +145,14 @@ export default function DressCodePage() {
         </section>
       ))}
 
-      <Band tone="cream" width="prose" className="gap-5">
-        <Label>{ITALY_DRESS.notToWear.heading}</Label>
-        <Prose>{ITALY_DRESS.notToWear.body}</Prose>
+      <Band tone="cream" width="wide">
+        <div className="relative flex w-full flex-col items-center">
+          <Scatter items={CLOSING_ART} />
+          <div className="flex w-full max-w-[29rem] flex-col items-center gap-5">
+            <Label>{ITALY_DRESS.notToWear.heading}</Label>
+            <Prose>{ITALY_DRESS.notToWear.body}</Prose>
+          </div>
+        </div>
       </Band>
     </>
   );

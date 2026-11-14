@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Motif } from "@/components/italy/Art";
 import type { MotifName } from "@/components/italy/sketches";
 import { Band } from "@/components/italy/Band";
+import { Scatter, type Placed } from "@/components/italy/Scatter";
 import { Prose, ScriptTitle, capsLinkClass } from "@/components/italy/Type";
 import { ITALY_RSVP, ITALY_TRAVEL } from "@/lib/italy-content";
 
@@ -16,24 +17,6 @@ export const metadata: Metadata = { title: "Travel" };
  * inside the section that owns it so it moves with its own copy. Below that
  * it would land on the text, so phones get a small row in the hero instead.
  */
-
-type Placed = { name: MotifName; size: number; rot: number; style: React.CSSProperties };
-
-function Scatter({ items }: { items: Placed[] }) {
-  return (
-    <div aria-hidden="true" className="hidden min-[901px]:block">
-      {items.map((m) => (
-        <Motif
-          key={m.name}
-          name={m.name}
-          size={m.size}
-          className="absolute text-ink"
-          style={{ ...m.style, transform: `rotate(${m.rot}deg)` }}
-        />
-      ))}
-    </div>
-  );
-}
 
 const HERO_ART: Placed[] = [
   { name: "swallow", size: 92, rot: -6, style: { left: "6%", top: 0 } },

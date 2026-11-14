@@ -11,11 +11,12 @@ import { EASE_OUT } from "@/lib/motion";
  * Live weather in Todi: conditions now, then three day tabs, each with a
  * strip of three-hourly slots that slides sideways.
  *
- * Open-Meteo is free, keyless and CORS-open, so this fetches straight from
- * the browser and the page itself stays static. Asking for Europe/Rome means
- * every timestamp comes back as Todi wall-clock time ("2026-11-11T15:00"),
- * which is why the times below are read off the string rather than through
- * Date, which would shift them into the guest's own zone.
+ * The forecast is Open-Meteo's, fetched from the browser so the page itself
+ * stays static (see FORECAST_URL for the same-origin alternative, which
+ * browser extensions do not block). Asking for Europe/Rome means every timestamp
+ * comes back as Todi wall-clock time ("2026-11-11T15:00"), which is why the
+ * times below are read off the string rather than through Date, which would
+ * shift them into the guest's own zone.
  *
  * Fahrenheit leads because most guests are American; Celsius rides along.
  * Refreshes every fifteen minutes, and when the tab comes back into view.
@@ -25,6 +26,10 @@ const { live } = ITALY_EXPLORE;
 const REFRESH_MS = 15 * 60 * 1000;
 const STEP_HOURS = 3;
 
+/* Straight to Open-Meteo for now, while it is being tested. The same-origin
+   route app/api/italy/weather makes the identical request on the server and
+   is not blocked by browser extensions; to switch to it, set FORECAST_URL to
+   "/api/italy/weather". */
 const FORECAST_URL =
   "https://api.open-meteo.com/v1/forecast" +
   `?latitude=${live.latitude}&longitude=${live.longitude}` +
@@ -150,16 +155,25 @@ function useTodiWeather() {
   const [data, setData] = useState<Weather | null>(null);
   const [failed, setFailed] = useState(false);
 
+  /* A request that stalls is given up after 10 seconds and tried once more
+     after 4, so the card never sits on "Loading" for good; if the retry
+     fails too it shows the unavailable note beside April's usual range. */
   const load = useCallback((signal?: AbortSignal) => {
-    fetch(FORECAST_URL, { signal })
-      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then((j) => {
-        setData(shape(j));
-        setFailed(false);
-      })
-      .catch((e) => {
-        if ((e as Error)?.name !== "AbortError") setFailed(true);
-      });
+    const attempt = (retry: boolean) => {
+      const timeout = AbortSignal.timeout(10_000);
+      fetch(FORECAST_URL, { signal: signal ? AbortSignal.any([signal, timeout]) : timeout })
+        .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+        .then((j) => {
+          setData(shape(j));
+          setFailed(false);
+        })
+        .catch(() => {
+          if (signal?.aborted) return;
+          if (retry) window.setTimeout(() => attempt(false), 4000);
+          else setFailed(true);
+        });
+    };
+    attempt(true);
   }, []);
 
   useEffect(() => {

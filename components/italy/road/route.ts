@@ -8,16 +8,23 @@
  * Change one only to fix a bug, and say why next to it.
  */
 
-/* The world is one SVG, 1200 × 4880 units. Y grows downward, so the drive
-   starts near the bottom and climbs to Todi at the top. */
+/* The world is one SVG, 1200 × 5500 units. Y grows downward, so the drive
+   starts near the bottom and climbs to Todi at the top.
+
+   DY is the extra height the Italy 2022 drawing needs between leg 3 and
+   Chicago's leg (2026-11-13). Everything from leg 4 up keeps the place it had
+   in the prototype; leg 3 and below, and Y0 with them, sit DY lower. */
+export const DY = 620;
 export const W = 1200;
-export const H = 4880;
+export const H = 4880 + DY;
 export const XL = 160;
 export const XR = 1040;
 export const RISE = 220; // each leg climbs this much across its width
 export const HP = 240; // each hairpin climbs this much
 export const STEP = 460;
-export const Y0 = 4400; // where leg 1 starts
+export const Y0 = 4400 + DY; // where leg 1 starts
+/* Where leg 1 started before DY: anchor for anything placed from leg 4 up. */
+export const YT = Y0 - DY;
 export const SCALE_W = 0.72; // overall scroll-length knob
 export const PZ = { x: 560, y: 580 }; // the piazza
 
@@ -26,8 +33,9 @@ export type Pt = { x: number; y: number };
 const f1 = (n: number) => Math.round(n * 10) / 10;
 
 /* Eight legs. Odd legs run left to right, even legs right to left. */
-export const legStart = (i: number): Pt => ({ x: i % 2 ? XL : XR, y: Y0 - (i - 1) * STEP });
-export const legEnd = (i: number): Pt => ({ x: i % 2 ? XR : XL, y: Y0 - (i - 1) * STEP - RISE });
+const lift = (i: number) => (i >= 4 ? DY : 0);
+export const legStart = (i: number): Pt => ({ x: i % 2 ? XL : XR, y: Y0 - (i - 1) * STEP - lift(i) });
+export const legEnd = (i: number): Pt => ({ x: i % 2 ? XR : XL, y: Y0 - (i - 1) * STEP - RISE - lift(i) });
 export const legPt = (i: number, f: number): Pt => {
   const a = legStart(i);
   const b = legEnd(i);
@@ -49,7 +57,9 @@ export const hairpinSeg = (i: number): string => {
 export const arcSeg = (a: Pt, b: Pt, lift: number): string =>
   `C ${f1(a.x + (b.x - a.x) * 0.25)} ${f1(a.y - lift)} ${f1(b.x - (b.x - a.x) * 0.25)} ${f1(b.y - lift)} ${f1(b.x)} ${f1(b.y)}`;
 
-export type PieceKind = "spur" | "road" | "flight" | "pause";
+/* "ride" is road the Vespa follows inside the Italy drawing: measured and
+   driven like road, but never drawn, because the drawing has its own. */
+export type PieceKind = "spur" | "road" | "ride" | "flight" | "pause";
 export type Piece = {
   kind: PieceKind;
   w: number; // scroll weight, already multiplied by SCALE_W
@@ -58,7 +68,7 @@ export type Piece = {
   seg?: string;
   ease?: "in" | "out" | "io";
   tag?: string;
-  car?: "us" | "it";
+  car?: "us" | "it" | "vespa";
 };
 
 /* Where the two spur roads merge: a little way along leg 1 rather than at its
@@ -67,10 +77,11 @@ export type Piece = {
 export const FORK = legPt(1, 0.12);
 
 /* Where the car stops for a beat: beside the Boston sign (art/boston.ts puts
-   it at x ≈ 358 on leg 1) and halfway along Chicago's leg. Each leg keeps
+   it at x ≈ 358 on leg 1) and at the Chicago sign, just after the bend onto
+   Chicago's leg (art/chicago.ts puts it at this point). Each leg keeps
    its prototype road weight, split either side of the pause. */
 export const BOSTON_STOP = legPt(1, 0.225);
-export const CHICAGO_STOP = legPt(4, 0.5);
+export const CHICAGO_STOP = legPt(4, 0.085);
 
 /* Where the flights leave and land: Italy 2022 (leg 3) and the crossing (leg 7). */
 /* Italy 2022 takes off right as the hairpin bend ends and flies a
@@ -78,6 +89,51 @@ export const CHICAGO_STOP = legPt(4, 0.5);
    rest of the leg for the Florence, Tuscany and Amalfi drawings. */
 export const fA3 = legPt(3, 0.01);
 export const fB3 = legPt(3, 0.25);
+
+/* Italy 2022: the couple's drawing of the road from Florence through Tuscany
+   to the Amalfi coast (public/italy/art/final_italy_road.jpeg, knocked out to
+   ink in public/italy/road/italy_road.webp). After landing, leg 3 runs
+   straight into it at the bend beside Florence, where the drawn road runs at
+   leg 3's own slope (0.27 against 0.25) and about its width; the Vespa then
+   rides the drawn road to its tip, top right, and flies on to Chicago.
+
+   ITALY_TRACE is the drawn road's centre line, traced in the drawing's own
+   848 × 1264 space from the foot (0) to the tip. The road only uses it from
+   ITALY_ENTRY_PT on; below that the drawing fades out (cut at ITALY_CUT). */
+export const ITALY_TRACE: readonly (readonly [number, number])[] = [
+  [520, 1262], [400, 1195], [310, 1150], [255, 1115], [205, 1075], [215, 1050], [270, 1035], [350, 1012],
+  [430, 975], [500, 945], [560, 912], [605, 878], [615, 845], [585, 812], [520, 785], [450, 765],
+  [410, 738], [398, 705], [432, 662], [490, 638], [560, 622], [630, 608], [650, 578], [640, 545],
+  [600, 522], [520, 505], [455, 485], [432, 465], [500, 452], [600, 422], [680, 398], [715, 365],
+  [660, 335], [600, 312], [550, 298], [522, 288], [600, 262], [690, 242], [760, 222], [800, 200],
+  [812, 175], [780, 138], [740, 125], [712, 112], [722, 98], [770, 85], [820, 66], [846, 52],
+];
+const ITALY_ENTRY_PT = 5;
+const ITALY_CUT = 1078;
+const IK = 600 / 848;
+const IX = 1110 - 846 * IK;
+const IEX = IX + ITALY_TRACE[ITALY_ENTRY_PT][0] * IK;
+const IY = legY(3, IEX) - ITALY_TRACE[ITALY_ENTRY_PT][1] * IK;
+/* Where the drawing sits in the world, and where its bottom fade ends. */
+export const ITALY_DRAWING = { x: f1(IX), y: f1(IY), w: 600, h: f1(1264 * IK), cutY: f1(IY + ITALY_CUT * IK) };
+const ridePts = ITALY_TRACE.slice(ITALY_ENTRY_PT).map(([x, y]) => ({ x: IX + x * IK, y: IY + y * IK }));
+export const ITALY_ENTRY: Pt = { x: f1(ridePts[0].x), y: f1(ridePts[0].y) };
+export const ITALY_TIP: Pt = { x: f1(ridePts[ridePts.length - 1].x), y: f1(ridePts[ridePts.length - 1].y) };
+/* The ride as one smooth curve through the trace (Catmull-Rom as cubics),
+   starting at ITALY_ENTRY. */
+const RIDE_SEG = ridePts
+  .slice(1)
+  .map((p2, k) => {
+    const p0 = ridePts[Math.max(0, k - 1)], p1 = ridePts[k], p3 = ridePts[Math.min(ridePts.length - 1, k + 2)];
+    const p1x = k === 0 ? ITALY_ENTRY.x : p1.x, p1y = k === 0 ? ITALY_ENTRY.y : p1.y;
+    const end = k === ridePts.length - 2 ? ITALY_TIP : { x: f1(p2.x), y: f1(p2.y) };
+    return `C ${f1(p1x + (p2.x - p0.x) / 6)} ${f1(p1y + (p2.y - p0.y) / 6)} ${f1(p2.x - (p3.x - p1.x) / 6)} ${f1(p2.y - (p3.y - p1.y) / 6)} ${end.x} ${end.y}`;
+  })
+  .join(" ");
+/* From the tip, out to the right and round onto Chicago's leg, landing on its
+   own heading, the way the old flight home did. */
+const L4 = legStart(4);
+const FLY_HOME = `C ${f1(ITALY_TIP.x + 62)} ${f1(ITALY_TIP.y - 52)} ${L4.x + 150} ${L4.y + 40} ${L4.x} ${L4.y}`;
 export const fA7 = legPt(7, 0.22);
 export const fB7 = legPt(7, 0.78);
 
@@ -91,11 +147,14 @@ const RAW: Piece[] = [
   { kind: "road", from: legEnd(2), seg: hairpinSeg(2), w: 0.5, ch: 1 },
   { kind: "road", from: legStart(3), seg: lineSeg(fA3), w: 0.5, ch: 2, ease: "out" },
   { kind: "flight", from: fA3, seg: arcSeg(fA3, fB3, 120), w: 1.0, ch: 2, ease: "io", tag: "fly1" },
-  { kind: "road", from: fB3, seg: lineSeg(legEnd(3)), w: 1.9, ch: 2, tag: "italy22", car: "it" },
-  { kind: "flight", from: legEnd(3), seg: hairpinSeg(3), w: 1.0, ch: 3, ease: "io", tag: "flyhome" },
-  { kind: "road", from: legStart(4), seg: lineSeg(CHICAGO_STOP), w: 0.95, ch: 3, ease: "out" },
+  /* Leg 3 ends in the drawing; the old Italian car and the right-hand bend
+     are gone. The Vespa rides side-on to the drawing, then away up it. */
+  { kind: "road", from: fB3, seg: lineSeg(ITALY_ENTRY), w: 0.8, ch: 2, tag: "italy22", car: "vespa" },
+  { kind: "ride", from: ITALY_ENTRY, seg: RIDE_SEG, w: 2.6, ch: 2, tag: "vespaRide", car: "vespa" },
+  { kind: "flight", from: ITALY_TIP, seg: FLY_HOME, w: 1.0, ch: 3, ease: "io", tag: "flyhome" },
+  { kind: "road", from: legStart(4), seg: lineSeg(CHICAGO_STOP), w: 0.3, ch: 3, ease: "out" },
   { kind: "pause", w: 0.8, ch: 3, tag: "chicago" },
-  { kind: "road", from: CHICAGO_STOP, seg: lineSeg(legEnd(4)), w: 0.95, ch: 3, ease: "in" },
+  { kind: "road", from: CHICAGO_STOP, seg: lineSeg(legEnd(4)), w: 1.6, ch: 3, ease: "in" },
   { kind: "road", from: legEnd(4), seg: hairpinSeg(4), w: 0.5, ch: 3 },
   /* Leg 5: the five mini stops (art/miniStops.ts). The car drives straight
      through, no pauses; the road keeps the prototype leg's weight (2.0). */
@@ -141,10 +200,10 @@ export const SPURS = {
 
 /* The road as SVG paths, computed rather than measured so they can render on
    the server: `full` is one continuous path (the ink-reveal mask follows it),
-   `road` is the same route with each flight replaced by a move-to, and
-   `flights` are the dotted arcs. */
+   `road` is the same route with each flight and the Italy ride replaced by a
+   move-to, and `flights` are the dotted arcs. */
 export function roadPaths(): { full: string; road: string; flights: string[]; spurs: string } {
-  const moving = PIECES.filter((p) => p.kind === "road" || p.kind === "flight");
+  const moving = PIECES.filter((p) => p.kind === "road" || p.kind === "ride" || p.kind === "flight");
   const start = (p: Piece) => `M ${f1(p.from!.x)} ${f1(p.from!.y)}`;
   const endOf = (seg: string) => {
     const n = seg.trim().split(/[\s,]+/).map(Number).filter((v) => !Number.isNaN(v));
@@ -152,7 +211,7 @@ export function roadPaths(): { full: string; road: string; flights: string[]; sp
   };
   return {
     full: moving.map((p, i) => (i === 0 ? `${start(p)} ${p.seg}` : p.seg)).join(" "),
-    road: moving.map((p, i) => (i === 0 ? `${start(p)} ${p.seg}` : p.kind === "flight" ? endOf(p.seg!) : p.seg)).join(" "),
+    road: moving.map((p, i) => (i === 0 ? `${start(p)} ${p.seg}` : p.kind === "road" ? p.seg : endOf(p.seg!))).join(" "),
     flights: moving.filter((p) => p.kind === "flight").map((p) => `${start(p)} ${p.seg}`),
     spurs: `${SPURS.a} ${SPURS.b}`,
   };

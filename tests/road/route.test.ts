@@ -17,6 +17,13 @@ import {
   textChapter,
   SPURS,
   FORK,
+  legY,
+  ITALY_ENTRY,
+  ITALY_TIP,
+  ITALY_DRAWING,
+  W,
+  H,
+  DY,
 } from "../../components/italy/road/route.ts";
 
 /* The last two numbers in an SVG segment are its end point. */
@@ -25,23 +32,27 @@ const endOf = (seg: string) => {
   return { x: n[n.length - 2], y: n[n.length - 1] };
 };
 
-test("PIECES has 29 pieces and ends with park", () => {
-  assert.equal(PIECES.length, 29);
+test("PIECES has 30 pieces and ends with park", () => {
+  assert.equal(PIECES.length, 30);
   assert.equal(PIECES[0].kind, "spur");
   assert.equal(PIECES[PIECES.length - 1].tag, "park");
 });
 
 test("weights are the prototype's", () => {
   // The prototype's 28.8, plus the Boston and Chicago pauses (0.8 each),
-  // less the Bali and Spain pauses (leg 5 now drives straight through).
-  assert.ok(Math.abs(TOTAL_W - 28.8 * 0.72) < 1e-9);
+  // less the Bali and Spain pauses (leg 5 now drives straight through),
+  // plus 1.5 for the Italy drawing (road 0.8 and ride 2.6, against the old
+  // leg 1.9).
+  assert.ok(Math.abs(TOTAL_W - 30.3 * 0.72) < 1e-9);
   assert.equal(SCALE_W, 0.72);
   assert.equal(PIECES[pieceIndex("long")].w, 3.0 * 0.72);
-  assert.equal(CUM.length, 30);
+  assert.equal(CUM.length, 31);
 });
 
 test("hairpins join legs", () => {
-  for (let i = 1; i <= 7; i++) {
+  // Leg 3 has none: it ends in the Italy drawing, and the flight from the
+  // drawing’s tip takes the Vespa on to leg 4.
+  for (const i of [1, 2, 4, 5, 6, 7]) {
     const e = endOf(hairpinSeg(i));
     const s = legStart(i + 1);
     assert.ok(Math.abs(e.x - s.x) < 0.1 && Math.abs(e.y - s.y) < 0.1, `hairpin ${i}`);
@@ -49,7 +60,7 @@ test("hairpins join legs", () => {
 });
 
 test("pieces are continuous", () => {
-  const moving = PIECES.filter((p) => p.kind === "road" || p.kind === "flight");
+  const moving = PIECES.filter((p) => p.kind === "road" || p.kind === "ride" || p.kind === "flight");
   for (let k = 1; k < moving.length; k++) {
     const prevEnd = endOf(moving[k - 1].seg!);
     const from = moving[k].from!;
@@ -59,7 +70,7 @@ test("pieces are continuous", () => {
 
 test("locate bounds", () => {
   assert.deepEqual(locate(0), { i: 0, t: 0 });
-  assert.deepEqual(locate(1), { i: 28, t: 1 });
+  assert.deepEqual(locate(1), { i: 29, t: 1 });
   assert.deepEqual(locate(-1), locate(0));
   assert.deepEqual(locate(2), locate(1));
 });
@@ -84,8 +95,8 @@ test("road paths", () => {
   // one continuous path for the reveal mask, starting where leg 1 starts
   assert.ok(r.full.startsWith(`M ${FORK.x} ${FORK.y} `));
   assert.equal((r.full.match(/M /g) || []).length, 1);
-  // the drivable road skips the three flights: a move-to for each
-  assert.equal((r.road.match(/M /g) || []).length, 1 + 3);
+  // the drivable road skips the three flights and the Italy ride: a move-to for each
+  assert.equal((r.road.match(/M /g) || []).length, 1 + 3 + 1);
   assert.equal(r.flights.length, 3);
   for (const f of r.flights) assert.match(f, /^M [\d.-]+ [\d.-]+ C /);
   assert.ok(r.spurs.includes(SPURS.a) && r.spurs.includes(SPURS.b));
@@ -108,4 +119,31 @@ test("odometer runs 0 to Chicago–Todi miles", () => {
   assert.deepEqual(odometerReading({ roadFraction: 1 }), { value: TRIP_MILES, unit: "MI" });
   assert.deepEqual(odometerReading({ roadFraction: 1.2 }), { value: TRIP_MILES, unit: "MI" });
   assert.equal(TRIP_MILES, 4768);
+});
+
+test("Italy 2022: leg 3 runs into the drawing, the Vespa rides it, the flight leaves from its tip", () => {
+  const road = PIECES[pieceIndex("italy22")];
+  const ride = PIECES[pieceIndex("vespaRide")];
+  const fly = PIECES[pieceIndex("flyhome")];
+  assert.equal(ride.kind, "ride");
+  assert.equal(road.car, "vespa");
+  assert.equal(ride.car, "vespa");
+  // the entry sits on leg 3, inside the drawing, above its faded bottom edge
+  assert.ok(Math.abs(legY(3, ITALY_ENTRY.x) - ITALY_ENTRY.y) < 0.2, "entry on leg 3");
+  assert.ok(ITALY_ENTRY.x > ITALY_DRAWING.x && ITALY_ENTRY.y < ITALY_DRAWING.cutY);
+  assert.deepEqual(endOf(road.seg!), ITALY_ENTRY);
+  assert.deepEqual(ride.from, ITALY_ENTRY);
+  assert.deepEqual(endOf(ride.seg!), ITALY_TIP);
+  assert.deepEqual(fly.from, ITALY_TIP);
+  assert.deepEqual(endOf(fly.seg!), legStart(4));
+  // the drawing fits the world and stays clear of Chicago’s leg
+  assert.ok(ITALY_DRAWING.x >= 0 && ITALY_DRAWING.x + ITALY_DRAWING.w <= W);
+  assert.ok(ITALY_TIP.y - legStart(4).y > 200, "room for the flight up to Chicago");
+});
+
+test("the extra height leaves Chicago and everything above where it was", () => {
+  assert.equal(H, 4880 + DY);
+  assert.equal(legStart(4).y, 4400 - 3 * 460);
+  assert.equal(legStart(8).y, 4400 - 7 * 460);
+  assert.equal(legStart(1).y, 4400 + DY);
 });
