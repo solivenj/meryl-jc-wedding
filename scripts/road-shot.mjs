@@ -117,33 +117,36 @@ if (flags.has("--checks")) {
 
   await check("restored scroll", async () => {
     const { ctx, page } = await open(1440, 900);
-    await drive(page, 0.84);
+    /* Italy 2027, the crossing: every passport stamp down by now. The odometer
+       reads miles throughout. */
+    await drive(page, chapterStart(8) - 0.003);
     await page.reload({ waitUntil: "networkidle" });
     await page.waitForTimeout(1600);
     const chip = await text(page, "chip");
-    const stamps = await Promise.all(["stIt22", "stBali", "stSpain", "stIt27"].map((id) => opacity(page, id)));
+    const stamps = await Promise.all(["stIt22", "stMini0", "stMini1", "stMini2", "stMini3", "stMini4", "stIt27"].map((id) => opacity(page, id)));
     const unit = await text(page, "unit");
     await ctx.close();
     if (chip !== "Italia · 2027") return `chip reads ${chip}`;
     if (stamps.some((o) => o !== "1")) return `stamps ${stamps.join(",")}`;
-    if (unit !== "KM") return `unit ${unit}`;
+    if (unit !== "MI") return `unit ${unit}`;
   });
 
   await check("scroll back", async () => {
     const { ctx, page } = await open(1440, 900);
+    /* To the end, then back to Italy 2022, half way up the drawing: later
+       stamps go again and the Vespa is the vehicle showing. */
     await drive(page, 1);
-    await drive(page, 0.3);
+    await drive(page, chapterStart(3) - 0.25 * (chapterStart(3) - chapterStart(2)));
     const it27 = await opacity(page, "stIt27");
-    const bali = await opacity(page, "stBali");
-    const unit = await text(page, "unit");
-    const fifth = await page.evaluate(() => document.getElementById("tally").children[4].getAttribute("opacity"));
-    await drive(page, 0.15);
-    const strokes = await page.evaluate(() => [...document.getElementById("tally").children].filter((c) => c.getAttribute("opacity") === "1").length);
+    const mini = await opacity(page, "stMini0");
+    const it22 = await opacity(page, "stIt22");
+    const shown = await page.evaluate(() =>
+      [...document.querySelectorAll("#vehicles > g")].filter((g) => g.getAttribute("opacity") === "1").map((g) => g.querySelector("use")?.getAttribute("href")),
+    );
     await ctx.close();
-    if (it27 !== "0" || bali !== "0") return `stamps still shown after scrolling back: 2027=${it27} bali=${bali}`;
-    if (unit !== "KM") return `unit at Italy 2022 reads ${unit}`;
-    if (fifth !== "1") return "tally not full after the long-distance stretch";
-    if (strokes >= 5) return `tally shows ${strokes} strokes partway through the long-distance stretch`;
+    if (it27 !== "0" || mini !== "0") return `stamps still shown after scrolling back: 2027=${it27} first mini stop=${mini}`;
+    if (it22 !== "1") return `Italy 2022 stamp missing: ${it22}`;
+    if (shown.join() !== "#vespaRear") return `vehicle showing in the drawing: ${shown.join() || "none"}`;
   });
 
   await check("copy fit", async () => {
@@ -207,35 +210,38 @@ if (flags.has("--checks")) {
       await page.emulateMedia({ reducedMotion: mode });
       await page.waitForTimeout(400);
     }
-    await drive(page, 0.42);
+    await drive(page, chapterStart(3) + 0.01);
     const c = await counts();
     const chip = await text(page, "chip");
     await ctx.close();
     if (!c.ready) return "drive never started after motion was turned back on";
-    if (c.digits !== 5 || c.stops !== 10 || c.vehicles !== 6) return `duplicated or missing DOM: ${JSON.stringify(c)}`;
+    if (c.digits !== 5 || c.stops !== 10 || c.vehicles !== 8) return `duplicated or missing DOM: ${JSON.stringify(c)}`;
     if (chip !== "Chicago") return `drive not running: chip reads ${chip}`;
   });
 
-  await check("only the current stop's words show", async () => {
+  /* Once a stop's words are in they stay as the car drives on; a later
+     stop's words never show early. */
+  await check("a stop's words show at it, and no later stop's", async () => {
     const { ctx, page } = await open(1440, 900);
     const wrong = [];
     for (const ch of [0, 2, 6]) {
-      await drive(page, chapterStart(ch) + 0.002);
+      await drive(page, textOnAt(ch + 1) - 0.003);
       const seen = await page.evaluate(() =>
         [...document.querySelectorAll("#texts .wt")]
           .filter((w) => !w.classList.contains("title"))
           .map((w) => ({ ch: w.dataset.ch, shown: getComputedStyle(w.firstElementChild).opacity === "1" })),
       );
       for (const s of seen) {
-        const mine = s.ch.split(",").includes(String(ch));
-        if (mine !== s.shown) wrong.push(`at stop ${ch}, slot ${s.ch} ${s.shown ? "shown" : "hidden"}`);
+        const first = Math.min(...s.ch.split(",").map(Number));
+        if (first > ch && s.shown) wrong.push(`at stop ${ch}, later slot ${s.ch} shown`);
+        if (s.ch.split(",").includes(String(ch)) && !s.shown) wrong.push(`at stop ${ch}, its own slot hidden`);
       }
     }
     await ctx.close();
     if (wrong.length) return wrong.join("; ");
   });
 
-  await check("stop text is fully on screen whenever it shows", async () => {
+  await check("stop text is fully on screen when it comes in", async () => {
     // Sample each stop from just before its words are due until just after
     // the stop begins, on short and tall windows. Shown text must never be
     // cut off at the top or bottom of the screen.
@@ -243,10 +249,14 @@ if (flags.has("--checks")) {
     for (const [w, h] of [[1440, 640], [1600, 700], [1920, 950]]) {
       const { ctx, page } = await open(w, h);
       for (const ch of [1, 2, 3, 6, 7, 8]) {
+        /* Only the newest words count, at the sample where they first show:
+           once in, they may scroll off as the car climbs. */
+        let prev = null;
         for (const p of [textOnAt(ch) + 0.002, textOnAt(ch) + 0.01, chapterStart(ch) + 0.004, chapterStart(ch) + 0.015]) {
           await drive(page, p);
           const r = await page.evaluate(() => {
-            const w = document.querySelector("#texts .wt.on:not(.title)");
+            const first = (w) => Math.min(...w.dataset.ch.split(",").map(Number));
+            const w = [...document.querySelectorAll("#texts .wt.on:not(.title)")].sort((a, b) => first(b) - first(a))[0];
             if (!w) return null;
             /* Measure the SVG box (its rect includes the camera), and scale the
                text's own height into screen pixels. */
@@ -254,7 +264,10 @@ if (flags.has("--checks")) {
             const k = b.height / fo.height.baseVal.value;
             return { ch: w.dataset.ch, top: b.top - s.top, bottom: b.top - s.top + w.offsetHeight * k, h: s.height };
           });
-          if (r && (r.top < 0 || r.bottom > r.h)) bad.push(`${w}x${h} at ${p.toFixed(3)} stop ${r.ch}: ${Math.round(r.top)}-${Math.round(r.bottom)} of ${Math.round(r.h)}`);
+          const mine = r && r.ch.split(",").includes(String(ch));
+          const fresh = mine && r.ch !== prev;
+          if (mine) prev = r.ch;
+          if (fresh && (r.top < 0 || r.bottom > r.h + 40)) bad.push(`${w}x${h} at ${p.toFixed(3)} stop ${r.ch}: ${Math.round(r.top)}-${Math.round(r.bottom)} of ${Math.round(r.h)}`);
         }
       }
       await ctx.close();

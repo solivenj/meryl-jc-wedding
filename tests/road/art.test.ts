@@ -6,10 +6,8 @@ test("scenery has every stop's landmarks", () => {
   const s = sceneryMarkup();
   for (const needle of [
     "boston_sign.webp",
-    "NEU",
     "pst_sign.webp",
-    "florence.webp",
-    "tuscany.webp",
+    "italy_road.webp",
     "chicago.webp",
     "ATLANTIC",
     "ITALIA",
@@ -33,7 +31,7 @@ test("fx has every animated element", () => {
 
 test("defs has the vehicles", () => {
   const d = defsMarkup();
-  for (const id of ["carBody", "itBody", "wheel", "wheelS", "reveal", "revealPath"]) {
+  for (const id of ["carBody", "itBody", "wheel", "wheelS", "vespaSide", "vespaRear", "reveal", "revealPath", "roadEnd"]) {
     assert.ok(d.includes(`id="${id}"`), `missing #${id}`);
   }
 });

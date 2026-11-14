@@ -12,31 +12,30 @@
 import { legPt } from "../route.ts";
 import { f1 } from "./kit.ts";
 
-export type MiniStop = { id: string; name: string; photo?: string };
+export type MiniStop = { id: string; name: string; year: string; photo?: string };
 
 /* In order along the road. A stop with no photo shows a black placeholder
    in its polaroid. */
 export const MINI_STOPS: MiniStop[] = [
-  { id: "france", name: "France" },
-  { id: "puerto_rico", name: "Puerto Rico" },
-  { id: "indonesia", name: "Indonesia" },
-  { id: "spain", name: "Spain" },
-  { id: "canada", name: "Canada" },
+  { id: "france", name: "France", year: "2024" },
+  { id: "puerto_rico", name: "Puerto Rico", year: "2024" },
+  { id: "indonesia", name: "Indonesia", year: "2024" },
+  { id: "spain", name: "Spain", year: "2024" },
+  { id: "canada", name: "Canada", year: "2024" },
 ];
 
 /* Where each stop stands: its fraction along leg 5 (the stamp sits there)
-   and how far its foot sits above the top edge of the road. Raised into the
-   room the Thanksgiving text used to take (that text now sits above leg 6).
-   The road above narrows to the right, so the lifts shrink that way; in
-   absolute height they zigzag low, high, low, high, low; the lows sit low
-   enough that each high stop's stamp clears the polaroid before it. Spain
-   is near the most that clears the road above. */
+   and how far its foot sits above the top edge of the road. Every low stop
+   shares one lift and every high stop another, so both rows of the zigzag
+   climb at the road's own angle, the low row clear above the road. The stops
+   are spaced .17 apart from .02 so Spain (190) still clears the road above;
+   the 135 between the rows keeps each stamp off its neighbour's polaroid. */
 const SPOTS: [number, number][] = [
-  [0.04, 150],
-  [0.23, 270],
-  [0.42, 50],
-  [0.61, 160],
-  [0.8, 30],
+  [0.02, 55],
+  [0.19, 190],
+  [0.36, 55],
+  [0.53, 190],
+  [0.7, 55],
 ];
 
 const SR = 38; // stamp radius

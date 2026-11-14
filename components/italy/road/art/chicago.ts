@@ -8,8 +8,8 @@
    left and the leg above it to the right, so the room narrows toward that
    bend: 360 wide at x 290 is as far in as it goes with its top clearing
    the road above (by about 17). */
-import { legY } from "../route.ts";
-import { f1 } from "./kit.ts";
+import { CHICAGO_STOP, legY } from "../route.ts";
+import { drawnSign, f1 } from "./kit.ts";
 
 export function chicagoArt(): { backdrop: string; scenery: string; fx: string } {
   const B: string[] = [], S: string[] = [], F: string[] = [];
@@ -18,5 +18,10 @@ export function chicagoArt(): { backdrop: string; scenery: string; fx: string } 
     const yb = legY(4, x) - 20;
     S.push(`<image href="/italy/road/chicago.webp" x="${x}" y="${f1(yb - h)}" width="${w}" height="${f1(h)}"/>`);
   }
+  /* The Chicago sign (public/italy/art/chicago_sign.jpeg, toned like the
+     other place signs in public/italy/road/chicago_sign.webp) stands above
+     the road where the car pauses for Chicago (route.ts CHICAGO_STOP),
+     the same size as the Boston sign. */
+  S.push(drawnSign(CHICAGO_STOP.x, legY(4, CHICAGO_STOP.x) - 20, '/italy/road/chicago_sign.webp', 152));
   return { backdrop: B.join(''), scenery: S.join(''), fx: F.join('') };
 }

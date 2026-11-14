@@ -12,7 +12,7 @@
 import "./road.css";
 import { useEffect, useRef } from "react";
 import { overpass, titillium } from "./fonts";
-import { H, TOTAL_W, W, Y0, roadPaths } from "./route.ts";
+import { H, ITALY_DRAWING, TOTAL_W, W, Y0, YT, roadPaths } from "./route.ts";
 import { createDrive } from "./engine.ts";
 import { backdropMarkup, defsMarkup, fxMarkup, sceneryMarkup } from "./art/index.ts";
 import { ITALY_STORY } from "@/lib/italy-content";
@@ -140,7 +140,8 @@ export function RoadTrip() {
           <svg id="world" viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs dangerouslySetInnerHTML={{ __html: defsMarkup() }} />
             <g id="backdrop" dangerouslySetInnerHTML={{ __html: backdropMarkup() }} />
-            <g id="road">
+            {/* The road fades out where leg 3 runs into the Italy drawing. */}
+            <g id="road" mask="url(#roadEnd)">
               <g id="roadFaint" opacity={0.32}>
                 <RoadLayer d={PATHS.road} inked={false} />
                 <RoadLayer d={PATHS.spurs} inked={false} />
@@ -158,20 +159,24 @@ export function RoadTrip() {
             <g id="texts">
               <Slot x={690} y={Y0 - 100} w={470} h={280} ch="0"><Block i={0} /></Slot>
               <Slot x={180} y={Y0 - 550} w={380} h={370} ch="1"><Block i={1} /></Slot>
-              <Slot x={690} y={Y0 - 1025} w={450} h={370} ch="2"><Block i={2} /></Slot>
-              <Slot x={180} y={Y0 - 1470} w={380} h={340} ch="3"><Block i={3} /></Slot>
-              <Slot x={690} y={Y0 - 1940} w={345} h={190} ch="4,5">
+              {/* Italy 2022 sits in the open sky left of the drawing. From
+                  Chicago up, slots are placed from YT, where leg 1 started
+                  before the drawing added its height (route.ts DY), so they
+                  keep their places. */}
+              <Slot x={140} y={ITALY_DRAWING.y + 200} w={370} h={340} ch="2"><Block i={2} /></Slot>
+              <Slot x={180} y={YT - 1470} w={380} h={340} ch="3"><Block i={3} /></Slot>
+              <Slot x={690} y={YT - 1940} w={345} h={190} ch="4,5">
                 <p className="k">{halfStops.kicker}</p>
                 <h2>{halfStops.heading}</h2>
                 <p className="b">{halfStops.body}</p>
               </Slot>
               {/* Thanksgiving sits top right, above its road (leg 6), clear of the
                   palms, leaving the room below leg 6 to the mini stops. */}
-              <Slot x={690} y={Y0 - 2760} w={380} h={350} ch="6"><Block i={6} /></Slot>
+              <Slot x={690} y={YT - 2760} w={380} h={350} ch="6"><Block i={6} /></Slot>
               {/* The crossing sits top left, above its road (leg 7), clear of the
                   plane: Thanksgiving now takes its old spot. */}
-              <Slot x={130} y={Y0 - 3050} w={330} h={330} ch="7"><Block i={7} /></Slot>
-              <Slot x={176} y={Y0 - 3306} w={392} h={330} ch="8"><Block i={8} /></Slot>
+              <Slot x={130} y={YT - 3050} w={330} h={330} ch="7"><Block i={7} /></Slot>
+              <Slot x={176} y={YT - 3306} w={392} h={330} ch="8"><Block i={8} /></Slot>
               <Slot x={140} y={Y0 + 196} w={360} h={270} ch="" className="title on">
                 <p className="b">{title.tagline}</p>
                 <p className="cue">{title.cue} &darr;</p>
