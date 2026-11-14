@@ -188,8 +188,14 @@ export function RoadTrip() {
               </Slot>
             </g>
             <g id="fx" dangerouslySetInnerHTML={{ __html: fxMarkup() }} />
-            <g id="vehicles" />
             <g id="measure" visibility="hidden" />
+          </svg>
+          {/* The vehicles ride in their own SVG over the scene, moved with it.
+              They were already drawn last, so nothing looks different, but
+              now the car moving every frame repaints only this layer, not the
+              whole drawn world under it (a big cost on phones at 3x). */}
+          <svg id="worldTop" viewBox={`0 0 ${W} ${H}`} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <g id="vehicles" />
           </svg>
 
           <a className="skip" href="#site-footer">Skip the drive</a>
