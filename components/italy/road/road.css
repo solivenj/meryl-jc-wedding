@@ -46,7 +46,7 @@
     repeating-linear-gradient(0deg, rgb(30 35 30 / .022) 0 1px, transparent 1px 3px),
     repeating-linear-gradient(90deg, rgb(30 35 30 / .018) 0 1px, transparent 1px 4px);
 }
-.road-trip #world { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; overflow: visible; }
+.road-trip #world, .road-trip #worldTop { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; overflow: visible; }
 .road-trip #world text { font-family: var(--f-body); }
 .road-trip .post { stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; }
 .road-trip .hwy { font-family: var(--f-hwy); font-weight: 800; font-size: 13px; letter-spacing: .05em; fill: #fff; }
@@ -169,6 +169,7 @@
    (the ending). Keep it and the HUD hidden until then; the stage shows its
    plain linen, as the prototype did before its script ran. */
 .road-trip:not(.road-ready) #world,
+.road-trip:not(.road-ready) #worldTop,
 .road-trip:not(.road-ready) .hud-sign,
 .road-trip:not(.road-ready) .odo,
 .road-trip:not(.road-ready) .stops { visibility: hidden; }
@@ -186,3 +187,10 @@
   .road-trip { display: none; }
   .road-fallback { position: static; width: auto; height: auto; margin: 0; overflow: visible; clip: auto; white-space: normal; }
 }
+
+/* Phones: no ink drawing in behind the car. The road shows fully inked from
+   the start, so the reveal mask, which spans the whole route and changed
+   every frame, is gone from the repaint (engine.ts stops updating it). */
+.road-trip .narrow #roadFaint { display: none; }
+.road-trip .narrow #roadInk { mask: none; }
+.road-trip .narrow #spurInk { opacity: 1; }

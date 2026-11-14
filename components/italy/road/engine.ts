@@ -28,6 +28,15 @@ import {
 import { MINI_STOPS, miniStopX } from "./art/miniStops.ts";
 import type { ITALY_STORY } from "@/lib/italy-content";
 
+/* Every attribute write inside the world SVG makes the browser repaint the
+   scene, and on a phone at 3x that means re-rasterizing everything on
+   screen. Most per-frame values (stamps that have landed, hidden cars, the
+   heart) do not change from one frame to the next, so skip the write when
+   the value is the same. */
+const setA = (el: Element, name: string, value: string): void => {
+  if (el.getAttribute(name) !== value) el.setAttribute(name, value);
+};
+
 type Story = typeof ITALY_STORY;
 type Car = {
   g: SVGGElement;
@@ -49,7 +58,7 @@ const f1 = (n: number) => Math.round(n * 10) / 10;
 
 function el<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, string | number>, parent?: Element): SVGElementTagNameMap[K] {
   const n = document.createElementNS(NS, tag);
-  for (const k in attrs) n.setAttribute(k, String(attrs[k]));
+  for (const k in attrs) setA(n, k, String(attrs[k]));
   if (parent) parent.appendChild(n);
   return n;
 }
@@ -58,6 +67,7 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
   const $ = <T extends Element>(id: string) => root.querySelector(`#${id}`) as T;
   const stage = $<HTMLElement>("stage");
   const world = $<SVGSVGElement>("world");
+  const worldTop = $<SVGSVGElement>("worldTop");
   const measure = $<SVGGElement>("measure");
   const V = $<SVGGElement>("vehicles");
 
@@ -83,8 +93,8 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
   const spurLen = [spurA.getTotalLength(), spurB.getTotalLength()];
 
   const revealPath = $<SVGPathElement>("revealPath");
-  revealPath.setAttribute("d", roadPaths().full);
-  revealPath.setAttribute("stroke-dasharray", `${TOTAL} ${TOTAL + 10}`);
+  setA(revealPath, "d", roadPaths().full);
+  setA(revealPath, "stroke-dasharray", `${TOTAL} ${TOTAL + 10}`);
   const spurInk = $<SVGGElement>("spurInk");
 
   /* ---------- vehicles ---------- */
@@ -137,22 +147,22 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     if (Math.abs(sx) < 0.14) sx = (sx < 0 ? -1 : 1) * 0.14;
     const tilt = clamp((Math.atan2(dy, Math.abs(dx)) * 180) / Math.PI, -24, 24);
     const bob = mv ? Math.sin(d * 0.32) * 0.7 : 0;
-    c.g.setAttribute("transform", `translate(${f1(x)} ${f1(y + bob)}) scale(${(sx * s).toFixed(3)} ${s}) rotate(${tilt.toFixed(2)})`);
+    setA(c.g, "transform", `translate(${f1(x)} ${f1(y + bob)}) scale(${(sx * s).toFixed(3)} ${s}) rotate(${tilt.toFixed(2)})`);
     const rot = ((d * 180) / (Math.PI * c.r)) % 360;
-    c.w1.setAttribute("transform", `translate(${c.wx[0]} ${c.wy}) rotate(${rot.toFixed(1)})`);
-    c.w2.setAttribute("transform", `translate(${c.wx[1]} ${c.wy}) rotate(${rot.toFixed(1)})`);
+    setA(c.w1, "transform", `translate(${c.wx[0]} ${c.wy}) rotate(${rot.toFixed(1)})`);
+    setA(c.w2, "transform", `translate(${c.wx[1]} ${c.wy}) rotate(${rot.toFixed(1)})`);
     c.puffs.forEach((p, k) => {
       const ph = ((d * 0.9 + k * 22) % 66) / 66;
-      p.setAttribute("cx", String(f1(-48 - ph * 40)));
-      p.setAttribute("cy", String(f1(-12 - ph * 10)));
-      p.setAttribute("r", String(f1(3 + ph * 5)));
-      p.setAttribute("opacity", String(mv ? f1((1 - ph) * 0.55) : 0));
+      setA(p, "cx", String(f1(-48 - ph * 40)));
+      setA(p, "cy", String(f1(-12 - ph * 10)));
+      setA(p, "r", String(f1(3 + ph * 5)));
+      setA(p, "opacity", String(mv ? f1((1 - ph) * 0.55) : 0));
     });
   };
   const placePlane = (g: SVGGElement, x: number, y: number, dx: number, dy: number, s = 1) => {
     const sx = dx < 0 ? -1 : 1;
     const tilt = clamp((Math.atan2(dy, Math.abs(dx)) * 180) / Math.PI, -30, 30);
-    g.setAttribute("transform", `translate(${f1(x)} ${f1(y - 14 * s)}) scale(${(sx * s).toFixed(3)} ${s.toFixed(3)}) rotate(${tilt.toFixed(2)})`);
+    setA(g, "transform", `translate(${f1(x)} ${f1(y - 14 * s)}) scale(${(sx * s).toFixed(3)} ${s.toFixed(3)}) rotate(${tilt.toFixed(2)})`);
   };
   /* The Vespa is a little smaller than the cars. Up the drawing it shrinks
      with the drawn road, which narrows with height: full size where leg 3
@@ -162,12 +172,12 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
   const placeVespaSide = (x: number, y: number, dx: number, dy: number, s: number) => {
     const sx = dx < 0 ? -1 : 1;
     const tilt = clamp((Math.atan2(dy, Math.abs(dx)) * 180) / Math.PI, -24, 24);
-    vespaSide.setAttribute("transform", `translate(${f1(x)} ${f1(y)}) scale(${(sx * s).toFixed(3)} ${s.toFixed(3)}) rotate(${tilt.toFixed(2)})`);
+    setA(vespaSide, "transform", `translate(${f1(x)} ${f1(y)}) scale(${(sx * s).toFixed(3)} ${s.toFixed(3)}) rotate(${tilt.toFixed(2)})`);
   };
   /* Seen from behind, it leans a little into the bends rather than turning. */
   const placeVespaRear = (x: number, y: number, dx: number, dy: number, s: number) => {
     const lean = clamp(((Math.atan2(dx, -dy) * 180) / Math.PI) * 0.3, -16, 16);
-    vespaRear.setAttribute("transform", `translate(${f1(x)} ${f1(y + 6 * s)}) scale(${s.toFixed(3)}) rotate(${lean.toFixed(2)})`);
+    setA(vespaRear, "transform", `translate(${f1(x)} ${f1(y + 6 * s)}) scale(${s.toFixed(3)}) rotate(${lean.toFixed(2)})`);
   };
 
   /* ---------- HUD ---------- */
@@ -211,7 +221,7 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     b.type = "button";
     if (c.half) b.classList.add("half");
     b.innerHTML = `<span class="lab">${c.h}</span><span class="dot"></span>`;
-    b.setAttribute("aria-label", `Drive to: ${c.h}`);
+    setA(b, "aria-label", `Drive to: ${c.h}`);
     const onClick = () => {
       const top = drive.getBoundingClientRect().top + scrollY;
       const span = drive.offsetHeight - innerHeight;
@@ -286,8 +296,10 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     SH = stage.clientHeight;
     narrow = SW < 900;
     S = narrow ? clamp(SW / 700, 0.5, 0.8) : Math.min(SW / W, 1.25);
-    world.style.width = `${W * S}px`;
-    world.style.height = `${H * S}px`;
+    for (const w of [world, worldTop]) {
+      w.style.width = `${W * S}px`;
+      w.style.height = `${H * S}px`;
+    }
     stage.classList.toggle("narrow", narrow);
   };
 
@@ -319,8 +331,8 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     const n = fx(id) as SVGElement & { dataset: DOMStringMap };
     const e = clamp(k, 0, 1);
     const s = 1 + (1 - easeOut(e)) * 0.8;
-    n.setAttribute("opacity", String(f1(e)));
-    n.setAttribute("transform", `translate(${n.dataset.x} ${n.dataset.y}) rotate(${n.dataset.r}) scale(${s.toFixed(3)})`);
+    setA(n, "opacity", String(f1(e)));
+    setA(n, "transform", `translate(${n.dataset.x} ${n.dataset.y}) rotate(${n.dataset.r}) scale(${s.toFixed(3)})`);
   };
 
   const render = (p: number) => {
@@ -343,14 +355,14 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
       const b2 = spurB.getPointAtLength(Math.min(te * spurLen[1] + 2, spurLen[1]));
       placeCar(carA, a.x, a.y, a2.x - a.x || 1, a2.y - a.y, te * spurLen[0], t > 0 && t < 1, 0.9);
       placeCar(carB, b.x, b.y, b2.x - b.x || -1, b2.y - b.y, te * spurLen[1], t > 0 && t < 1, 0.9);
-      carA.g.setAttribute("opacity", "1");
-      carB.g.setAttribute("opacity", "1");
+      setA(carA.g, "opacity", "1");
+      setA(carB.g, "opacity", "1");
       x = lerp(290 + FORK.x - XL, FORK.x, easeIO(t));
       y = (a.y + b.y) / 2;
       vehicle = "none";
     } else {
-      carA.g.setAttribute("opacity", "0");
-      carB.g.setAttribute("opacity", "0");
+      setA(carA.g, "opacity", "0");
+      setA(carB.g, "opacity", "0");
       if (pc.kind === "pause") {
         let j = i - 1;
         while (!M[j]) j--;
@@ -380,9 +392,9 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
         if (pc.kind === "flight") vehicle = "plane";
       }
     }
-    car.g.setAttribute("opacity", vehicle === "us" ? "1" : "0");
-    itc.g.setAttribute("opacity", vehicle === "it" ? "1" : "0");
-    plane.setAttribute("opacity", vehicle === "plane" ? "1" : "0");
+    setA(car.g, "opacity", vehicle === "us" ? "1" : "0");
+    setA(itc.g, "opacity", vehicle === "it" ? "1" : "0");
+    setA(plane, "opacity", vehicle === "plane" ? "1" : "0");
     if (vehicle === "us") placeCar(car, x, y, dx, dy, d, mv);
     if (vehicle === "it") placeCar(itc, x, y, dx, dy, d, mv);
     if (vehicle === "plane") {
@@ -390,7 +402,7 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
          Vespa was, and grows to full size as it climbs away. */
       const fromTip = i === I.flyhome;
       const ps = fromTip ? 0.35 + 0.65 * clamp(t / 0.6, 0, 1) : 1;
-      if (fromTip) plane.setAttribute("opacity", String(f1(clamp(t / 0.06, 0, 1))));
+      if (fromTip) setA(plane, "opacity", String(f1(clamp(t / 0.06, 0, 1))));
       placePlane(plane, x, y, dx, dy, ps);
     }
     {
@@ -408,22 +420,26 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
         if (side > 0) placeVespaSide(x, y, dx, dy, vs);
         if (rear > 0) placeVespaRear(x, y, dx, dy, vs);
       }
-      vespaSide.setAttribute("opacity", String(f1(side)));
-      vespaRear.setAttribute("opacity", String(f1(rear)));
+      setA(vespaSide, "opacity", String(f1(side)));
+      setA(vespaRear, "opacity", String(f1(rear)));
       /* the puff at the tip, as the Vespa becomes the plane */
       const pu = i === I.ride ? clamp((t - 0.94) / 0.06, 0, 1) * 0.4 : i === I.flyhome ? 0.4 + clamp(t / 0.2, 0, 1) * 0.6 : 0;
       tipPuffs.forEach((c, k) => {
         const u = clamp(pu - k * 0.15, 0, 1);
-        c.setAttribute("cx", String(ITALY_TIP.x));
-        c.setAttribute("cy", String(f1(ITALY_TIP.y - 6)));
-        c.setAttribute("r", String(f1((k ? 14 : 24) * u)));
-        c.setAttribute("opacity", u > 0 && u < 1 ? String(f1(1 - u)) : "0");
+        setA(c, "cx", String(ITALY_TIP.x));
+        setA(c, "cy", String(f1(ITALY_TIP.y - 6)));
+        setA(c, "r", String(f1((k ? 14 : 24) * u)));
+        setA(c, "opacity", u > 0 && u < 1 ? String(f1(1 - u)) : "0");
       });
     }
-    itc.lug.setAttribute("opacity", i >= I.landed ? "1" : "0");
+    setA(itc.lug, "opacity", i >= I.landed ? "1" : "0");
 
-    revealPath.setAttribute("stroke-dashoffset", String(f1(TOTAL - d)));
-    spurInk.setAttribute("opacity", String(pc.kind === "spur" ? f1(clamp((t - 0.6) / 0.4, 0, 1) * 0.6) : 1));
+    /* The ink reveal is desktop only: on phones the road is drawn fully
+       inked from the start (road.css .narrow), so its mask is not touched. */
+    if (!narrow) {
+      setA(revealPath, "stroke-dashoffset", String(f1(TOTAL - d)));
+      setA(spurInk, "opacity", String(pc.kind === "spur" ? f1(clamp((t - 0.6) / 0.4, 0, 1) * 0.6) : 1));
+    }
 
     /* merge heart */
     {
@@ -431,9 +447,9 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
          which now ends early at the Boston pause. */
       const hs = (s - PIECES[0].w * 0.82) / (PIECES[0].w * 0.18 + 1.8 * SCALE_W * 0.4);
       if (hs > 0 && hs < 1) {
-        heart.setAttribute("opacity", String(f1(Math.sin(hs * Math.PI))));
-        heart.setAttribute("transform", `translate(${f1(FORK.x)} ${f1(FORK.y - 56 - hs * 40)}) scale(${f1(1 + hs * 0.6)})`);
-      } else heart.setAttribute("opacity", "0");
+        setA(heart, "opacity", String(f1(Math.sin(hs * Math.PI))));
+        setA(heart, "transform", `translate(${f1(FORK.x)} ${f1(FORK.y - 56 - hs * 40)}) scale(${f1(1 + hs * 0.6)})`);
+      } else setA(heart, "opacity", "0");
     }
 
     /* long-distance flights (the post-it tally that counted them is gone) */
@@ -446,10 +462,10 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
         const q = easeIO(fwd ? fr : 1 - fr);
         const a = longArc.getPointAtLength(q * longArcLen);
         const b = longArc.getPointAtLength(Math.min(q * longArcLen + 2, longArcLen));
-        longPlane.setAttribute("opacity", fr > 0.02 && fr < 0.98 ? "1" : "0");
+        setA(longPlane, "opacity", fr > 0.02 && fr < 0.98 ? "1" : "0");
         placePlane(longPlane, a.x, a.y + 14, (b.x - a.x) * (fwd ? 1 : -1) || (fwd ? -1 : 1), (b.y - a.y) * (fwd ? 1 : -1));
       } else {
-        longPlane.setAttribute("opacity", "0");
+        setA(longPlane, "opacity", "0");
       }
     }
 
@@ -463,7 +479,7 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
       const sx = miniStopX(k);
       const kk = i > I.leg5b ? 1 : on5 ? (x - (sx - 40)) / 40 : 0;
       popStamp(`stMini${k}`, kk);
-      fx(`pMini${k}`).setAttribute("opacity", String(f1(clamp(kk, 0, 1))));
+      setA(fx(`pMini${k}`), "opacity", String(f1(clamp(kk, 0, 1))));
     });
     popStamp("stIt27", i === I.landed ? t / 0.3 : i > I.landed ? 1 : 0);
 
@@ -473,13 +489,13 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
       const fade = i === I.ring + 1 ? 1 - clamp(t * 2.5, 0, 1) : 1;
       const rise = easeOut(clamp(rt / 0.4, 0, 1));
       const pp = M[I.ring - 1]!.end;
-      ring.setAttribute("opacity", String(f1(rise * fade)));
-      ring.setAttribute("transform", `translate(${f1(pp.x)} ${f1(pp.y - 90 - rise * 40)}) scale(${f1(0.6 + rise * 0.7)})`);
-      sparks.setAttribute("opacity", String(f1(clamp((rt - 0.3) / 0.2, 0, 1) * (0.6 + 0.4 * Math.sin(s * 40)))));
+      setA(ring, "opacity", String(f1(rise * fade)));
+      setA(ring, "transform", `translate(${f1(pp.x)} ${f1(pp.y - 90 - rise * 40)}) scale(${f1(0.6 + rise * 0.7)})`);
+      setA(sparks, "opacity", String(f1(clamp((rt - 0.3) / 0.2, 0, 1) * (0.6 + 0.4 * Math.sin(s * 40)))));
       const cheer = clamp((rt - 0.45) / 0.15, 0, 1) * fade;
-      famHeads.forEach((h, k) => h.setAttribute("transform", `translate(0 ${f1(-Math.abs(Math.sin(s * 30 + k * 1.3)) * 7 * cheer)})`));
+      famHeads.forEach((h, k) => setA(h, "transform", `translate(0 ${f1(-Math.abs(Math.sin(s * 30 + k * 1.3)) * 7 * cheer)})`));
     } else {
-      ring.setAttribute("opacity", "0");
+      setA(ring, "opacity", "0");
       famHeads.forEach((h) => h.removeAttribute("transform"));
     }
 
@@ -491,12 +507,12 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
       const kx = lerp(from.x, to.x, k);
       const ky = lerp(from.y, to.y, k) - Math.sin(k * Math.PI) * 60;
       const swing = k >= 1 ? Math.sin((t - 0.52) * 30) * 12 * Math.max(0, 1 - (t - 0.52) * 3) : k * 360;
-      keys.setAttribute("opacity", "1");
-      keys.setAttribute("transform", `translate(${f1(kx)} ${f1(ky)}) rotate(${f1(swing)})`);
-      keysTxt.setAttribute("opacity", String(f1(clamp((t - 0.5) / 0.2, 0, 1))));
+      setA(keys, "opacity", "1");
+      setA(keys, "transform", `translate(${f1(kx)} ${f1(ky)}) rotate(${f1(swing)})`);
+      setA(keysTxt, "opacity", String(f1(clamp((t - 0.5) / 0.2, 0, 1))));
     } else {
-      keys.setAttribute("opacity", "0");
-      keysTxt.setAttribute("opacity", "0");
+      setA(keys, "opacity", "0");
+      setA(keysTxt, "opacity", "0");
     }
 
     /* odometer: road only, frozen in the air, kilometres while in Italy */
@@ -545,7 +561,7 @@ export function createDrive(root: HTMLElement, story: Story, opts: { reduceMotio
     let oy = clamp(ay - y * S, SH - H * S - lift, 0);
     if (pc.tag === "park") oy = lerp(oy, 0, easeIO(clamp((t - 0.35) / 0.45, 0, 1)));
     const ox = W * S <= SW ? (SW - W * S) / 2 : clamp(SW / 2 - x * S, SW - W * S, 0);
-    world.style.transform = `translate3d(${ox.toFixed(1)}px, ${oy.toFixed(1)}px, 0)`;
+    world.style.transform = worldTop.style.transform = `translate3d(${ox.toFixed(1)}px, ${oy.toFixed(1)}px, 0)`;
 
     {
       const raw = textChapter(p);
